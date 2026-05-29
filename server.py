@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""FastAPI server — wraps the RAG pipeline as a REST API.
+"""EduDaily FastAPI server — wraps the RAG pipeline as a REST API.
 
 Startup:
     python server.py
@@ -46,6 +46,8 @@ from modules.extractor import run_extraction_pipeline
 from modules.generator import generate_report
 from modules.retriever import retrieve_relevant_chunks
 from modules.url_ingester import ingest_urls
+from modules.daily_fetcher import run_daily_fetch
+from db.repository import list_news_sources, insert_news_source, delete_news_source
 from utils.helpers import setup_logging
 
 sys.path.insert(0, str(config.BASE_DIR))
@@ -141,6 +143,34 @@ class IngestURLResponse(BaseModel):
     save_dir: str
 
 
+class NewsSourceRequest(BaseModel):
+    name: str
+    url: str
+    source_type: str = "web"
+    category: str = "education"
+
+
+class NewsSourceResponse(BaseModel):
+    id: int
+    name: str
+    url: str
+    source_type: str
+    category: str
+    enabled: int
+    last_fetched_at: str | None = None
+    created_at: str | None = None
+
+
+class DailyFetchResponse(BaseModel):
+    batch_id: str
+    today: str
+    total_articles: int
+    sources_checked: int
+    sources_failed: int
+    articles: list[dict]
+    errors: list[str]
+
+
 # ── Lifecycle ─────────────────────────────────────────────────────────
 
 
@@ -149,7 +179,7 @@ async def lifespan(app: FastAPI):
     """Initialize the full RAG pipeline on server startup."""
     print()
     print("=" * 60)
-    print("  Starting RAG API Server ...")
+    print("  Starting EduDaily API Server ...")
     print("=" * 60)
 
     setup_logging(config.LOG_FILE)
@@ -170,8 +200,10 @@ async def lifespan(app: FastAPI):
     if not state["api_key_valid"]:
         print("  [!] WARNING: DEEPSEEK_API_KEY not configured!")
         print("  [!] Copy .env.example to .env and fill in your key.")
-    state["client"] = openai.OpenAI(api_key=api_key, base_url=config.DEEPSEEK_BASE_URL)
-    print(f"  [OK] DeepSeek client: {config.DEEPSEEK_BASE_URL}")
+        state["client"] = None
+    else:
+        state["client"] = openai.OpenAI(api_key=api_key, base_url=config.DEEPSEEK_BASE_URL)
+        print(f"  [OK] DeepSeek client: {config.DEEPSEEK_BASE_URL}")
 
     # ── Init local embedding model ──
     print(f"  Loading embedding model: {config.EMBEDDING_MODEL_NAME} ...")
@@ -241,14 +273,17 @@ async def lifespan(app: FastAPI):
         all_chunks = []
         for doc in state["docs"]:
             all_chunks.extend(doc._chunks)
-        embed_and_store_chunks(
-            state["embedding_model"], state["collection"], all_chunks
-        )
-        print(f"  [OK] ChromaDB: {state['collection'].count()} vectors indexed")
+        if all_chunks:
+            embed_and_store_chunks(
+                state["embedding_model"], state["collection"], all_chunks
+            )
+            print(f"  [OK] ChromaDB: {state['collection'].count()} vectors indexed")
+        else:
+            print(f"  [OK] ChromaDB initialized (empty — waiting for documents)")
 
     state["ready"] = True
     print("=" * 60)
-    print("  Server ready! Open http://localhost:8765")
+    print("  EduDaily server ready! Open http://localhost:8765")
     print("=" * 60)
     print()
 
@@ -259,7 +294,7 @@ async def lifespan(app: FastAPI):
     print("Server stopped.")
 
 
-app = FastAPI(title="KnowledgeVault API", lifespan=lifespan)
+app = FastAPI(title="EduDaily API", lifespan=lifespan)
 
 frontend_dir = Path(__file__).parent / "frontend"
 frontend_dir.mkdir(exist_ok=True)
@@ -294,7 +329,7 @@ async def health():
 async def extract():
     if not state["ready"]:
         raise HTTPException(status_code=503, detail="管道尚未就绪，请稍后再试")
-    if not state["api_key_valid"]:
+    if not state["api_key_valid"] or state["client"] is None:
         raise HTTPException(status_code=401, detail="请先配置 DEEPSEEK_API_KEY")
 
     all_chunks = []
@@ -328,7 +363,7 @@ async def query(req: QueryRequest):
         raise HTTPException(status_code=503, detail="管道尚未就绪")
     if not req.query.strip():
         raise HTTPException(status_code=400, detail="查询内容不能为空")
-    if not state["api_key_valid"]:
+    if not state["api_key_valid"] or state["client"] is None:
         raise HTTPException(status_code=401,
             detail="请先配置 DEEPSEEK_API_KEY：复制 .env.example 为 .env，编辑填入密钥后重启服务")
 
@@ -573,7 +608,7 @@ async def ingest_url(req: IngestURLRequest):
     """
     if not state["ready"]:
         raise HTTPException(status_code=503, detail="管道尚未就绪")
-    if not state["api_key_valid"]:
+    if not state["api_key_valid"] or state["client"] is None:
         raise HTTPException(status_code=401, detail="请先配置 DEEPSEEK_API_KEY")
     if not req.urls:
         raise HTTPException(status_code=400, detail="请至少提供一个网址")
@@ -674,6 +709,85 @@ async def import_saved_files():
         "total_documents": len(state["docs"]),
         "total_vectors": state["collection"].count(),
     }
+
+
+# ── News Sources Management ─────────────────────────────────────────────
+
+
+@app.get("/api/sources")
+async def list_sources():
+    """List all configured news sources."""
+    if not state["conn"]:
+        raise HTTPException(status_code=503, detail="数据库未就绪")
+    sources = list_news_sources(state["conn"])
+    return {"sources": sources, "total": len(sources)}
+
+
+@app.post("/api/sources")
+async def add_source(req: NewsSourceRequest):
+    """Add a new news source URL."""
+    if not state["conn"]:
+        raise HTTPException(status_code=503, detail="数据库未就绪")
+    if not req.name.strip() or not req.url.strip():
+        raise HTTPException(status_code=400, detail="名称和网址不能为空")
+    if not req.url.startswith(("http://", "https://")):
+        raise HTTPException(status_code=400, detail="网址必须以 http:// 或 https:// 开头")
+
+    source_id = insert_news_source(
+        state["conn"], req.name.strip(), req.url.strip(),
+        req.source_type, req.category,
+    )
+    return {"status": "ok", "id": source_id, "name": req.name.strip(), "url": req.url.strip()}
+
+
+@app.delete("/api/sources/{source_id}")
+async def remove_source(source_id: int):
+    """Delete a news source and its associated articles."""
+    if not state["conn"]:
+        raise HTTPException(status_code=503, detail="数据库未就绪")
+    ok = delete_news_source(state["conn"], source_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="信息源不存在")
+    return {"status": "ok", "deleted_id": source_id}
+
+
+# ── Daily Fetch ──────────────────────────────────────────────────────────
+
+
+@app.post("/api/daily-fetch", response_model=DailyFetchResponse)
+async def daily_fetch():
+    """Fetch today's articles from all enabled news sources and index into KB."""
+    if not state["ready"]:
+        raise HTTPException(status_code=503, detail="管道尚未就绪")
+    if not state["api_key_valid"] or state["client"] is None:
+        raise HTTPException(status_code=401, detail="请先配置 DEEPSEEK_API_KEY")
+
+    try:
+        result = run_daily_fetch(
+            client=state["client"],
+            conn=state["conn"],
+            embedding_model=state["embedding_model"],
+            collection=state["collection"],
+            docs_state=state["docs"],
+        )
+    except openai.AuthenticationError:
+        raise HTTPException(status_code=401, detail="DeepSeek API 认证失败")
+    except openai.RateLimitError:
+        raise HTTPException(status_code=429, detail="API 请求频率超限，请稍后再试")
+    except openai.APIError as e:
+        raise HTTPException(status_code=502, detail=f"DeepSeek API 错误: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"日报获取失败: {e}")
+
+    return DailyFetchResponse(
+        batch_id=result["batch_id"],
+        today=result["today"],
+        total_articles=result["total_articles"],
+        sources_checked=result["sources_checked"],
+        sources_failed=result["sources_failed"],
+        articles=result["articles"],
+        errors=result["errors"],
+    )
 
 
 # ── Main ──────────────────────────────────────────────────────────────

@@ -24,7 +24,6 @@ def _build_keyword_index():
     return index
 
 
-# Built once at module load
 _KEYWORD_INDEX = _build_keyword_index()
 
 
@@ -33,45 +32,33 @@ def classify_domain(
     chunk_texts: list[str] | None = None,
     entity_fields: list[str] | None = None,
 ) -> str:
-    """Classify the content domain from available signals.
-
-    Args:
-        query: The user's query string
-        chunk_texts: List of retrieved chunk text contents
-        entity_fields: List of entity field names that had values (e.g. ["company_name", "revenue"])
-
-    Returns a domain key string (e.g. "finance", "politics", "technology").
-    """
+    """Classify the content domain from available signals."""
     scores: Counter = Counter()
 
-    # Combine all text
     text_parts = [query]
     if chunk_texts:
         text_parts.extend(chunk_texts)
     combined = "\n".join(text_parts).lower()
 
-    # Score by keyword matches
     for keyword, domains in _KEYWORD_INDEX.items():
         if keyword in combined:
             for d in domains:
-                # Weight: shorter keywords get less weight (avoid false matches)
                 weight = 2 if len(keyword) >= 4 else 1
                 scores[d] += weight
 
-    # Hints from entity fields — strong signal
+    # Hints from entity fields
     entity_hints = {
-        "company_name": "finance",
-        "revenue": "finance",
-        "net_profit": "finance",
-        "stock_code": "finance",
-        "growth_rate": "finance",
+        "policy_name": "education",
+        "education_stage": "education",
+        "subject_area": "education",
+        "institution_name": "education",
+        "reform_type": "education",
     }
     if entity_fields:
         for field in entity_fields:
             if field in entity_hints:
-                scores[entity_hints[field]] += 5  # strong weight
+                scores[entity_hints[field]] += 5
 
-    # Get best domain
     if scores:
         best_domain, best_score = scores.most_common(1)[0]
         if best_score >= 2:
@@ -85,10 +72,7 @@ def get_persona_for_query(
     chunk_texts: list[str] | None = None,
     entity_fields: list[str] | None = None,
 ) -> DomainPersona:
-    """Classify domain and return the corresponding DomainPersona.
-
-    Convenience wrapper that calls classify_domain() then get_persona().
-    """
+    """Classify domain and return the corresponding DomainPersona."""
     from prompts.personas import get_persona
 
     domain = classify_domain(query, chunk_texts, entity_fields)
@@ -100,10 +84,7 @@ def get_classification_detail(
     chunk_texts: list[str] | None = None,
     entity_fields: list[str] | None = None,
 ) -> dict:
-    """Return detailed classification info including all domain scores.
-
-    Useful for debugging and for showing the user why a domain was chosen.
-    """
+    """Return detailed classification info including all domain scores."""
     scores: Counter = Counter()
 
     text_parts = [query]
@@ -119,11 +100,11 @@ def get_classification_detail(
 
     if entity_fields:
         entity_hints = {
-            "company_name": "finance",
-            "revenue": "finance",
-            "net_profit": "finance",
-            "stock_code": "finance",
-            "growth_rate": "finance",
+            "policy_name": "education",
+            "education_stage": "education",
+            "subject_area": "education",
+            "institution_name": "education",
+            "reform_type": "education",
         }
         for field in entity_fields:
             if field in entity_hints:

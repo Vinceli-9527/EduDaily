@@ -39,34 +39,29 @@ def insert_extracted_entity(
         """
         INSERT INTO extracted_entities (
             chunk_id, document_id,
-            company_name, industry,
-            revenue, revenue_unit, revenue_period,
-            net_profit, net_profit_unit, net_profit_period,
-            growth_rate,
-            event_date, event_summary,
-            key_persons, location,
-            stock_code, stock_exchange,
+            policy_name, policy_level,
+            education_stage, subject_area,
+            institution_name, person_name,
+            event_date, reform_type,
+            impact_summary, region,
+            keywords,
             extraction_raw, confidence_score, extraction_model
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             chunk_id,
             document_id,
-            entity.get("company_name"),
-            entity.get("industry"),
-            entity.get("revenue"),
-            entity.get("revenue_unit"),
-            entity.get("revenue_period"),
-            entity.get("net_profit"),
-            entity.get("net_profit_unit"),
-            entity.get("net_profit_period"),
-            entity.get("growth_rate"),
+            entity.get("policy_name"),
+            entity.get("policy_level"),
+            entity.get("education_stage"),
+            entity.get("subject_area"),
+            entity.get("institution_name"),
+            entity.get("person_name"),
             entity.get("event_date"),
-            entity.get("event_summary"),
-            json.dumps(entity.get("key_persons"), ensure_ascii=False) if entity.get("key_persons") else None,
-            entity.get("location"),
-            entity.get("stock_code"),
-            entity.get("stock_exchange"),
+            entity.get("reform_type"),
+            entity.get("impact_summary"),
+            entity.get("region"),
+            json.dumps(entity.get("keywords"), ensure_ascii=False) if entity.get("keywords") else None,
             extraction_raw,
             entity.get("confidence_score"),
             model,
@@ -129,3 +124,89 @@ def insert_evaluation_result(
     )
     conn.commit()
     return cur.lastrowid
+
+
+# ── News Sources CRUD ─────────────────────────────────────────────────
+
+
+def list_news_sources(conn: sqlite3.Connection) -> list[dict]:
+    rows = conn.execute(
+        "SELECT * FROM news_sources ORDER BY id"
+    ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def insert_news_source(
+    conn: sqlite3.Connection, name: str, url: str, source_type: str = "web", category: str = "education"
+) -> int:
+    cur = conn.execute(
+        "INSERT INTO news_sources (name, url, source_type, category) VALUES (?, ?, ?, ?)",
+        (name, url, source_type, category),
+    )
+    conn.commit()
+    return cur.lastrowid
+
+
+def delete_news_source(conn: sqlite3.Connection, source_id: int) -> bool:
+    cur = conn.execute("DELETE FROM news_sources WHERE id = ?", (source_id,))
+    conn.commit()
+    return cur.rowcount > 0
+
+
+def update_source_fetched_at(conn: sqlite3.Connection, source_id: int) -> None:
+    conn.execute(
+        "UPDATE news_sources SET last_fetched_at = CURRENT_TIMESTAMP WHERE id = ?",
+        (source_id,),
+    )
+    conn.commit()
+
+
+# ── Edu Articles CRUD ──────────────────────────────────────────────────
+
+
+def insert_article(
+    conn: sqlite3.Connection,
+    source_id: int,
+    title: str,
+    original_url: str = None,
+    publish_date: str = None,
+    summary: str = None,
+    source_name: str = None,
+    document_id: int = None,
+    fetch_batch_id: str = None,
+) -> int:
+    cur = conn.execute(
+        """
+        INSERT INTO edu_articles (source_id, document_id, title, original_url, publish_date, summary, source_name, fetch_batch_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (source_id, document_id, title, original_url, publish_date, summary, source_name, fetch_batch_id),
+    )
+    conn.commit()
+    return cur.lastrowid
+
+
+def list_articles_by_date(
+    conn: sqlite3.Connection, date: str = None, limit: int = 50
+) -> list[dict]:
+    if date:
+        rows = conn.execute(
+            "SELECT * FROM edu_articles WHERE publish_date = ? ORDER BY id DESC LIMIT ?",
+            (date, limit),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT * FROM edu_articles ORDER BY id DESC LIMIT ?",
+            (limit,),
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def list_articles_by_batch(
+    conn: sqlite3.Connection, batch_id: str
+) -> list[dict]:
+    rows = conn.execute(
+        "SELECT * FROM edu_articles WHERE fetch_batch_id = ? ORDER BY id",
+        (batch_id,),
+    ).fetchall()
+    return [dict(r) for r in rows]

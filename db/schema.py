@@ -1,4 +1,4 @@
-"""SQLite schema — DDL for all 5 tables."""
+"""SQLite schema — DDL for all tables."""
 
 CREATE_DOCUMENTS_TABLE = """
 CREATE TABLE IF NOT EXISTS documents (
@@ -28,28 +28,24 @@ CREATE TABLE IF NOT EXISTS extracted_entities (
     id                INTEGER PRIMARY KEY AUTOINCREMENT,
     chunk_id          INTEGER NOT NULL REFERENCES chunks(id) ON DELETE CASCADE,
     document_id       INTEGER NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
-    company_name      TEXT,
-    industry          TEXT,
-    revenue           REAL,
-    revenue_unit      TEXT,
-    revenue_period    TEXT,
-    net_profit        REAL,
-    net_profit_unit   TEXT,
-    net_profit_period TEXT,
-    growth_rate       REAL,
+    policy_name       TEXT,
+    policy_level      TEXT,
+    education_stage   TEXT,
+    subject_area      TEXT,
+    institution_name  TEXT,
+    person_name       TEXT,
     event_date        TEXT,
-    event_summary     TEXT,
-    key_persons       TEXT,
-    location          TEXT,
-    stock_code        TEXT,
-    stock_exchange    TEXT,
+    reform_type       TEXT,
+    impact_summary    TEXT,
+    region            TEXT,
+    keywords          TEXT,
     extraction_raw    TEXT,
     confidence_score  REAL,
     extraction_model  TEXT,
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_entities_company ON extracted_entities(company_name);
+CREATE INDEX IF NOT EXISTS idx_entities_policy ON extracted_entities(policy_name);
 CREATE INDEX IF NOT EXISTS idx_entities_doc ON extracted_entities(document_id);
 CREATE INDEX IF NOT EXISTS idx_entities_event_date ON extracted_entities(event_date);
 """
@@ -78,12 +74,46 @@ CREATE TABLE IF NOT EXISTS evaluation_results (
 );
 """
 
+CREATE_NEWS_SOURCES_TABLE = """
+CREATE TABLE IF NOT EXISTS news_sources (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    name            TEXT    NOT NULL,
+    url             TEXT    NOT NULL,
+    source_type     TEXT    DEFAULT 'web',
+    category        TEXT    DEFAULT 'education',
+    enabled         INTEGER DEFAULT 1,
+    last_fetched_at TIMESTAMP,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+"""
+
+CREATE_EDU_ARTICLES_TABLE = """
+CREATE TABLE IF NOT EXISTS edu_articles (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_id       INTEGER NOT NULL REFERENCES news_sources(id) ON DELETE CASCADE,
+    document_id     INTEGER REFERENCES documents(id) ON DELETE SET NULL,
+    title           TEXT    NOT NULL,
+    original_url    TEXT,
+    publish_date    DATE,
+    summary         TEXT,
+    source_name     TEXT,
+    fetch_batch_id  TEXT,
+    fetched_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_articles_source ON edu_articles(source_id);
+CREATE INDEX IF NOT EXISTS idx_articles_date ON edu_articles(publish_date);
+CREATE INDEX IF NOT EXISTS idx_articles_batch ON edu_articles(fetch_batch_id);
+"""
+
 ALL_TABLES = [
     CREATE_DOCUMENTS_TABLE,
     CREATE_CHUNKS_TABLE,
     CREATE_EXTRACTED_ENTITIES_TABLE,
     CREATE_ANALYSIS_REPORTS_TABLE,
     CREATE_EVALUATION_RESULTS_TABLE,
+    CREATE_NEWS_SOURCES_TABLE,
+    CREATE_EDU_ARTICLES_TABLE,
 ]
 
 

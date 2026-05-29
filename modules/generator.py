@@ -26,25 +26,26 @@ def build_structured_summary(entities: list[dict]) -> str:
     lines = []
     for e in entities:
         parts = []
-        if e.get("company_name"):
-            parts.append(f"公司：{e['company_name']}")
-        if e.get("industry"):
-            parts.append(f"行业：{e['industry']}")
-        if e.get("location"):
-            parts.append(f"地点：{e['location']}")
-        if e.get("revenue") is not None:
-            parts.append(f"营收：{e['revenue']}{e.get('revenue_unit', '')} ({e.get('revenue_period', '')})")
-        if e.get("net_profit") is not None:
-            parts.append(f"净利润：{e['net_profit']}{e.get('net_profit_unit', '')} ({e.get('net_profit_period', '')})")
-        if e.get("growth_rate") is not None:
-            parts.append(f"增长率：{e['growth_rate']}%")
-        if e.get("event_date") and e.get("event_summary"):
-            parts.append(f"事件：{e['event_date']} — {e['event_summary']}")
-        if e.get("key_persons"):
-            kp = json.loads(e["key_persons"]) if isinstance(e["key_persons"], str) else e["key_persons"]
-            parts.append(f"关键人物：{', '.join(kp)}")
-        if e.get("stock_code"):
-            parts.append(f"股票：{e['stock_code']}.{e.get('stock_exchange', '')}")
+        if e.get("policy_name"):
+            parts.append(f"政策：{e['policy_name']}")
+        if e.get("policy_level"):
+            parts.append(f"级别：{e['policy_level']}")
+        if e.get("education_stage"):
+            parts.append(f"学段：{e['education_stage']}")
+        if e.get("subject_area"):
+            parts.append(f"学科：{e['subject_area']}")
+        if e.get("institution_name"):
+            parts.append(f"机构：{e['institution_name']}")
+        if e.get("region"):
+            parts.append(f"地区：{e['region']}")
+        if e.get("event_date"):
+            parts.append(f"日期：{e['event_date']}")
+        if e.get("reform_type"):
+            parts.append(f"改革类型：{e['reform_type']}")
+        if e.get("impact_summary"):
+            parts.append(f"影响：{e['impact_summary']}")
+        if e.get("person_name"):
+            parts.append(f"关键人物：{e['person_name']}")
         if parts:
             lines.append("  |  ".join(parts))
     return "\n".join(lines)
@@ -62,7 +63,7 @@ def generate_report(
     """Generate an analysis report using DeepSeek with RAG context.
 
     Automatically detects the content domain and adopts an appropriate
-    expert persona (financial analyst, political commentator, tech analyst, etc.).
+    expert persona (education researcher, general analyst, etc.).
 
     Returns dict with keys:
         report              — markdown report text
@@ -88,10 +89,11 @@ def generate_report(
 
     # Collect entity field names that have values
     entity_fields = []
+    edu_keys = {"policy_name", "education_stage", "subject_area", "institution_name", "reform_type"}
     if entities:
         for e in entities:
             for key, val in e.items():
-                if val is not None and val != "" and key not in entity_fields:
+                if val is not None and val != "" and key not in entity_fields and key in edu_keys:
                     entity_fields.append(key)
 
     # Classify domain and select persona

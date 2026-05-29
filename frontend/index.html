@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KnowledgeVault — 智能知识库检索与隐私保护分析</title>
+    <title>EduDaily — 每日教育资讯智能检索与分析</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script src="https://unpkg.com/marked@12/marked.min.js"></script>
     <style>
@@ -621,6 +621,141 @@
             border: 1px solid #fcd34d;
         }
 
+        /* ── News Sources ─────────────────────────────────── */
+        .src-card { margin-bottom: 16px; }
+        .src-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 24px; background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border-bottom: 1px solid #bfdbfe; cursor: pointer; user-select: none;
+            transition: background var(--transition);
+        }
+        .src-header:hover { background: linear-gradient(135deg, #dbeafe, #cbdffd); }
+        .src-header .src-title {
+            font-weight: 700; font-size: 0.88rem;
+            display: flex; align-items: center; gap: 10px; color: #1e40af;
+        }
+        .src-header .src-chevron {
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.7rem; color: #3b82f6; width: 20px; height: 20px;
+            display: flex; align-items: center; justify-content: center;
+            background: #dbeafe; border-radius: 50%;
+        }
+        .src-header .src-chevron.open { transform: rotate(90deg); background: #2563eb; color: #fff; }
+        .src-body { padding: 20px 24px; }
+        .src-add-row { display: flex; gap: 10px; margin-bottom: 16px; }
+        .src-add-row input {
+            flex: 1; padding: 10px 14px;
+            border: 2px solid #bfdbfe; border-radius: var(--radius-sm);
+            font-size: 0.85rem; outline: none; transition: all var(--transition);
+            background: #f8faff;
+        }
+        .src-add-row input:focus {
+            border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+        }
+        .src-add-row input::placeholder { color: #94a3b8; }
+        .src-add-btn {
+            padding: 10px 20px; white-space: nowrap;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #fff; border: none; border-radius: var(--radius-sm);
+            font-size: 0.85rem; font-weight: 600; cursor: pointer;
+            transition: all var(--transition);
+            box-shadow: 0 2px 8px rgba(59,130,246,0.2);
+        }
+        .src-add-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(59,130,246,0.35);
+        }
+        .src-add-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .src-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 14px; border: 1px solid var(--border);
+            border-radius: var(--radius-sm); margin-bottom: 6px;
+            font-size: 0.82rem; background: var(--card);
+            transition: all var(--transition);
+        }
+        .src-item:hover { background: #fafbfd; border-color: #cbd5e1; }
+        .src-item .src-item-icon {
+            font-size: 1.2rem; flex-shrink: 0;
+            width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-radius: 8px;
+        }
+        .src-item-info { flex: 1; min-width: 0; }
+        .src-item-info .src-item-name {
+            font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .src-item-info .src-item-url {
+            font-size: 0.73rem; color: var(--text-muted);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .src-item-status {
+            font-size: 0.7rem; padding: 3px 10px; border-radius: 10px;
+            font-weight: 600; flex-shrink: 0;
+        }
+        .src-item-status.ok { background: #dcfce7; color: #166534; }
+        .src-item-status.never { background: #f1f5f9; color: #64748b; }
+        .src-item-delete {
+            flex-shrink: 0; padding: 5px 12px; background: none;
+            border: 1px solid #fecaca; color: #dc2626; border-radius: 6px;
+            font-size: 0.73rem; cursor: pointer; transition: all var(--transition);
+            font-weight: 500;
+        }
+        .src-item-delete:hover:not(:disabled) {
+            background: #fef2f2; border-color: #f87171;
+        }
+        .src-item-delete:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        /* ── Daily Fetch Button ────────────────────────────── */
+        .daily-fetch-section {
+            margin-top: 18px; padding-top: 18px;
+            border-top: 2px dashed #e2e8f0;
+        }
+        .daily-fetch-btn {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 16px 24px;
+            background: linear-gradient(135deg, #059669, #047857);
+            color: #fff; border: none; border-radius: var(--radius);
+            font-size: 1rem; font-weight: 700; cursor: pointer;
+            transition: all var(--transition);
+            box-shadow: 0 4px 16px rgba(5,150,105,0.25);
+            letter-spacing: 0.02em;
+        }
+        .daily-fetch-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(5,150,105,0.4);
+        }
+        .daily-fetch-btn:active:not(:disabled) { transform: translateY(0); }
+        .daily-fetch-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .daily-fetch-hint {
+            text-align: center; font-size: 0.76rem; color: var(--text-muted);
+            margin-top: 8px;
+        }
+        .daily-fetch-result {
+            margin-top: 14px; padding: 16px 20px;
+            border-radius: var(--radius-sm); font-size: 0.82rem;
+        }
+        .daily-fetch-result.success {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 1px solid #a7f3d0;
+        }
+        .daily-fetch-result.partial {
+            background: linear-gradient(135deg, #fffbeb, #fefce8);
+            border: 1px solid #fde68a;
+        }
+        .daily-fetch-result.error {
+            background: linear-gradient(135deg, #fef2f2, #fff5f5);
+            border: 1px solid #fecaca;
+        }
+        .fetch-result-title { font-weight: 700; margin-bottom: 8px; }
+        .fetch-result-item {
+            display: flex; align-items: flex-start; gap: 8px;
+            padding: 6px 0; font-size: 0.8rem; line-height: 1.5;
+        }
+        .fetch-result-item .fetch-icon { flex-shrink: 0; margin-top: 2px; }
+        .fetch-error {
+            color: #991b1b; font-size: 0.78rem; margin-top: 4px; padding-left: 22px;
+        }
+
         /* ── Responsive ───────────────────────────────────── */
         @media (max-width: 640px) {
             .search-row { flex-direction: column; }
@@ -636,8 +771,8 @@
 <div id="app">
     <!-- Header -->
     <div class="header">
-        <h1><span>KnowledgeVault</span> — 智能知识库检索与隐私保护分析</h1>
-        <div class="subtitle">DeepSeek Chat + BGE Embedding + ChromaDB | 检索增强生成全链路可视化</div>
+        <h1><span>EduDaily</span> — 每日教育资讯智能检索与分析</h1>
+        <div class="subtitle">DeepSeek Chat + BGE Embedding + ChromaDB | 服务于教育工作者的 RAG 资讯系统</div>
         <div class="status-bar">
             <span><span class="status-dot" :class="health.ready ? 'ok' : 'err'"></span>管道就绪</span>
             <span><span class="status-dot" :class="health.api_key_configured ? 'ok' : 'err'"></span>{{ health.api_key_configured ? 'API Key 已配置' : 'API Key 未配置' }}</span>
@@ -665,7 +800,7 @@
             <span class="privacy-text">
                 <strong>隐私保护已启用</strong> — 您的文档保存在本地，检索到的内容在发送至 DeepSeek API 前会自动脱敏。<br>
                 <span style="color:var(--text-muted);">
-                自动隐藏：手机号、身份证号、银行卡号、邮箱、姓名、表格数据。在「Prompt 工程」标签页可查看脱敏后的实际 Prompt。
+                自动隐藏：手机号、身份证号、银行卡号、邮箱、姓名等敏感信息。在「Prompt 工程」标签页可查看脱敏后的实际 Prompt。
                 </span>
             </span>
         </div>
@@ -677,7 +812,7 @@
                     class="search-input"
                     v-model="query"
                     type="text"
-                    placeholder="输入您的问题，体验 Prompt Engineering 驱动的 RAG 分析..."
+                    placeholder="输入您关心的教育问题，检索相关资讯并生成分析报告..."
                     @keyup.enter="submitQuery"
                     :disabled="loading"
                 />
@@ -848,6 +983,97 @@ XX公司成立于20XX年，总部位于XX市，主营业务涵盖...
             </div>
         </div>
 
+        <!-- News Sources & Daily Fetch -->
+        <div class="card src-card">
+            <div class="src-header" @click="srcOpen = !srcOpen">
+                <span class="src-title">
+                    <span>📡</span> 信息源管理 & 每日日报
+                    <span style="font-weight:400;font-size:0.75rem;color:var(--text-muted);">
+                        {{ sources.length }} 个信息源
+                    </span>
+                </span>
+                <span class="src-chevron" :class="{ open: srcOpen }">▶</span>
+            </div>
+            <div class="src-body" v-show="srcOpen">
+                <!-- Add new source -->
+                <div class="src-add-row">
+                    <input v-model="newSourceName" type="text" placeholder="信息源名称，如：教育部官网"
+                        @keyup.enter="addSource" :disabled="srcAdding" />
+                    <input v-model="newSourceUrl" type="text" placeholder="网址，如：https://www.moe.gov.cn/"
+                        @keyup.enter="addSource" :disabled="srcAdding" />
+                    <button class="src-add-btn" @click="addSource" :disabled="srcAdding || !newSourceName.trim() || !newSourceUrl.trim()">
+                        {{ srcAdding ? '添加中...' : '添加' }}
+                    </button>
+                </div>
+
+                <!-- Source list -->
+                <div v-if="sources.length === 0" style="text-align:center;padding:12px;color:var(--text-muted);font-size:0.8rem;">
+                    暂无信息源，请添加您关注的教育资讯网站
+                </div>
+                <div class="src-item" v-for="src in sources" :key="src.id">
+                    <span class="src-item-icon">🌐</span>
+                    <div class="src-item-info">
+                        <div class="src-item-name">{{ src.name }}</div>
+                        <div class="src-item-url">{{ src.url }}</div>
+                    </div>
+                    <span class="src-item-status" :class="src.last_fetched_at ? 'ok' : 'never'">
+                        {{ src.last_fetched_at ? '已同步' : '未同步' }}
+                    </span>
+                    <button class="src-item-delete"
+                        @click="deleteSource(src)"
+                        :disabled="srcDeleting === src.id">
+                        {{ srcDeleting === src.id ? '...' : '删除' }}
+                    </button>
+                </div>
+
+                <!-- Daily Fetch -->
+                <div class="daily-fetch-section">
+                    <button class="daily-fetch-btn"
+                        @click="runDailyFetch"
+                        :disabled="fetchRunning || sources.length === 0">
+                        <span v-if="fetchRunning" class="url-mini-spinner"></span>
+                        <span v-else>📰</span>
+                        {{ fetchRunning ? '正在获取今日教育资讯...' : '一键获取今日日报' }}
+                    </button>
+                    <div class="daily-fetch-hint" v-if="sources.length > 0">
+                        从 {{ sources.length }} 个信息源获取今日（{{ todayDate }}）发布的最新教育资讯
+                    </div>
+                    <div class="daily-fetch-hint" v-else>
+                        请先添加信息源网址
+                    </div>
+
+                    <!-- Fetch results -->
+                    <div v-if="fetchResult" class="daily-fetch-result"
+                        :class="fetchResult.total_articles > 0 ? 'success' : (fetchResult.sources_checked > 0 ? 'partial' : 'error')">
+                        <div class="fetch-result-title">
+                            <span v-if="fetchResult.total_articles > 0">获取完成！共收录 {{ fetchResult.total_articles }} 篇今日资讯</span>
+                            <span v-else-if="fetchResult.sources_checked > 0">获取完成，但未找到今日资讯</span>
+                            <span v-else>获取失败</span>
+                        </div>
+                        <div v-if="fetchResult.total_articles > 0" style="font-size:0.78rem;color:var(--text-muted);margin-bottom:8px;">
+                            批次：{{ fetchResult.batch_id }} | 已检查 {{ fetchResult.sources_checked }} 个信息源
+                        </div>
+                        <div class="fetch-result-item" v-for="(art, idx) in fetchResult.articles" :key="idx">
+                            <span class="fetch-icon">📄</span>
+                            <div>
+                                <div style="font-weight:600;">{{ art.title }}</div>
+                                <div style="font-size:0.73rem;color:var(--text-muted);">
+                                    来源：{{ art.source_name }} | 日期：{{ art.publish_date }} |
+                                    {{ art.chunks }} 分块 | 文档 #{{ art.doc_id }}
+                                    <span v-if="art.original_url" style="margin-left:4px;">
+                                        <a :href="art.original_url" target="_blank" style="color:var(--primary);">原文链接</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fetch-error" v-for="(err, idx) in fetchResult.errors" :key="'e'+idx">
+                            {{ err }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Loading -->
         <div class="loading-card" v-if="loading">
             <div class="spinner"></div>
@@ -922,7 +1148,7 @@ XX公司成立于20XX年，总部位于XX市，主营业务涵盖...
         <!-- Empty -->
         <div class="empty-state" v-if="!loading && !result && !error">
             <div class="icon">&#x1F4DD;</div>
-            <p>输入问题，观察 Prompt Engineering 如何驱动 RAG 管道</p>
+            <p>输入教育相关问题，获取每日教育资讯分析</p>
             <p style="font-size:0.8rem;margin-top:4px;">从检索 → Prompt 组装 → 报告生成，全链路可视化</p>
         </div>
     </div>
@@ -949,11 +1175,7 @@ createApp({
             kbDeleting: null,
             kbUploadStatus: { msg: "", type: "info" },
             kbGuideOpen: false,
-            quickQueries: [
-                { label: "深圳创新科技财务分析", text: "分析深圳创新科技有限公司2024年的财务状况和技术创新进展" },
-                { label: "北京数字金融经营风险", text: "北京数字金融集团面临哪些经营风险？新任CEO刘芳采取了什么改革措施？" },
-                { label: "华信医药并购康达生物", text: "上海华信医药收购广州康达生物的并购条款和对赌协议内容" },
-            ],
+            quickQueries: [],
             // URL Ingestion
             urlOpen: false,
             urlInput: "",
@@ -962,10 +1184,26 @@ createApp({
             urlResults: [],
             urlSavedCount: 0,
             urlSaveDir: "",
+            // News Sources & Daily Fetch
+            srcOpen: false,
+            sources: [],
+            newSourceName: "",
+            newSourceUrl: "",
+            srcAdding: false,
+            srcDeleting: null,
+            fetchRunning: false,
+            fetchResult: null,
         };
     },
 
     computed: {
+        todayDate() {
+            const now = new Date();
+            return now.getFullYear() + '-' +
+                String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                String(now.getDate()).padStart(2, '0');
+        },
+
         renderedReport() {
             if (!this.result?.report) return "";
             marked.setOptions({ breaks: true, gfm: true });
@@ -1019,6 +1257,7 @@ createApp({
     mounted() {
         this.checkHealth();
         this.loadKnowledge();
+        this.loadSources();
     },
 
     methods: {
@@ -1223,6 +1462,96 @@ createApp({
                 alert("导入失败: " + (e.message || "未知错误"));
             } finally {
                 this.urlImporting = false;
+            }
+        },
+
+        // ── News Sources ───────────────────────────────────────────
+
+        async loadSources() {
+            try {
+                const res = await fetch("/api/sources");
+                if (!res.ok) throw new Error("HTTP " + res.status);
+                const data = await res.json();
+                this.sources = data.sources || [];
+            } catch(e) {
+                console.error("Load sources failed:", e);
+            }
+        },
+
+        async addSource() {
+            const name = this.newSourceName.trim();
+            const url = this.newSourceUrl.trim();
+            if (!name || !url || this.srcAdding) return;
+
+            this.srcAdding = true;
+            try {
+                const res = await fetch("/api/sources", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, url }),
+                });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.detail || "添加失败");
+                }
+                this.newSourceName = "";
+                this.newSourceUrl = "";
+                await this.loadSources();
+            } catch(e) {
+                alert("添加信息源失败: " + (e.message || "未知错误"));
+            } finally {
+                this.srcAdding = false;
+            }
+        },
+
+        async deleteSource(src) {
+            if (!confirm(`确认删除信息源「${src.name}」？关联的文章记录也会被删除。`)) return;
+
+            this.srcDeleting = src.id;
+            try {
+                const res = await fetch(`/api/sources/${src.id}`, { method: "DELETE" });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.detail || "删除失败");
+                }
+                await this.loadSources();
+            } catch(e) {
+                alert("删除失败: " + (e.message || "未知错误"));
+            } finally {
+                this.srcDeleting = null;
+            }
+        },
+
+        // ── Daily Fetch ──────────────────────────────────────────────
+
+        async runDailyFetch() {
+            if (this.fetchRunning || this.sources.length === 0) return;
+
+            this.fetchRunning = true;
+            this.fetchResult = null;
+            try {
+                const res = await fetch("/api/daily-fetch", { method: "POST" });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.detail || "获取失败 (HTTP " + res.status + ")");
+                }
+                this.fetchResult = await res.json();
+                // Refresh knowledge base stats
+                await this.loadKnowledge();
+                await this.loadSources();
+                await this.checkHealth();
+            } catch(e) {
+                this.fetchResult = {
+                    batch_id: "",
+                    today: this.todayDate,
+                    total_articles: 0,
+                    sources_checked: 0,
+                    sources_failed: this.sources.length,
+                    articles: [],
+                    errors: [e.message || "网络错误"],
+                };
+            } finally {
+                this.fetchRunning = false;
             }
         },
 

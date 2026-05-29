@@ -1,8 +1,6 @@
-"""Generation prompt templates for DeepSeek API.
+"""Generation prompt templates for DeepSeek API — education domain.
 
 Supports dynamic persona selection based on content domain.
-Each domain (finance, politics, technology, healthcare, legal, etc.)
-has its own expert role and report structure.
 """
 
 from prompts.personas import DomainPersona, DEFAULT_PERSONA

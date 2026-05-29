@@ -37,8 +37,8 @@ def extract_from_chunk(
             logger.warning("Failed to parse JSON from extraction response: %s", raw[:300])
             return None
 
-        # Ensure numeric fields are actually numbers
-        for field in ("revenue", "net_profit", "growth_rate", "confidence_score"):
+        # Ensure confidence_score is numeric
+        for field in ("confidence_score",):
             if field in entity and entity[field] is not None:
                 try:
                     entity[field] = float(entity[field])
@@ -81,12 +81,12 @@ def run_extraction_pipeline(
 
         if entity is None:
             entity = {
-                "company_name": None, "industry": None,
-                "revenue": None, "revenue_unit": None, "revenue_period": None,
-                "net_profit": None, "net_profit_unit": None, "net_profit_period": None,
-                "growth_rate": None, "event_date": None, "event_summary": None,
-                "key_persons": None, "location": None,
-                "stock_code": None, "stock_exchange": None,
+                "policy_name": None, "policy_level": None,
+                "education_stage": None, "subject_area": None,
+                "institution_name": None, "person_name": None,
+                "event_date": None, "reform_type": None,
+                "impact_summary": None, "region": None,
+                "keywords": None,
                 "confidence_score": 0.0,
             }
             raw = json.dumps({"error": "extraction_failed"}, ensure_ascii=False)

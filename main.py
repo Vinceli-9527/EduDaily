@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""KnowledgeVault — RAG-powered knowledge retrieval & analysis system
+"""EduDaily — RAG-powered daily education news & analysis system
 
 Full RAG pipeline: Load → Chunk → Extract → Embed → Retrieve → Generate → Evaluate
 
 Usage:
-    python main.py              # Run full pipeline with demo queries
+    python main.py              # Run full pipeline
     python main.py --query "..." # Run full pipeline + custom query
 """
+
 
 import os
 import re
@@ -35,7 +36,7 @@ sys.path.insert(0, str(config.BASE_DIR))
 def print_banner():
     print()
     print("=" * 62)
-    print("   KnowledgeVault — Intelligent Knowledge Retrieval & Analysis")
+    print("   EduDaily — Daily Education News & Analysis")
     print("   RAG Pipeline: Load → Chunk → Extract → Embed → Retrieve → Generate → Evaluate")
     print("=" * 62)
     print(f"   Chat Model:      {config.DEEPSEEK_CHAT_MODEL}")
@@ -166,10 +167,9 @@ def stage_extract(conn, client, docs):
 
     # Print sample extractions
     for i, (chunk, entity) in enumerate(zip(all_chunks, entities)):
-        company = entity.get("company_name") or "(未识别)"
-        revenue = entity.get("revenue")
-        rev_str = f"{revenue}{entity.get('revenue_unit', '')}" if revenue else "N/A"
-        print(f"  chunk_{chunk.chunk_id}: {company} | 营收={rev_str}")
+        policy = entity.get("policy_name") or "(未识别)"
+        stage = entity.get("education_stage") or "N/A"
+        print(f"  chunk_{chunk.chunk_id}: {policy} | 学段={stage}")
         if i >= 5:
             break  # show first few
 
@@ -243,11 +243,7 @@ def stage_evaluate_extraction(conn):
 
 # ── Stage 6: Query & Generate Reports ─────────────────────────────────
 
-DEMO_QUERIES = [
-    "分析深圳创新科技有限公司2024年的财务状况和技术创新进展",
-    "北京数字金融集团面临哪些经营风险？新任CEO刘芳采取了什么改革措施？",
-    "上海华信医药集团收购广州康达生物的并购条款是什么？对赌协议的主要内容？",
-]
+DEMO_QUERIES = []
 
 
 def stage_query_and_generate(conn, client, embedding_model, collection):
@@ -259,6 +255,10 @@ def stage_query_and_generate(conn, client, embedding_model, collection):
     from modules.generator import generate_report
 
     queries_to_run = list(DEMO_QUERIES)
+
+    if not queries_to_run:
+        print("  (no queries to run)")
+        return
 
     for idx, query in enumerate(queries_to_run, 1):
         print()
@@ -366,7 +366,7 @@ def print_summary(conn):
     """Print final summary of all artifacts and evaluation results."""
     print()
     print("=" * 62)
-    print("   PIPELINE COMPLETE — Summary")
+    print("   PIPELINE COMPLETE — EduDaily Summary")
     print("=" * 62)
 
     # DB stats
@@ -394,7 +394,7 @@ def print_summary(conn):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="KnowledgeVault — Intelligent Knowledge Retrieval & Analysis"
+        description="EduDaily — Daily Education News & Analysis"
     )
     parser.add_argument(
         "--query", "-q", type=str, default=None,

@@ -1,5 +1,10 @@
 # Environment — secrets & credentials (DO NOT COMMIT)
 .env
+.env.*
+!.env.example
+
+# Downloaded knowledge base documents (user data)
+data/sample_docs/*.txt
 
 # Bytecode
 __pycache__/

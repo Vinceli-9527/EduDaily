@@ -1,4 +1,4 @@
-"""Central configuration for KnowledgeVault.
+"""Central configuration for EduDaily.
 
 Secrets are loaded from .env file. Copy .env.example to .env and fill in your key.
 """
@@ -37,7 +37,7 @@ EMBEDDING_MODEL_NAME = "BAAI/bge-small-zh-v1.5"
 # ---- Paths ----
 BASE_DIR = Path(__file__).resolve().parent
 CHROMA_PERSIST_DIR = str(BASE_DIR / "chroma_store")
-CHROMA_COLLECTION_NAME = "financial_documents"
+CHROMA_COLLECTION_NAME = "edu_documents"
 SQLITE_DB_PATH = str(BASE_DIR / "data" / "structured.db")
 SAMPLE_DOCS_DIR = str(BASE_DIR / "data" / "sample_docs")
 GROUND_TRUTH_PATH = str(BASE_DIR / "data" / "ground_truth.json")

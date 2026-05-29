@@ -39,8 +39,8 @@ def _exact_match(extracted, truth):
     return 1.0 if _normalize(str(extracted)) == _normalize(str(truth)) else 0.0
 
 
-def _jaccard_persons(extracted, truth):
-    """Jaccard similarity for key_persons lists."""
+def _jaccard_keywords(extracted, truth):
+    """Jaccard similarity for keyword lists."""
     if not extracted and not truth:
         return 1.0
     if not extracted or not truth:
@@ -68,11 +68,11 @@ def evaluate_extraction(
     with open(ground_truth_path, "r", encoding="utf-8") as f:
         gt_data = json.load(f)
 
-    # Build a lookup: (company_name) → ground truth entity
+    # Build a lookup: (policy_name) → ground truth entity
     gt_lookup = {}
     for doc_name, doc_info in gt_data.items():
         for gt in doc_info.get("ground_truths", []):
-            key = gt.get("company_name", doc_name)
+            key = gt.get("policy_name", doc_name)
             gt_lookup[key] = gt
 
     if not db_entities or not gt_lookup:
@@ -82,28 +82,26 @@ def evaluate_extraction(
     # Field-level evaluation
     field_metrics = defaultdict(list)
     field_pairs = [
-        ("company_name", _fuzzy_match, "company_fuzzy_accuracy"),
-        ("industry", _fuzzy_match, "industry_fuzzy_accuracy"),
-        ("revenue", _numeric_accuracy, "revenue_accuracy"),
-        ("net_profit", _numeric_accuracy, "net_profit_accuracy"),
-        ("growth_rate", _numeric_accuracy, "growth_rate_accuracy"),
+        ("policy_name", _fuzzy_match, "policy_fuzzy_accuracy"),
+        ("policy_level", _exact_match, "policy_level_exact_match"),
+        ("education_stage", _exact_match, "education_stage_exact_match"),
+        ("subject_area", _exact_match, "subject_area_exact_match"),
+        ("institution_name", _fuzzy_match, "institution_fuzzy_accuracy"),
         ("event_date", _exact_match, "event_date_exact_match"),
-        ("event_summary", _fuzzy_match, "event_summary_fuzzy"),
-        ("key_persons", _jaccard_persons, "key_persons_jaccard"),
-        ("location", _exact_match, "location_exact_match"),
-        ("stock_code", _exact_match, "stock_code_exact_match"),
+        ("reform_type", _exact_match, "reform_type_exact_match"),
+        ("region", _exact_match, "region_exact_match"),
     ]
 
     scores = {}
     for db_entity in db_entities:
-        company = db_entity.get("company_name", "")
-        gt = gt_lookup.get(company)
+        policy = db_entity.get("policy_name", "")
+        gt = gt_lookup.get(policy)
         if gt is None:
             # Try fuzzy match to find nearest ground truth
             best_score = 0
             best_key = None
             for key in gt_lookup:
-                sim = _fuzzy_match(company, key)
+                sim = _fuzzy_match(policy, key)
                 if sim > best_score and sim > 0.6:
                     best_score = sim
                     best_key = key
@@ -122,15 +120,15 @@ def evaluate_extraction(
     total = len(db_entities)
     scores["json_validity_rate"] = valid_count / total if total > 0 else 0.0
 
-    # Completeness: non-null fields extracted / non-null fields in ground truth
     extractable_fields = [
-        "company_name", "industry", "revenue", "net_profit", "growth_rate",
-        "event_date", "event_summary", "key_persons", "location", "stock_code",
+        "policy_name", "policy_level", "education_stage", "subject_area",
+        "institution_name", "person_name", "event_date", "reform_type",
+        "impact_summary", "region",
     ]
     completeness_scores = []
     for db_entity in db_entities:
-        company = db_entity.get("company_name", "")
-        gt = next((v for k, v in gt_lookup.items() if _fuzzy_match(company, k) > 0.6), None)
+        policy = db_entity.get("policy_name", "")
+        gt = next((v for k, v in gt_lookup.items() if _fuzzy_match(policy, k) > 0.6), None)
         if gt is None:
             continue
         gt_non_null = sum(1 for f in extractable_fields if gt.get(f) is not None)
@@ -209,19 +207,19 @@ def evaluate_generation(report: str, structured_data: list[dict]) -> dict[str, f
 
     # Section completeness: check all 5 required sections
     required_sections = [
-        r"### 一、执行摘要",
-        r"### 二、关键财务指标分析",
-        r"### 三、重大事件分析",
-        r"### 四、风险提示",
-        r"### 五、结论与展望",
+        r"### 一、教育现象/政策概述",
+        r"### 二、深度分析",
+        r"### 三、利益相关方影响",
+        r"### 四、国内外对比与借鉴",
+        r"### 五、建议与展望",
     ]
     found = sum(1 for pat in required_sections if re.search(pat, report))
     scores["section_completeness"] = found / len(required_sections)
 
-    # Data citation: count numeric values that match structured data
+    # Data citation: count entity values that match structured data
     citation_count = 0
     for entity in structured_data:
-        for key in ("revenue", "net_profit", "growth_rate"):
+        for key in ("policy_name", "institution_name", "person_name", "region"):
             val = entity.get(key)
             if val is not None and str(val) in report:
                 citation_count += 1
@@ -231,12 +229,13 @@ def evaluate_generation(report: str, structured_data: list[dict]) -> dict[str, f
     report_len = len(report)
     scores["length_valid"] = 1.0 if 500 <= report_len <= 5000 else 0.5 if report_len > 0 else 0.0
 
-    # Hallucination check: any company names in report that aren't in source data?
-    source_companies = {e.get("company_name", "") for e in structured_data if e.get("company_name")}
+    # Hallucination check: any policy/institution names in report that aren't in source data?
+    source_names = {e.get("policy_name", "") for e in structured_data if e.get("policy_name")}
+    source_names.update({e.get("institution_name", "") for e in structured_data if e.get("institution_name")})
     report_mentions = 0
     report_known = 0
-    for company in source_companies:
-        if company and company in report:
+    for name in source_names:
+        if name and name in report:
             report_mentions += 1
             report_known += 1
     scores["hallucination_flag"] = 1.0 if report_mentions == report_known else 0.5
