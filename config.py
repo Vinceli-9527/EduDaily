@@ -27,22 +27,58 @@ def _load_dotenv(dotenv_path: str) -> None:
 # Load .env from project root (environment wins over .env)
 _load_dotenv(str(Path(__file__).resolve().parent / ".env"))
 
+# ---- Paths ----
+BASE_DIR = Path(__file__).resolve().parent
+
 # ---- DeepSeek API ----
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
 DEEPSEEK_BASE_URL = "https://api.deepseek.com"
-DEEPSEEK_CHAT_MODEL = "deepseek-chat"
+DEEPSEEK_CHAT_MODEL = os.environ.get("DEEPSEEK_CHAT_MODEL", "deepseek-v4-pro")
+DEEPSEEK_REASONING_EFFORT = os.environ.get("DEEPSEEK_REASONING_EFFORT", "high")
+DEEPSEEK_THINKING_ENABLED = os.environ.get(
+    "DEEPSEEK_THINKING_ENABLED", "true"
+).lower() not in {"0", "false", "no", "off"}
 # Local embedding model (Chinese-optimized, runs offline, no API needed)
-EMBEDDING_MODEL_NAME = "BAAI/bge-small-zh-v1.5"
+LOCAL_EMBEDDING_MODEL_DIR = BASE_DIR / "models" / "bge-small-zh-v1.5"
+EMBEDDING_MODEL_NAME = os.environ.get(
+    "EMBEDDING_MODEL_NAME",
+    str(LOCAL_EMBEDDING_MODEL_DIR)
+    if LOCAL_EMBEDDING_MODEL_DIR.exists()
+    else "BAAI/bge-small-zh-v1.5",
+)
 
-# ---- Paths ----
-BASE_DIR = Path(__file__).resolve().parent
-CHROMA_PERSIST_DIR = str(BASE_DIR / "chroma_store")
+
+def deepseek_chat_options() -> dict:
+    """Return DeepSeek V4 Pro-specific options for chat completion calls."""
+    options = {}
+    if DEEPSEEK_REASONING_EFFORT:
+        options["reasoning_effort"] = DEEPSEEK_REASONING_EFFORT
+    if DEEPSEEK_THINKING_ENABLED:
+        options["extra_body"] = {"thinking": {"type": "enabled"}}
+    return options
+
 CHROMA_COLLECTION_NAME = "edu_documents"
-SQLITE_DB_PATH = str(BASE_DIR / "data" / "structured.db")
-SAMPLE_DOCS_DIR = str(BASE_DIR / "data" / "sample_docs")
-GROUND_TRUTH_PATH = str(BASE_DIR / "data" / "ground_truth.json")
-OUTPUT_DIR = str(BASE_DIR / "output")
-LOG_FILE = str(BASE_DIR / "pipeline.log")
+DATA_DIR = Path(os.environ.get("EDUDAILY_DATA_DIR", str(BASE_DIR)))
+CHROMA_PERSIST_DIR = str(DATA_DIR / "chroma_store")
+SQLITE_DB_PATH = str(DATA_DIR / "data" / "structured.db")
+SAMPLE_DOCS_DIR = str(DATA_DIR / "data" / "sample_docs")
+GROUND_TRUTH_PATH = str(DATA_DIR / "data" / "ground_truth.json")
+OUTPUT_DIR = str(DATA_DIR / "output")
+LOG_FILE = str(DATA_DIR / "pipeline.log")
+
+
+def configure_data_dir(data_dir: str | os.PathLike) -> None:
+    """Point all user-writable runtime paths at a selected data directory."""
+    global DATA_DIR, CHROMA_PERSIST_DIR, SQLITE_DB_PATH, SAMPLE_DOCS_DIR
+    global GROUND_TRUTH_PATH, OUTPUT_DIR, LOG_FILE
+
+    DATA_DIR = Path(data_dir).expanduser().resolve()
+    CHROMA_PERSIST_DIR = str(DATA_DIR / "chroma_store")
+    SQLITE_DB_PATH = str(DATA_DIR / "data" / "structured.db")
+    SAMPLE_DOCS_DIR = str(DATA_DIR / "data" / "sample_docs")
+    GROUND_TRUTH_PATH = str(DATA_DIR / "data" / "ground_truth.json")
+    OUTPUT_DIR = str(DATA_DIR / "output")
+    LOG_FILE = str(DATA_DIR / "pipeline.log")
 
 # ---- Chunking ----
 CHUNK_MAX_CHARS = 1000
@@ -51,6 +87,9 @@ CHUNK_MIN_CHARS = 50
 
 # ---- Retrieval ----
 TOP_K_RETRIEVAL = 5
+
+# ---- Scheduling ----
+SCHEDULE_TIME = os.environ.get("SCHEDULE_TIME", "07:00")
 
 # ---- API Settings ----
 EXTRACTION_TEMPERATURE = 0.1

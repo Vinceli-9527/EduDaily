@@ -94,6 +94,7 @@ def _discover_today_articles(
             ],
             temperature=0.1,
             max_tokens=2048,
+            **config.deepseek_chat_options(),
         )
         raw = resp.choices[0].message.content or ""
 
@@ -131,6 +132,26 @@ def _resolve_url(base_url: str, article_url: str) -> str:
     if article_url.startswith(("http://", "https://")):
         return article_url
     return urljoin(base_url, article_url)
+
+
+def _cleanup_partial_article(conn, collection, doc_id, dest: Path | None, chunk_ids: list[str]) -> None:
+    """Best-effort cleanup when an article is only partially indexed."""
+    if collection is not None and chunk_ids:
+        try:
+            collection.delete(ids=chunk_ids)
+        except Exception:
+            pass
+    if conn is not None and doc_id:
+        try:
+            conn.execute("DELETE FROM documents WHERE id = ?", (doc_id,))
+            conn.commit()
+        except Exception:
+            pass
+    if dest and dest.exists():
+        try:
+            dest.unlink()
+        except Exception:
+            pass
 
 
 # ── Main fetch pipeline ───────────────────────────────────────────────────
@@ -252,60 +273,68 @@ def run_daily_fetch(
                 filename = f"{safe_name}_{uuid.uuid4().hex[:6]}.txt"
                 dest = save_dir / filename
 
-            dest.write_text(kb_content, encoding="utf-8")
+            doc_id = None
+            chunk_ids = []
+            try:
+                dest.write_text(kb_content, encoding="utf-8")
 
-            # ── Index into knowledge base ──
-            doc_id = repo.insert_document(conn, filename, source_label + " | " + art_title, str(dest))
+                # ── Index into knowledge base ──
+                doc_id = repo.insert_document(conn, filename, source_label + " | " + art_title, str(dest))
 
-            from modules.chunker import chunk_document
-            from modules.embedder import encode_text
+                from modules.chunker import chunk_document
+                from modules.embedder import encode_text
 
-            lines = kb_content.split("\n", 1)
-            body = lines[1].strip() if len(lines) > 1 else kb_content
-            chunks = chunk_document(
-                doc_id, body,
-                max_chars=config.CHUNK_MAX_CHARS,
-                overlap_chars=config.CHUNK_OVERLAP_CHARS,
-                min_chars=config.CHUNK_MIN_CHARS,
-            )
-            for c in chunks:
-                c.chunk_id = repo.insert_chunk(conn, doc_id, c.chunk_index, c.content)
-            repo.update_document_total_chunks(conn, doc_id, len(chunks))
-
-            if chunks and collection is not None:
-                chunk_ids = [f"chunk_{c.chunk_id}" for c in chunks]
-                chunk_texts = [c.content for c in chunks]
-                chunk_metadatas = [
-                    {"document_id": str(doc_id), "chunk_index": c.chunk_index, "chunk_id": str(c.chunk_id)}
-                    for c in chunks
-                ]
-                chunk_embeddings = [encode_text(embedding_model, ct) for ct in chunk_texts]
-                collection.add(
-                    ids=chunk_ids, embeddings=chunk_embeddings,
-                    documents=chunk_texts, metadatas=chunk_metadatas,
+                lines = kb_content.split("\n", 1)
+                body = lines[1].strip() if len(lines) > 1 else kb_content
+                chunks = chunk_document(
+                    doc_id, body,
+                    max_chars=config.CHUNK_MAX_CHARS,
+                    overlap_chars=config.CHUNK_OVERLAP_CHARS,
+                    min_chars=config.CHUNK_MIN_CHARS,
                 )
+                for c in chunks:
+                    c.chunk_id = repo.insert_chunk(conn, doc_id, c.chunk_index, c.content)
+                repo.update_document_total_chunks(conn, doc_id, len(chunks))
 
-            # Add to in-memory state
-            doc_obj = type("Doc", (), {})()
-            doc_obj._db_id = doc_id
-            doc_obj._chunks = chunks
-            doc_obj.filename = filename
-            doc_obj.title = source_label + " | " + art_title
-            doc_obj.content = body
-            docs_state.append(doc_obj)
+                if chunks and collection is not None:
+                    chunk_ids = [f"chunk_{c.chunk_id}" for c in chunks]
+                    chunk_texts = [c.content for c in chunks]
+                    chunk_metadatas = [
+                        {"document_id": str(doc_id), "chunk_index": c.chunk_index, "chunk_id": str(c.chunk_id)}
+                        for c in chunks
+                    ]
+                    chunk_embeddings = [encode_text(embedding_model, ct) for ct in chunk_texts]
+                    collection.add(
+                        ids=chunk_ids, embeddings=chunk_embeddings,
+                        documents=chunk_texts, metadatas=chunk_metadatas,
+                    )
 
-            # Record in edu_articles
-            article_id = repo.insert_article(
-                conn,
-                source_id=source_id,
-                document_id=doc_id,
-                title=art_title,
-                original_url=art_url,
-                publish_date=art_date,
-                summary=art_brief,
-                source_name=source_name,
-                fetch_batch_id=batch_id,
-            )
+                # Add to in-memory state
+                doc_obj = type("Doc", (), {})()
+                doc_obj._db_id = doc_id
+                doc_obj._chunks = chunks
+                doc_obj.filename = filename
+                doc_obj.title = source_label + " | " + art_title
+                doc_obj.content = body
+                docs_state.append(doc_obj)
+
+                # Record in edu_articles
+                article_id = repo.insert_article(
+                    conn,
+                    source_id=source_id,
+                    document_id=doc_id,
+                    title=art_title,
+                    original_url=art_url,
+                    publish_date=art_date,
+                    summary=art_brief,
+                    source_name=source_name,
+                    fetch_batch_id=batch_id,
+                )
+            except Exception as e:
+                _cleanup_partial_article(conn, collection, doc_id, dest, chunk_ids)
+                errors.append(f"{source_name} / {art_title}: 入库失败: {e}")
+                logger.warning("Article indexing failed for %s: %s", art_title, e)
+                continue
 
             all_articles.append({
                 "article_id": article_id,

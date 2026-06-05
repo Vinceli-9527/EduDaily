@@ -4,6 +4,7 @@ import json
 import logging
 import openai
 
+import config
 from prompts.extraction import build_extraction_messages
 from utils.helpers import safe_json_parse
 
@@ -28,6 +29,7 @@ def extract_from_chunk(
             messages=messages,
             temperature=temperature,
             timeout=timeout,
+            **config.deepseek_chat_options(),
         )
         raw = response.choices[0].message.content
         logger.debug("Extraction raw response: %s", raw[:200])

@@ -5,13 +5,16 @@
 
 # Downloaded knowledge base documents (user data)
 data/sample_docs/*.txt
+data/processed.json
 
 # Bytecode
 __pycache__/
 *.py[cod]
 *.egg-info/
+.venv/
 dist/
 build/
+models/
 
 # ChromaDB persistent data
 chroma_store/

@@ -195,6 +195,7 @@ def generate_kb_document(client, url: str, url_title: str, raw_text: str) -> str
             ],
             temperature=0.3,
             max_tokens=4096,
+            **config.deepseek_chat_options(),
         )
         content = resp.choices[0].message.content
         return content.strip() if content else ""

@@ -119,6 +119,7 @@ def generate_report(
         messages=messages,
         temperature=temperature,
         timeout=timeout,
+        **config.deepseek_chat_options(),
     )
     elapsed_ms = int((time.perf_counter() - start) * 1000)
 

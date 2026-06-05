@@ -5,6 +5,7 @@ fully offline — no external API calls needed for embeddings.
 """
 
 import logging
+import uuid
 import chromadb
 from sentence_transformers import SentenceTransformer
 
@@ -55,6 +56,52 @@ def build_chroma_collection(
     except Exception:
         pass
     return chroma_client.create_collection(name=collection_name)
+
+
+def rebuild_chroma_collection_safely(
+    model: SentenceTransformer,
+    persist_dir: str,
+    collection_name: str,
+    chunks: list,
+) -> chromadb.Collection:
+    """Rebuild a collection via a temporary collection before replacing the old one."""
+    chroma_client = chromadb.PersistentClient(path=persist_dir)
+    temp_name = f"{collection_name}_rebuild_{uuid.uuid4().hex[:8]}"
+    temp_collection = chroma_client.create_collection(name=temp_name)
+    try:
+        if chunks:
+            embed_and_store_chunks(model, temp_collection, chunks)
+
+        temp_count = temp_collection.count()
+        if chunks and temp_count != len(chunks):
+            raise RuntimeError(
+                f"Temporary Chroma collection count mismatch: {temp_count} vs {len(chunks)}"
+            )
+
+        temp_data = temp_collection.get(
+            include=["documents", "metadatas", "embeddings"]
+        )
+
+        try:
+            chroma_client.delete_collection(collection_name)
+        except Exception:
+            pass
+        final_collection = chroma_client.create_collection(name=collection_name)
+
+        ids = temp_data.get("ids", [])
+        if ids:
+            final_collection.add(
+                ids=ids,
+                documents=temp_data.get("documents", []),
+                metadatas=temp_data.get("metadatas", []),
+                embeddings=temp_data.get("embeddings", []),
+            )
+        return final_collection
+    finally:
+        try:
+            chroma_client.delete_collection(temp_name)
+        except Exception:
+            pass
 
 
 def embed_and_store_chunks(

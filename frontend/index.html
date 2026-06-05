@@ -3,1153 +3,1207 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EduDaily — 每日教育资讯智能检索与分析</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-    <script src="https://unpkg.com/marked@12/marked.min.js"></script>
+    <title>EduDaily - 每日教育资讯智能检索与分析</title>
+    <script src="assets/vendor/vue.global.prod.js"></script>
+    <script src="assets/vendor/marked.min.js"></script>
     <style>
         :root {
-            --bg: #f8fafd;
-            --card: #ffffff;
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --primary-light: #eef2ff;
-            --primary-glow: rgba(99,102,241,0.15);
-            --text: #1e293b;
-            --text-muted: #64748b;
-            --border: #e8ecf1;
-            --green: #10b981;
-            --green-bg: #ecfdf5;
-            --red: #ef4444;
-            --red-bg: #fef2f2;
-            --orange: #f59e0b;
-            --radius: 14px;
-            --radius-sm: 10px;
-            --mono: "Cascadia Code", "Fira Code", "JetBrains Mono", "Consolas", monospace;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
-            --shadow-lg: 0 8px 30px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg: #f5f9fc;
+            --surface: #ffffff;
+            --surface-soft: #eef7fb;
+            --surface-blue: #eef6ff;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-soft: #dbeafe;
+            --teal: #0f766e;
+            --teal-soft: #ccfbf1;
+            --green: #16a34a;
+            --green-soft: #dcfce7;
+            --amber: #d97706;
+            --amber-soft: #fef3c7;
+            --red: #dc2626;
+            --red-soft: #fee2e2;
+            --ink: #102033;
+            --muted: #63758a;
+            --faint: #8aa0b5;
+            --line: #dce8f2;
+            --line-strong: #c9dae9;
+            --shadow: 0 18px 48px rgba(28, 65, 99, 0.10);
+            --shadow-sm: 0 8px 24px rgba(28, 65, 99, 0.08);
+            --radius: 18px;
+            --radius-sm: 12px;
+            --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
+        * { box-sizing: border-box; }
         body {
-            font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
-            background: var(--bg);
-            background-image:
-                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,0.06), transparent),
-                radial-gradient(ellipse 60% 40% at 80% 80%, rgba(16,185,129,0.04), transparent);
-            color: var(--text);
+            margin: 0;
             min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--ink);
+            background:
+                linear-gradient(180deg, rgba(219, 234, 254, 0.65), rgba(245, 249, 252, 0) 360px),
+                radial-gradient(circle at 10% 10%, rgba(20, 184, 166, 0.12), transparent 280px),
+                var(--bg);
+            font-family: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        /* ── Header ─────────────────────────────────────────── */
-        .header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%);
-            color: #fff;
-            padding: 28px 0 20px;
-            text-align: center;
+        button, input, textarea, select { font: inherit; }
+        button { cursor: pointer; }
+        button:disabled { cursor: not-allowed; opacity: 0.52; }
+        a { color: var(--primary); text-decoration: none; }
+        code { font-family: var(--mono); background: #eef4fb; padding: 2px 5px; border-radius: 6px; }
+
+        .app-shell {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .hero {
             position: relative;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 340px;
+            gap: 22px;
+            align-items: stretch;
+            padding: 28px;
+            border: 1px solid rgba(201, 218, 233, 0.78);
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.86);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px);
+        }
+        .hero > * { min-width: 0; }
+
+        .brand-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            color: var(--teal);
+            font-weight: 800;
+            font-size: 0.82rem;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 4rem);
+            line-height: 1.04;
+            letter-spacing: 0;
+            color: #0f2437;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .hero h1 span { color: var(--primary); }
+        .mobile-only { display: none; }
+        .hero-copy {
+            max-width: 760px;
+            margin: 14px 0 0;
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .hero-metrics {
+            display: grid;
+            gap: 12px;
+            align-content: center;
+        }
+
+        .metric {
+            display: grid;
+            grid-template-columns: 42px 1fr;
+            gap: 12px;
+            align-items: center;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: linear-gradient(180deg, #fff, #f8fcff);
+        }
+
+        .metric strong { display: block; font-size: 1.15rem; }
+        .metric span { color: var(--muted); font-size: 0.78rem; }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+            vertical-align: -3px;
+            object-fit: contain;
+        }
+        .icon-lg { width: 22px; height: 22px; }
+        .icon-xl { width: 28px; height: 28px; }
+        .icon-badge {
+            width: 42px;
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+        .icon-badge img { width: 22px; height: 22px; }
+        .icon-badge.teal { background: var(--teal-soft); }
+        .icon-badge.green { background: var(--green-soft); }
+        .icon-badge.amber { background: var(--amber-soft); }
+        .icon-badge.red { background: var(--red-soft); }
+
+        .topbar {
+            position: sticky;
+            top: 12px;
+            z-index: 20;
+            margin: 18px 0;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .nav-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(14px);
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            border: 0;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--muted);
+            font-weight: 800;
+            transition: background 0.18s, color 0.18s, transform 0.18s;
+        }
+        .nav-btn:hover { background: #f2f8fd; color: var(--ink); }
+        .nav-btn.active {
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), #0891b2);
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+        }
+        .nav-btn.active .icon { filter: brightness(0) invert(1); }
+
+        .tutorial-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            height: 48px;
+            padding: 0 16px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: #fff;
+            color: var(--muted);
+            font-weight: 800;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 18px;
+            align-items: start;
+        }
+        .main-column, .side-column { display: grid; gap: 16px; }
+
+        .panel {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: var(--shadow-sm);
             overflow: hidden;
         }
-        .header::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 20% 50%, rgba(99,102,241,0.2) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(16,185,129,0.12) 0%, transparent 50%),
-                radial-gradient(circle at 50% 100%, rgba(245,158,11,0.08) 0%, transparent 40%);
-            pointer-events: none;
+        .panel.pad { padding: 20px; }
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--line);
+            background: linear-gradient(180deg, #fff, #f8fcff);
         }
-        .header h1 {
-            font-size: 1.45rem; font-weight: 800; letter-spacing: -0.01em;
-            position: relative; z-index: 1;
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: 900;
         }
-        .header h1 span { background: linear-gradient(135deg, #a5b4fc, #6ee7b7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .header .subtitle { font-size: 0.8rem; opacity: 0.65; margin-top: 4px; font-weight: 400; letter-spacing: 0.02em; position: relative; z-index: 1; }
-        .status-bar {
-            display: flex; gap: 22px; justify-content: center; margin-top: 14px;
-            font-size: 0.73rem; position: relative; z-index: 1;
+        .panel-subtitle {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 0.8rem;
+            font-weight: 500;
         }
-        .status-bar span { display: flex; align-items: center; gap: 6px; opacity: 0.85; }
+        .panel-body { padding: 20px; }
+
+        .status-list { display: grid; gap: 10px; }
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 14px;
+            background: #f7fbff;
+            border: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
         .status-dot {
-            display: inline-block; width: 7px; height: 7px; border-radius: 50%;
-            box-shadow: 0 0 6px currentColor;
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            background: var(--faint);
+            box-shadow: 0 0 0 4px rgba(138, 160, 181, 0.16);
         }
-        .status-dot.ok { background: var(--green); color: var(--green); }
-        .status-dot.warn { background: var(--orange); color: var(--orange); }
-        .status-dot.err { background: var(--red); color: var(--red); }
+        .status-dot.ok { background: var(--green); box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.14); }
+        .status-dot.err { background: var(--red); box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.13); }
 
-        /* ── Container ─────────────────────────────────────── */
-        .container { max-width: 960px; margin: 0 auto; padding: 24px 20px; }
+        .privacy-banner {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 16px;
+            border: 1px solid #bfdbfe;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #eff6ff, #f0fdfa);
+            color: #1f4568;
+            line-height: 1.7;
+        }
+        .privacy-banner strong { color: #0f2f56; }
 
-        /* ── Pipeline Flow ────────────────────────────────── */
-        .pipeline-flow {
-            display: flex; align-items: center; justify-content: center; gap: 0;
-            margin-bottom: 24px; font-size: 0.74rem;
-            background: var(--card); border-radius: var(--radius);
-            box-shadow: var(--shadow-sm); padding: 6px;
-            border: 1px solid var(--border);
+        .search-panel {
+            display: grid;
+            gap: 14px;
+            padding: 22px;
         }
-        .pipeline-step {
-            padding: 7px 14px; border-radius: 8px; white-space: nowrap;
-            font-weight: 500; transition: all var(--transition);
-            color: #94a3b8; position: relative; z-index: 1;
+        .search-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
         }
-        .pipeline-step.active {
-            color: #fff; font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            box-shadow: 0 2px 8px var(--primary-glow);
-        }
-        .pipeline-arrow {
-            color: #cbd5e1; font-weight: 300; margin: 0 2px;
-            transition: color var(--transition);
-        }
-        .pipeline-arrow.done { color: var(--primary); }
-
-        /* ── Search Card ──────────────────────────────────── */
-        .search-card {
-            background: var(--card); border-radius: var(--radius); padding: 24px 28px;
-            box-shadow: var(--shadow-md); margin-bottom: 16px;
-            border: 1px solid var(--border);
-        }
-        .search-row { display: flex; gap: 12px; }
         .search-input {
-            flex: 1; padding: 13px 18px;
-            border: 2px solid var(--border); border-radius: var(--radius-sm);
-            font-size: 0.95rem; outline: none; transition: all var(--transition);
-            background: #f8fafd;
+            width: 100%;
+            min-height: 54px;
+            padding: 0 18px;
+            border: 1px solid var(--line-strong);
+            border-radius: 16px;
+            outline: 0;
+            background: #fbfdff;
+            color: var(--ink);
+            font-size: 0.98rem;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
         }
         .search-input:focus {
             border-color: var(--primary);
             background: #fff;
-            box-shadow: 0 0 0 4px var(--primary-glow);
+            box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.11);
         }
-        .search-input::placeholder { color: #94a3b8; }
-        .search-btn {
-            padding: 13px 32px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #fff; border: none; border-radius: var(--radius-sm);
-            font-size: 0.95rem; font-weight: 700; cursor: pointer;
-            white-space: nowrap; transition: all var(--transition);
-            box-shadow: 0 2px 8px var(--primary-glow);
-            letter-spacing: 0.01em;
+        .char-count { color: var(--faint); font-size: 0.78rem; }
+
+        .quick-queries {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
         }
-        .search-btn:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(99,102,241,0.3);
-        }
-        .search-btn:active:not(:disabled) { transform: translateY(0); }
-        .search-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-        .char-count { font-size: 0.73rem; color: var(--text-muted); margin-top: 8px; }
-        .quick-queries { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
         .quick-chip {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 6px 8px 6px 14px;
-            background: linear-gradient(135deg, #f8faff, var(--primary-light));
-            color: var(--primary-dark); border: 1px solid #d4d8f0;
-            border-radius: 24px; font-size: 0.78rem;
-            cursor: pointer; transition: all var(--transition);
-            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            min-height: 34px;
+            padding: 7px 11px;
+            border: 1px solid #cfe0ee;
+            border-radius: 999px;
+            background: #fff;
+            color: #25506f;
+            font-size: 0.78rem;
+            font-weight: 800;
+            transition: transform 0.16s, border-color 0.16s, background 0.16s;
         }
         .quick-chip:hover {
-            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
-            border-color: var(--primary);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px var(--primary-glow);
-        }
-        .quick-chip-delete {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 20px; height: 20px; border-radius: 50%; border: none;
-            background: rgba(99,102,241,0.1); color: var(--primary);
-            font-size: 0.75rem; cursor: pointer; transition: all var(--transition);
-            flex-shrink: 0; line-height: 1;
-        }
-        .quick-chip-delete:hover {
-            background: rgba(239,68,68,0.15); color: var(--red);
+            border-color: #93c5fd;
+            background: #eff6ff;
         }
 
-        /* ── Loading ──────────────────────────────────────── */
-        .loading-card {
-            background: var(--card); border-radius: var(--radius);
-            padding: 56px 20px; text-align: center; margin-bottom: 16px;
-            box-shadow: var(--shadow-md); border: 1px solid var(--border);
+        .pipeline {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
         }
-        .spinner {
-            width: 40px; height: 40px;
-            border: 3px solid #e2e8f0;
-            border-top-color: var(--primary); border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            margin: 0 auto 18px;
+        .pipeline-step {
+            min-height: 70px;
+            padding: 11px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #fff;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 800;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text {
-            color: var(--text-muted); font-size: 0.88rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+        .pipeline-step.active {
+            color: #0f3b67;
+            border-color: #93c5fd;
+            background: #eff6ff;
         }
 
-        /* ── Error ────────────────────────────────────────── */
-        .error-card {
-            background: var(--red-bg); border: 1px solid #fecaca;
-            border-radius: var(--radius); padding: 18px 24px;
-            color: #991b1b; font-size: 0.88rem; margin-bottom: 16px;
-            display: flex; align-items: flex-start; gap: 10px;
-            box-shadow: var(--shadow-sm);
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 0 15px;
+            border: 1px solid transparent;
+            border-radius: 13px;
+            font-weight: 900;
+            transition: transform 0.16s, box-shadow 0.16s, background 0.16s;
         }
-        .error-card::before {
-            content: "⚠";
-            flex-shrink: 0; font-size: 1.1rem; margin-top: 1px;
+        .btn:hover:not(:disabled) { transform: translateY(-1px); }
+        .btn-primary {
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), #0891b2);
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22);
         }
+        .btn-primary .icon, .btn-green .icon { filter: brightness(0) invert(1); }
+        .btn-green {
+            color: #fff;
+            background: linear-gradient(135deg, var(--green), #0f766e);
+            box-shadow: 0 12px 24px rgba(15, 118, 110, 0.18);
+        }
+        .btn-ghost {
+            color: var(--muted);
+            background: #fff;
+            border-color: var(--line);
+        }
+        .btn-danger {
+            color: var(--red);
+            background: var(--red-soft);
+            border-color: #fecaca;
+        }
+        .btn-sm { min-height: 34px; padding: 0 11px; font-size: 0.78rem; }
 
-        /* ── Tabs ─────────────────────────────────────────── */
         .tabs {
-            display: flex; gap: 4px;
-            background: var(--card); border-radius: var(--radius-sm);
-            padding: 5px; margin-bottom: 16px;
-            box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+            display: inline-flex;
+            gap: 6px;
+            padding: 6px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #fff;
         }
         .tab-btn {
-            flex: 1; padding: 10px 16px; border: none; background: transparent;
-            font-size: 0.85rem; color: var(--text-muted); cursor: pointer;
-            border-radius: 7px; transition: all var(--transition);
-            font-weight: 500; white-space: nowrap;
-        }
-        .tab-btn.active {
-            background: var(--primary); color: #fff; font-weight: 700;
-            box-shadow: 0 2px 8px var(--primary-glow);
-        }
-        .tab-btn:hover:not(.active) { color: var(--text); background: #f8fafc; }
-
-        /* ── Cards ────────────────────────────────────────── */
-        .card {
-            background: var(--card); border-radius: var(--radius);
-            box-shadow: var(--shadow-md); overflow: hidden;
-            margin-bottom: 16px; border: 1px solid var(--border);
-            transition: box-shadow var(--transition);
-        }
-        .card:hover { box-shadow: var(--shadow-lg); }
-        .card-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 24px; background: #fafbfc; border-bottom: 1px solid var(--border);
-            cursor: pointer; user-select: none; font-weight: 700; font-size: 0.85rem;
-        }
-
-        /* ── Chunks ───────────────────────────────────────── */
-        .chunk-item {
-            padding: 16px 24px; border-bottom: 1px solid var(--border);
-            transition: background var(--transition);
-        }
-        .chunk-item:hover { background: #fafbfd; }
-        .chunk-item:last-child { border-bottom: none; }
-        .chunk-meta {
-            font-size: 0.73rem; color: var(--text-muted);
-            margin-bottom: 6px; display: flex; gap: 16px; align-items: center;
-        }
-        .chunk-meta .score {
-            color: #fff; font-weight: 700; font-size: 0.7rem;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            padding: 2px 10px; border-radius: 10px;
-        }
-        .chunk-text { font-size: 0.85rem; line-height: 1.7; color: #334155; }
-
-        /* ── Report ───────────────────────────────────────── */
-        .report-body {
-            padding: 28px 32px; font-size: 0.9rem; line-height: 1.85;
-        }
-        .report-body h2 { font-size: 1.15rem; margin: 24px 0 10px; color: #0f172a; }
-        .report-body h3 { font-size: 1rem; margin: 20px 0 8px; color: #1e293b; }
-        .report-body h4 { font-size: 0.88rem; margin: 14px 0 6px; }
-        .report-body p { margin-bottom: 10px; }
-        .report-body ul, .report-body ol { margin: 8px 0 12px 22px; }
-        .report-body li { margin-bottom: 4px; }
-        .report-body code {
-            background: #f1f5f9; padding: 2px 7px; border-radius: 4px;
-            font-size: 0.88em; color: var(--primary-dark);
-        }
-        .report-body blockquote {
-            border-left: 4px solid var(--primary); padding: 8px 16px;
-            background: #f8fafd; color: #475569;
-            border-radius: 0 8px 8px 0; margin: 10px 0;
-        }
-        .report-body table { border-collapse: collapse; width: 100%; margin: 10px 0; }
-        .report-body th, .report-body td {
-            border: 1px solid var(--border); padding: 8px 14px; font-size: 0.84rem;
-        }
-        .report-body th {
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            font-weight: 700;
-        }
-        .gen-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 6px 16px;
-            background: linear-gradient(135deg, var(--primary-light), #e0e7ff);
-            color: var(--primary-dark); border-radius: 20px;
-            font-size: 0.75rem; font-weight: 600; margin-bottom: 16px;
-            border: 1px solid #d4d8f0;
-        }
-        .domain-badge {
-            display: inline-flex; align-items: center; gap: 5px;
-            padding: 6px 16px; border-radius: 20px;
-            font-size: 0.75rem; font-weight: 600; margin-bottom: 16px; margin-left: 8px;
-            vertical-align: middle;
-        }
-        .domain-badge.domain-finance {
-            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-            color: #065f46; border: 1px solid #a7f3d0;
-        }
-        .domain-badge.domain-politics {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            color: #92400e; border: 1px solid #fcd34d;
-        }
-        .domain-badge.domain-technology {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            color: #1e40af; border: 1px solid #93c5fd;
-        }
-        .domain-badge.domain-healthcare {
-            background: linear-gradient(135deg, #fce7f3, #fbcfe8);
-            color: #9d174d; border: 1px solid #f9a8d4;
-        }
-        .domain-badge.domain-legal {
-            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
-            color: #6b21a8; border: 1px solid #c4b5fd;
-        }
-        .domain-badge.domain-education {
-            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
-            color: #075985; border: 1px solid #7dd3fc;
-        }
-
-        /* ── Prompt Panel ─────────────────────────────────── */
-        .prompt-section { margin-bottom: 24px; }
-        .prompt-section h3 {
-            font-size: 0.85rem; font-weight: 700; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .prompt-label {
-            display: inline-flex; align-items: center;
-            padding: 3px 10px; border-radius: 6px;
-            font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 0.03em;
-        }
-        .prompt-label.system { background: #dbeafe; color: #1e40af; }
-        .prompt-label.user { background: #fef3c7; color: #92400e; }
-        .prompt-box {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            color: #e2e8f0; padding: 20px 24px; border-radius: var(--radius-sm);
-            font-family: var(--mono); font-size: 0.78rem; line-height: 1.75;
-            white-space: pre-wrap; word-break: break-word; max-height: 400px;
-            overflow-y: auto; position: relative;
-            border: 1px solid #334155;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-        }
-        .prompt-box .highlight-ctx {
-            background: rgba(99,102,241,0.2);
-            border-left: 3px solid #818cf8; display: inline-block; width: 100%;
-        }
-        .prompt-box .highlight-data {
-            background: rgba(16,185,129,0.2);
-            border-left: 3px solid #34d399; display: inline-block; width: 100%;
-        }
-        .prompt-box .highlight-query {
-            background: rgba(245,158,11,0.2);
-            border-left: 3px solid #fbbf24; display: inline-block; width: 100%;
-        }
-
-        .prompt-legend {
-            display: flex; gap: 18px; flex-wrap: wrap;
-            margin-bottom: 16px; font-size: 0.75rem;
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); padding: 10px 16px;
-        }
-        .legend-item { display: flex; align-items: center; gap: 6px; font-weight: 500; }
-        .legend-swatch { width: 12px; height: 12px; border-radius: 3px; }
-        .legend-swatch.ctx { background: rgba(99,102,241,0.4); }
-        .legend-swatch.data { background: rgba(16,185,129,0.4); }
-        .legend-swatch.query { background: rgba(245,158,11,0.4); }
-
-        /* ── Empty State ──────────────────────────────────── */
-        .empty-state {
-            text-align: center; padding: 80px 20px;
-            color: var(--text-muted);
-        }
-        .empty-state .icon {
-            font-size: 3rem; margin-bottom: 14px;
-            display: inline-block;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        .empty-state p:first-of-type { font-size: 1rem; font-weight: 600; color: #475569; }
-        .empty-state p:last-of-type { font-size: 0.82rem; margin-top: 6px; }
-
-        /* ── Knowledge Base ───────────────────────────────── */
-        .kb-card { margin-bottom: 16px; }
-        .kb-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 24px; background: #fafbfc;
-            border-bottom: 1px solid var(--border);
-            cursor: pointer; user-select: none;
-            transition: background var(--transition);
-        }
-        .kb-header:hover { background: #f5f6f8; }
-        .kb-header .kb-title {
-            font-weight: 700; font-size: 0.88rem;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .kb-header .kb-chevron {
-            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.7rem; color: var(--text-muted); width: 20px; height: 20px;
-            display: flex; align-items: center; justify-content: center;
-            background: var(--border); border-radius: 50%;
-        }
-        .kb-header .kb-chevron.open { transform: rotate(90deg); background: var(--primary); color: #fff; }
-        .kb-body { padding: 20px 24px; }
-        .kb-summary { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 16px; display: flex; gap: 18px; }
-        .kb-summary strong { color: var(--text); }
-
-        .kb-upload-zone {
-            border: 2px dashed #d0d5dd; border-radius: var(--radius-sm);
-            padding: 32px 24px; text-align: center;
-            transition: all var(--transition); margin-bottom: 16px;
-            background: #fafbfd;
-        }
-        .kb-upload-zone.dragover {
-            border-color: var(--primary);
-            background: linear-gradient(135deg, var(--primary-light), #e0e7ff);
-            box-shadow: 0 0 0 4px var(--primary-glow);
-        }
-        .kb-upload-zone input[type="file"] { display: none; }
-        .kb-upload-btn {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 9px 22px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #fff; border-radius: 8px; font-size: 0.84rem;
-            cursor: pointer; font-weight: 600; margin-top: 8px;
-            transition: all var(--transition);
-            box-shadow: 0 2px 8px var(--primary-glow);
-        }
-        .kb-upload-btn:hover:not(.disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(99,102,241,0.3);
-        }
-        .kb-upload-btn.disabled { opacity: 0.5; cursor: not-allowed; }
-        .kb-upload-hint { font-size: 0.75rem; color: #94a3b8; margin-top: 6px; }
-        .kb-upload-status {
-            font-size: 0.8rem; margin-top: 10px; padding: 10px 16px;
-            border-radius: var(--radius-sm); font-weight: 500;
-        }
-        .kb-upload-status.ok { background: var(--green-bg); color: #065f46; border: 1px solid #a7f3d0; }
-        .kb-upload-status.err { background: var(--red-bg); color: #991b1b; border: 1px solid #fecaca; }
-        .kb-upload-status.info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
-
-        .kb-doc-item {
-            display: flex; align-items: center; gap: 14px;
-            padding: 12px 16px; border: 1px solid var(--border);
-            border-radius: var(--radius-sm); margin-bottom: 8px;
-            font-size: 0.83rem; transition: all var(--transition);
-            background: var(--card);
-        }
-        .kb-doc-item:hover {
-            background: #fafbfd; border-color: #cbd5e1;
-            box-shadow: var(--shadow-sm);
-        }
-        .kb-doc-item .kb-doc-icon {
-            font-size: 1.5rem; flex-shrink: 0;
-            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            min-height: 36px;
+            padding: 0 12px;
+            border: 0;
             border-radius: 10px;
+            background: transparent;
+            color: var(--muted);
+            font-weight: 800;
         }
-        .kb-doc-info { flex: 1; min-width: 0; }
-        .kb-doc-info .kb-doc-name {
-            font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .kb-doc-info .kb-doc-meta { font-size: 0.74rem; color: var(--text-muted); margin-top: 3px; }
-        .kb-doc-delete {
-            flex-shrink: 0; padding: 6px 14px; background: none;
-            border: 1px solid #fecaca; color: #dc2626; border-radius: 7px;
-            font-size: 0.76rem; cursor: pointer; transition: all var(--transition);
-            font-weight: 500;
-        }
-        .kb-doc-delete:hover:not(:disabled) {
-            background: #fef2f2; border-color: #f87171;
-        }
-        .kb-doc-delete:disabled { opacity: 0.35; cursor: not-allowed; }
+        .tab-btn.active { background: var(--primary-soft); color: var(--primary-dark); }
 
-        /* ── KB Writing Guide ────────────────────────────── */
-        .kb-guide-toggle {
-            display: flex; align-items: center; gap: 8px;
-            padding: 10px 16px; margin-top: 14px;
-            background: linear-gradient(135deg, #fffbeb, #fffbeb);
-            border: 1px solid #fde68a; border-radius: var(--radius-sm);
-            font-size: 0.8rem; font-weight: 600; color: #92400e;
-            cursor: pointer; transition: all var(--transition);
-            width: 100%; text-align: left;
+        .report-body {
+            line-height: 1.82;
+            color: #1f3347;
         }
-        .kb-guide-toggle:hover { background: linear-gradient(135deg, #fef3c7, #fef3c7); }
-        .kb-guide-toggle .guide-chevron {
-            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.65rem; display: inline-block;
-        }
-        .kb-guide-toggle .guide-chevron.open { transform: rotate(90deg); }
-        .kb-guide-body {
-            background: #fffbeb; border: 1px solid #fde68a; border-top: none;
-            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-            padding: 16px 20px; font-size: 0.8rem; line-height: 1.75;
-            color: #78350f; margin-top: -1px;
-        }
-        .kb-guide-body h4 { font-size: 0.82rem; margin: 14px 0 6px; color: #92400e; }
-        .kb-guide-body h4:first-child { margin-top: 0; }
-        .kb-guide-body ul { margin: 4px 0 8px 18px; }
-        .kb-guide-body li { margin-bottom: 4px; }
-        .kb-guide-body code {
-            background: rgba(146,64,14,0.1); padding: 2px 6px; border-radius: 3px;
-            font-size: 0.85em; font-family: var(--mono);
+        .report-body h1, .report-body h2, .report-body h3 { color: #0f2437; line-height: 1.28; }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 28px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: #eef6ff;
+            color: var(--primary-dark);
+            font-size: 0.75rem;
+            font-weight: 900;
         }
 
-        /* ── URL Ingestion ────────────────────────────────── */
-        .url-card { margin-bottom: 16px; }
-        .url-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 24px; background: linear-gradient(135deg, #faf5ff, #f3e8ff);
-            border-bottom: 1px solid #e9d5ff; cursor: pointer; user-select: none;
-            transition: background var(--transition);
+        .prompt-box, .code-box {
+            font-family: var(--mono);
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.7;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #f7fbff;
+            color: #234057;
+            font-size: 0.78rem;
+            max-height: 440px;
+            overflow: auto;
         }
-        .url-header:hover { background: linear-gradient(135deg, #f3e8ff, #ede0ff); }
-        .url-header .url-title {
-            font-weight: 700; font-size: 0.88rem;
-            display: flex; align-items: center; gap: 10px; color: #6b21a8;
+        .chunk-item, .doc-item, .source-item, .result-item, .summary-item {
+            display: grid;
+            grid-template-columns: 38px minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+            padding: 13px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #fbfdff;
         }
-        .url-header .url-chevron {
-            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.7rem; color: #a855f7; width: 20px; height: 20px;
-            display: flex; align-items: center; justify-content: center;
-            background: #ede0ff; border-radius: 50%;
+        .chunk-item { grid-template-columns: minmax(0, 1fr); align-items: start; }
+        .doc-item { grid-template-columns: 32px 38px minmax(0, 1fr) auto; }
+        .item-title { font-weight: 900; color: #122f48; }
+        .item-meta { margin-top: 4px; color: var(--muted); font-size: 0.76rem; line-height: 1.55; }
+        .chunk-text { color: #344e66; font-size: 0.84rem; line-height: 1.75; white-space: pre-wrap; }
+
+        .form-grid { display: grid; gap: 12px; }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
         }
-        .url-header .url-chevron.open { transform: rotate(90deg); background: #7c3aed; color: #fff; }
-        .url-body { padding: 20px 24px; }
-        .url-textarea {
-            width: 100%; min-height: 100px; padding: 12px 16px;
-            border: 2px solid #e9d5ff; border-radius: var(--radius-sm);
-            font-size: 0.88rem; font-family: inherit; line-height: 1.6;
-            outline: none; resize: vertical; transition: all var(--transition);
-            background: #fdfbff;
+        .input, .select, .textarea {
+            border: 1px solid var(--line-strong);
+            border-radius: 13px;
+            background: #fbfdff;
+            color: var(--ink);
+            outline: 0;
+            transition: border-color 0.18s, box-shadow 0.18s;
         }
-        .url-textarea:focus { border-color: #7c3aed; box-shadow: 0 0 0 4px rgba(124,58,237,0.1); }
-        .url-textarea::placeholder { color: #c4b5d6; }
-        .url-hint { font-size: 0.74rem; color: #a78ac9; margin-top: 6px; }
-        .url-actions { display: flex; gap: 10px; align-items: center; margin-top: 12px; }
-        .url-btn {
-            padding: 10px 24px; border: none; border-radius: 8px;
-            font-size: 0.86rem; font-weight: 600; cursor: pointer;
-            transition: all var(--transition); white-space: nowrap;
+        .input, .select { min-height: 42px; padding: 0 12px; }
+        .textarea {
+            width: 100%;
+            min-height: 112px;
+            padding: 12px;
+            resize: vertical;
+            line-height: 1.7;
         }
-        .url-btn.primary {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9);
-            color: #fff; box-shadow: 0 2px 8px rgba(124,58,237,0.2);
+        .input:focus, .select:focus, .textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
         }
-        .url-btn.primary:hover:not(:disabled) {
-            transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124,58,237,0.35);
+        .select { min-width: 170px; }
+
+        .upload-zone {
+            display: grid;
+            place-items: center;
+            gap: 8px;
+            min-height: 180px;
+            padding: 24px;
+            border: 1.5px dashed #9fc2e2;
+            border-radius: 18px;
+            background: linear-gradient(180deg, #f8fcff, #f0f9ff);
+            text-align: center;
         }
-        .url-btn.primary:disabled { opacity: 0.45; cursor: not-allowed; }
-        .url-btn.secondary {
-            background: #fff; color: #7c3aed; border: 2px solid #e9d5ff;
+        .upload-zone.dragover {
+            border-color: var(--primary);
+            background: #eff6ff;
         }
-        .url-btn.secondary:hover:not(:disabled) {
-            background: #faf5ff; border-color: #7c3aed;
+        .file-input { display: none; }
+
+        .empty-state {
+            display: grid;
+            place-items: center;
+            gap: 10px;
+            min-height: 190px;
+            padding: 24px;
+            color: var(--muted);
+            text-align: center;
         }
-        .url-btn.secondary:disabled { opacity: 0.45; cursor: not-allowed; }
-        .url-result { margin-top: 14px; }
-        .url-result-item {
-            display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px;
-            border-radius: 8px; margin-bottom: 6px; font-size: 0.8rem;
+        .loading-card, .error-card {
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            background: #fff;
         }
-        .url-result-item.saved { background: #f0fdf4; border: 1px solid #bbf7d0; }
-        .url-result-item.failed { background: #fef2f2; border: 1px solid #fecaca; }
-        .url-result-item .url-result-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
-        .url-result-item .url-result-text { flex: 1; line-height: 1.5; }
-        .url-result-item .url-result-text .url-result-title { font-weight: 700; }
-        .url-result-item .url-result-text .url-result-meta { font-size: 0.73rem; color: var(--text-muted); }
-        .url-progress {
-            margin-top: 12px; padding: 10px 16px; background: #faf5ff;
-            border: 1px solid #e9d5ff; border-radius: 8px;
-            font-size: 0.82rem; color: #6b21a8; display: flex; align-items: center; gap: 10px;
+        .error-card {
+            color: var(--red);
+            border-color: #fecaca;
+            background: #fff7f7;
         }
-        .url-mini-spinner {
-            width: 16px; height: 16px; border: 2px solid #e9d5ff;
-            border-top-color: #7c3aed; border-radius: 50%;
-            animation: spin 0.7s linear infinite; flex-shrink: 0;
+        .spinner, .mini-spinner {
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            border: 3px solid #dbeafe;
+            border-top-color: var(--primary);
+            animation: spin 0.8s linear infinite;
+        }
+        .mini-spinner { width: 16px; height: 16px; border-width: 2px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .progress-wrap {
+            width: 100%;
+            height: 10px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #e6f0f8;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--primary), #14b8a6);
+            transition: width 0.22s;
         }
 
-        /* ── Privacy Banner ───────────────────────────────── */
-        .privacy-banner {
-            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
-            border: 1px solid #a7f3d0; border-radius: var(--radius);
-            padding: 16px 22px; margin-bottom: 16px;
-            font-size: 0.82rem; display: flex; align-items: flex-start; gap: 12px;
+        .log-panel {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: #0f2437;
+            color: #dbeafe;
+            overflow: hidden;
             box-shadow: var(--shadow-sm);
         }
-        .privacy-banner .privacy-icon {
-            font-size: 1.4rem; flex-shrink: 0; margin-top: 2px;
-            width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
-            background: #d1fae5; border-radius: 10px;
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            cursor: pointer;
         }
-        .privacy-banner .privacy-text { flex: 1; line-height: 1.65; }
-        .privacy-banner .privacy-text strong { color: #065f46; }
-        .privacy-badge {
-            display: inline-block; padding: 3px 12px;
-            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-            color: #065f46; border-radius: 14px;
-            font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em;
+        .log-title { display: inline-flex; align-items: center; gap: 8px; font-weight: 900; }
+        .log-body {
+            max-height: 250px;
+            overflow: auto;
+            padding: 12px 16px 16px;
+            border-top: 1px solid rgba(219, 234, 254, 0.12);
+            font-family: var(--mono);
+            font-size: 0.76rem;
         }
-        .pii-count {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 4px 12px;
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            color: #92400e; border-radius: 12px;
-            font-size: 0.74rem; font-weight: 700;
-            border: 1px solid #fcd34d;
+        .log-entry {
+            display: grid;
+            grid-template-columns: 74px 1fr;
+            gap: 10px;
+            padding: 5px 0;
+        }
+        .log-time { color: #93a9bd; }
+        .log-entry.ok .log-msg { color: #86efac; }
+        .log-entry.err .log-msg { color: #fca5a5; }
+        .log-entry.warn .log-msg { color: #fde68a; }
+
+        .toast {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 50;
+            padding: 12px 16px;
+            border-radius: 14px;
+            background: #0f2437;
+            color: #fff;
+            box-shadow: var(--shadow);
+            font-weight: 800;
         }
 
-        /* ── News Sources ─────────────────────────────────── */
-        .src-card { margin-bottom: 16px; }
-        .src-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 24px; background: linear-gradient(135deg, #eff6ff, #dbeafe);
-            border-bottom: 1px solid #bfdbfe; cursor: pointer; user-select: none;
-            transition: background var(--transition);
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 90;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            background: rgba(15, 36, 55, 0.38);
         }
-        .src-header:hover { background: linear-gradient(135deg, #dbeafe, #cbdffd); }
-        .src-header .src-title {
-            font-weight: 700; font-size: 0.88rem;
-            display: flex; align-items: center; gap: 10px; color: #1e40af;
+        .modal-card {
+            width: min(520px, 100%);
+            padding: 22px;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: #fff;
+            box-shadow: var(--shadow);
         }
-        .src-header .src-chevron {
-            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.7rem; color: #3b82f6; width: 20px; height: 20px;
-            display: flex; align-items: center; justify-content: center;
-            background: #dbeafe; border-radius: 50%;
+        .check-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .src-header .src-chevron.open { transform: rotate(90deg); background: #2563eb; color: #fff; }
-        .src-body { padding: 20px 24px; }
-        .src-add-row { display: flex; gap: 10px; margin-bottom: 16px; }
-        .src-add-row input {
-            flex: 1; padding: 10px 14px;
-            border: 2px solid #bfdbfe; border-radius: var(--radius-sm);
-            font-size: 0.85rem; outline: none; transition: all var(--transition);
-            background: #f8faff;
-        }
-        .src-add-row input:focus {
-            border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
-        }
-        .src-add-row input::placeholder { color: #94a3b8; }
-        .src-add-btn {
-            padding: 10px 20px; white-space: nowrap;
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: #fff; border: none; border-radius: var(--radius-sm);
-            font-size: 0.85rem; font-weight: 600; cursor: pointer;
-            transition: all var(--transition);
-            box-shadow: 0 2px 8px rgba(59,130,246,0.2);
-        }
-        .src-add-btn:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(59,130,246,0.35);
-        }
-        .src-add-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-        .src-item {
-            display: flex; align-items: center; gap: 12px;
-            padding: 10px 14px; border: 1px solid var(--border);
-            border-radius: var(--radius-sm); margin-bottom: 6px;
-            font-size: 0.82rem; background: var(--card);
-            transition: all var(--transition);
-        }
-        .src-item:hover { background: #fafbfd; border-color: #cbd5e1; }
-        .src-item .src-item-icon {
-            font-size: 1.2rem; flex-shrink: 0;
-            width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            border-radius: 8px;
-        }
-        .src-item-info { flex: 1; min-width: 0; }
-        .src-item-info .src-item-name {
-            font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .src-item-info .src-item-url {
-            font-size: 0.73rem; color: var(--text-muted);
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .src-item-status {
-            font-size: 0.7rem; padding: 3px 10px; border-radius: 10px;
-            font-weight: 600; flex-shrink: 0;
-        }
-        .src-item-status.ok { background: #dcfce7; color: #166534; }
-        .src-item-status.never { background: #f1f5f9; color: #64748b; }
-        .src-item-delete {
-            flex-shrink: 0; padding: 5px 12px; background: none;
-            border: 1px solid #fecaca; color: #dc2626; border-radius: 6px;
-            font-size: 0.73rem; cursor: pointer; transition: all var(--transition);
-            font-weight: 500;
-        }
-        .src-item-delete:hover:not(:disabled) {
-            background: #fef2f2; border-color: #f87171;
-        }
-        .src-item-delete:disabled { opacity: 0.35; cursor: not-allowed; }
-
-        /* ── Daily Fetch Button ────────────────────────────── */
-        .daily-fetch-section {
-            margin-top: 18px; padding-top: 18px;
-            border-top: 2px dashed #e2e8f0;
-        }
-        .daily-fetch-btn {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            width: 100%; padding: 16px 24px;
-            background: linear-gradient(135deg, #059669, #047857);
-            color: #fff; border: none; border-radius: var(--radius);
-            font-size: 1rem; font-weight: 700; cursor: pointer;
-            transition: all var(--transition);
-            box-shadow: 0 4px 16px rgba(5,150,105,0.25);
-            letter-spacing: 0.02em;
-        }
-        .daily-fetch-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(5,150,105,0.4);
-        }
-        .daily-fetch-btn:active:not(:disabled) { transform: translateY(0); }
-        .daily-fetch-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-        .daily-fetch-hint {
-            text-align: center; font-size: 0.76rem; color: var(--text-muted);
-            margin-top: 8px;
-        }
-        .daily-fetch-result {
-            margin-top: 14px; padding: 16px 20px;
-            border-radius: var(--radius-sm); font-size: 0.82rem;
-        }
-        .daily-fetch-result.success {
-            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
-            border: 1px solid #a7f3d0;
-        }
-        .daily-fetch-result.partial {
-            background: linear-gradient(135deg, #fffbeb, #fefce8);
-            border: 1px solid #fde68a;
-        }
-        .daily-fetch-result.error {
-            background: linear-gradient(135deg, #fef2f2, #fff5f5);
-            border: 1px solid #fecaca;
-        }
-        .fetch-result-title { font-weight: 700; margin-bottom: 8px; }
-        .fetch-result-item {
-            display: flex; align-items: flex-start; gap: 8px;
-            padding: 6px 0; font-size: 0.8rem; line-height: 1.5;
-        }
-        .fetch-result-item .fetch-icon { flex-shrink: 0; margin-top: 2px; }
-        .fetch-error {
-            color: #991b1b; font-size: 0.78rem; margin-top: 4px; padding-left: 22px;
+        .check-cell input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
         }
 
-        /* ── Responsive ───────────────────────────────────── */
+        .toggle {
+            position: relative;
+            width: 48px;
+            height: 28px;
+            display: inline-block;
+        }
+        .toggle input { display: none; }
+        .toggle span {
+            position: absolute;
+            inset: 0;
+            border-radius: 999px;
+            background: #cbd5e1;
+            transition: background 0.18s;
+        }
+        .toggle span:before {
+            content: "";
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            left: 3px;
+            top: 3px;
+            border-radius: 999px;
+            background: #fff;
+            transition: transform 0.18s;
+        }
+        .toggle input:checked + span { background: var(--primary); }
+        .toggle input:checked + span:before { transform: translateX(20px); }
+
+        .tutorial-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 80;
+            background: rgba(15, 36, 55, 0.32);
+        }
+        .tutorial-tooltip {
+            position: absolute;
+            z-index: 82;
+            max-width: 360px;
+            padding: 16px;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--line);
+        }
+        .tutorial-highlight {
+            position: absolute;
+            z-index: 81;
+            border-radius: 18px;
+            box-shadow: 0 0 0 9999px rgba(15, 36, 55, 0.34), 0 0 0 3px var(--primary);
+            pointer-events: none;
+        }
+
+        @media (max-width: 980px) {
+            .hero, .content-grid, .topbar { grid-template-columns: 1fr; }
+            .side-column { order: -1; }
+            .nav-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .pipeline { grid-template-columns: 1fr; }
+        }
         @media (max-width: 640px) {
-            .search-row { flex-direction: column; }
-            .pipeline-flow { flex-wrap: wrap; gap: 4px; }
-            .pipeline-arrow { display: none; }
-            .container { padding: 14px 12px; }
-            .tabs { flex-direction: column; gap: 4px; }
-            .report-body { padding: 18px 16px; }
+            .app-shell { padding: 14px; }
+            .hero {
+                width: 100%;
+                max-width: calc(100vw - 28px);
+                overflow: hidden;
+                padding: 20px;
+                border-radius: 22px;
+            }
+            .hero h1 {
+                max-width: 100%;
+                font-size: 1.72rem;
+                line-height: 1.1;
+                word-break: break-all;
+            }
+            .mobile-only { display: inline; }
+            .hero-copy {
+                max-width: 100%;
+                word-break: break-all;
+            }
+            .search-row { grid-template-columns: 1fr; }
+            .nav-tabs { grid-template-columns: 1fr; }
+            .chunk-item, .doc-item, .source-item, .result-item, .summary-item { grid-template-columns: 34px minmax(0, 1fr); }
+            .doc-item { grid-template-columns: 28px 34px minmax(0, 1fr); }
+            .doc-item .btn { grid-column: 3; justify-self: start; }
+            .source-item .btn { grid-column: 2; justify-self: start; }
         }
     </style>
 </head>
 <body>
-<div id="app">
-    <!-- Header -->
-    <div class="header">
-        <h1><span>EduDaily</span> — 每日教育资讯智能检索与分析</h1>
-        <div class="subtitle">DeepSeek Chat + BGE Embedding + ChromaDB | 服务于教育工作者的 RAG 资讯系统</div>
-        <div class="status-bar">
-            <span><span class="status-dot" :class="health.ready ? 'ok' : 'err'"></span>管道就绪</span>
-            <span><span class="status-dot" :class="health.api_key_configured ? 'ok' : 'err'"></span>{{ health.api_key_configured ? 'API Key 已配置' : 'API Key 未配置' }}</span>
-            <span><span class="status-dot" :class="health.vector_count > 0 ? 'ok' : 'err'"></span>{{ health.vector_count }} 个向量索引</span>
+<div id="app" class="app-shell">
+    <header class="hero">
+        <div>
+            <div class="brand-kicker">
+                <img class="icon" :src="icon('sparkles')" alt="" /> 教育资讯 RAG 工作台
+            </div>
+            <h1><span>EduDaily</span><br />每日教育资讯智能<span class="mobile-only"><br /></span>检索与分析</h1>
+            <p class="hero-copy">
+                聚合教育资讯源、沉淀本地知识库、<span class="mobile-only"><br /></span>生成可追溯分析报告，<span class="mobile-only"><br /></span>并为公众号、小红书、短视频和播客<span class="mobile-only"><br /></span>生成内容草稿。
+            </p>
         </div>
+        <div class="hero-metrics">
+            <div class="metric">
+                <span class="icon-badge"><img :src="icon('activity')" alt="" /></span>
+                <div><strong>{{ health.ready ? '已就绪' : '待检查' }}</strong><span>RAG 管道状态</span></div>
+            </div>
+            <div class="metric">
+                <span class="icon-badge teal"><img :src="icon('layers')" alt="" /></span>
+                <div><strong>{{ health.vector_count || 0 }}</strong><span>向量索引</span></div>
+            </div>
+            <div class="metric">
+                <span class="icon-badge green"><img :src="icon('database')" alt="" /></span>
+                <div><strong>{{ health.document_count || kbDocs.length || 0 }}</strong><span>知识库文档</span></div>
+            </div>
+        </div>
+    </header>
+
+    <div class="topbar">
+        <nav class="nav-tabs" aria-label="主导航">
+            <button v-for="item in navItems" :key="item.key" class="nav-btn" :class="{ active: activeMainTab === item.key }" @click="switchTab(item.key)">
+                <img class="icon" :src="icon(item.icon)" alt="" /> {{ item.label }}
+            </button>
+        </nav>
+        <button class="tutorial-link" v-if="tutorialCompleted" @click="startTutorial">
+            <img class="icon" :src="icon('lightbulb')" alt="" /> 使用教程
+        </button>
     </div>
 
-    <div class="container">
-        <!-- Pipeline flow -->
-        <div class="pipeline-flow">
-            <span class="pipeline-step" :class="{ active: stage >= 1 }">1. 输入查询</span>
-            <span class="pipeline-arrow" :class="{ done: stage >= 2 }">→</span>
-            <span class="pipeline-step" :class="{ active: stage >= 2 }">2. 向量检索</span>
-            <span class="pipeline-arrow" :class="{ done: stage >= 3 }">→</span>
-            <span class="pipeline-step" :class="{ active: stage >= 3 }">3. Prompt 构建</span>
-            <span class="pipeline-arrow" :class="{ done: stage >= 4 }">→</span>
-            <span class="pipeline-step" :class="{ active: stage >= 4 }">4. LLM 生成</span>
-            <span class="pipeline-arrow" :class="{ done: stage >= 5 }">→</span>
-            <span class="pipeline-step" :class="{ active: stage >= 5 }">5. 报告输出</span>
-        </div>
-
-        <!-- Privacy notice -->
-        <div class="privacy-banner">
-            <span class="privacy-icon">🔒</span>
-            <span class="privacy-text">
-                <strong>隐私保护已启用</strong> — 您的文档保存在本地，检索到的内容在发送至 DeepSeek API 前会自动脱敏。<br>
-                <span style="color:var(--text-muted);">
-                自动隐藏：手机号、身份证号、银行卡号、邮箱、姓名等敏感信息。在「Prompt 工程」标签页可查看脱敏后的实际 Prompt。
-                </span>
-            </span>
-        </div>
-
-        <!-- Search -->
-        <div class="search-card">
-            <div class="search-row">
-                <input
-                    class="search-input"
-                    v-model="query"
-                    type="text"
-                    placeholder="输入您关心的教育问题，检索相关资讯并生成分析报告..."
-                    @keyup.enter="submitQuery"
-                    :disabled="loading"
-                />
-                <button class="search-btn" @click="submitQuery" :disabled="loading || !query.trim()">
-                    {{ loading ? '处理中...' : '开始分析' }}
-                </button>
-            </div>
-            <div class="char-count">{{ query.length }} 字</div>
-            <div class="quick-queries">
-                <span class="quick-chip" v-for="(item, idx) in quickQueries" :key="idx">
-                    <span @click="quickQuery(item.text)">{{ item.label }}</span>
-                    <button class="quick-chip-delete" @click.stop="removeQuickQuery(idx)" title="移除">×</button>
-                </span>
-            </div>
-        </div>
-
-        <!-- Knowledge Base -->
-        <div class="card kb-card">
-            <div class="kb-header" @click="kbOpen = !kbOpen">
-                <span class="kb-title">
-                    <span>📚</span> 知识库管理
-                    <span style="font-weight:400;font-size:0.75rem;color:var(--text-muted);">
-                        {{ kbDocs.length }} 个文档，{{ kbDocs.reduce((s,d) => s + d.chunk_count, 0) }} 个分块
-                    </span>
-                </span>
-                <span class="kb-chevron" :class="{ open: kbOpen }">▶</span>
-            </div>
-            <div class="kb-body" v-show="kbOpen">
-                <!-- Upload zone -->
-                <div class="kb-upload-zone" :class="{ dragover: kbDragOver }"
-                    @dragover.prevent="kbDragOver = true"
-                    @dragleave.prevent="kbDragOver = false"
-                    @drop.prevent="onKbDrop">
-                    <div style="font-size:1.5rem;margin-bottom:4px;">📤</div>
-                    <div style="font-size:0.84rem;font-weight:500;">导入新的知识库文档 (.txt)</div>
-                    <div class="kb-upload-hint">拖拽 .txt 文件到此处，或点击下方按钮选择文件</div>
-                    <label class="kb-upload-btn" :class="{ disabled: kbUploading }" style="display:inline-block;">
-                        {{ kbUploading ? '上传中...' : '选择文件并上传' }}
-                        <input type="file" accept=".txt" multiple
-                            @change="onKbFileSelect" :disabled="kbUploading" />
-                    </label>
-                </div>
-
-                <!-- Upload status -->
-                <div v-if="kbUploadStatus.msg" class="kb-upload-status" :class="kbUploadStatus.type">
-                    {{ kbUploadStatus.msg }}
-                </div>
-
-                <!-- Writing Guide -->
-                <button class="kb-guide-toggle" @click="kbGuideOpen = !kbGuideOpen">
-                    💡 如何编写高质量知识库文档？
-                    <span class="guide-chevron" :class="{ open: kbGuideOpen }">▶</span>
-                </button>
-                <div class="kb-guide-body" v-show="kbGuideOpen">
-                    <h4>📝 文档格式要求</h4>
-                    <ul>
-                        <li>仅支持 <code>.txt</code> 纯文本文件，编码必须为 <code>UTF-8</code></li>
-                        <li><strong>首行自动作为文档标题</strong> — 建议写一个清晰、概括性的标题</li>
-                        <li>段落之间用<strong>空行</strong>（双击回车）分隔 — 空行是分块的核心依据</li>
-                    </ul>
-                    <h4>✂️ 分块规则（系统自动处理）</h4>
-                    <ul>
-                        <li>以<strong>段落</strong>（空行分隔）为基本分块单元</li>
-                        <li>单个段落超过 <code>1000</code> 字时，按句子（。！？；）进一步切分</li>
-                        <li>短于 <code>50</code> 字的内容会被过滤掉</li>
-                        <li>相邻分块之间保留 <code>200</code> 字的重叠，保证上下文连贯</li>
-                    </ul>
-                    <h4>✅ 编写建议</h4>
-                    <ul>
-                        <li>每个段落保持在 <strong>100–800 字</strong>之间，过长会被切分，过短会被丢弃</li>
-                        <li>段落内信息尽量<strong>独立完整</strong> — 每个分块应能独立理解</li>
-                        <li>使用<strong>清晰的标题和层次结构</strong>（如"一、财务状况"、"1. 营收分析"）</li>
-                        <li>同一主题的内容写在一起，不同主题用空行隔开</li>
-                        <li>涉及数字、日期、人名等信息时，确保<strong>在同一段落内完整表达</strong></li>
-                        <li>避免大段连续无标点的文字 — 会影响句子级切分效果</li>
-                    </ul>
-                    <h4>📋 推荐模板</h4>
-                    <pre style="background:rgba(146,64,14,0.06);padding:12px 16px;border-radius:6px;font-size:0.78rem;line-height:1.7;overflow-x:auto;margin-top:4px;">XX公司2024年度经营分析报告
-
-一、公司概况
-XX公司成立于20XX年，总部位于XX市，主营业务涵盖...
-
-二、财务表现
-2024年全年营收达到XX亿元，同比增长XX%。其中...
-
-三、技术创新
-公司在2024年完成了XX项目的研发，获得专利X项...
-
-四、风险与挑战
-公司面临的主要风险包括：市场竞争加剧、原材料...</pre>
-                </div>
-
-                <!-- Document list -->
-                <div v-if="kbDocs.length === 0 && !kbUploading" style="text-align:center;padding:20px;color:var(--text-muted);font-size:0.82rem;">
-                    暂无文档，上传 .txt 文件即可添加到知识库
-                </div>
-                <div class="kb-doc-item" v-for="doc in kbDocs" :key="doc.doc_id">
-                    <span class="kb-doc-icon">📄</span>
-                    <div class="kb-doc-info">
-                        <div class="kb-doc-name">{{ doc.filename }}</div>
-                        <div class="kb-doc-meta">
-                            {{ doc.chunk_count }} 分块 · {{ doc.char_count }} 字 · {{ doc.created_at?.split('T')[0] || '-' }}
-                        </div>
+    <main class="content-grid">
+        <section class="main-column">
+            <template v-if="activeMainTab === 'qa'">
+                <div class="panel search-panel" id="tutorial-qa-search">
+                    <div class="panel-title"><img class="icon-lg" :src="icon('search')" alt="" /> 问答分析</div>
+                    <div class="search-row">
+                        <input class="search-input" v-model="query" type="text" placeholder="输入你关心的教育问题，系统会检索知识库并生成分析报告" @keyup.enter="submitQuery" :disabled="loading" />
+                        <button class="btn btn-primary" @click="submitQuery" :disabled="loading || !query.trim()">
+                            <span v-if="loading" class="mini-spinner"></span>
+                            <img v-else class="icon" :src="icon('send')" alt="" />
+                            {{ loading ? '分析中' : '开始分析' }}
+                        </button>
                     </div>
-                    <button class="kb-doc-delete"
-                        @click="deleteKbDoc(doc)"
-                        :disabled="kbDeleting === doc.doc_id">
-                        {{ kbDeleting === doc.doc_id ? '删除中...' : '删除' }}
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- URL Ingestion -->
-        <div class="card url-card">
-            <div class="url-header" @click="urlOpen = !urlOpen">
-                <span class="url-title">
-                    <span>🪄</span> 想偷懒？试试输入网址帮你快速构成知识库
-                </span>
-                <span class="url-chevron" :class="{ open: urlOpen }">▶</span>
-            </div>
-            <div class="url-body" v-show="urlOpen">
-                <textarea
-                    class="url-textarea"
-                    v-model="urlInput"
-                    placeholder="在此粘贴网址，每行一个&#10;支持：新闻文章、百科页面、在线文档、博客文章等&#10;&#10;例如：&#10;https://example.com/news/tech-2024&#10;https://baike.baidu.com/item/人工智能"
-                    :disabled="urlProcessing"
-                ></textarea>
-                <div class="url-hint">
-                    支持新闻、百科、博客等网页。系统会自动抓取内容并用 AI 提炼为结构化的知识库文档。
-                </div>
-                <div class="url-actions">
-                    <button class="url-btn primary" @click="submitUrls" :disabled="urlProcessing || !urlInput.trim()">
-                        {{ urlProcessing ? '正在抓取并提炼...' : '抓取并提炼' }}
-                    </button>
-                    <button class="url-btn secondary"
-                        @click="importSavedDocs"
-                        :disabled="urlImporting || urlSavedCount === 0">
-                        {{ urlImporting ? '导入中...' : '导入已提炼的文档 (' + urlSavedCount + ')' }}
-                    </button>
+                    <div class="char-count">{{ query.length }} 字</div>
+                    <div class="quick-queries">
+                        <button class="quick-chip" v-for="item in quickQueries" :key="item.text" @click="quickQuery(item.text)">
+                            <img class="icon" :src="icon(item.icon || 'message-square')" alt="" /> {{ item.label }}
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Progress -->
-                <div class="url-progress" v-if="urlProcessing">
-                    <span class="url-mini-spinner"></span>
-                    正在处理网址，AI 提炼中，请耐心等待...
+                <div class="privacy-banner">
+                    <span class="icon-badge teal"><img :src="icon('key-round')" alt="" /></span>
+                    <div>
+                        <strong>隐私保护已启用。</strong> 文档保存在本地，检索上下文发送到 DeepSeek API 前会自动隐藏手机号、身份证号、银行卡号、邮箱、姓名和表格型敏感数据。
+                    </div>
                 </div>
 
-                <!-- Results -->
-                <div class="url-result" v-if="urlResults.length > 0">
-                    <div class="url-result-item" v-for="(r, idx) in urlResults" :key="idx"
-                        :class="r.status">
-                        <span class="url-result-icon">{{ r.status === 'saved' ? '✅' : '❌' }}</span>
-                        <div class="url-result-text">
-                            <div class="url-result-title" v-if="r.status === 'saved'">{{ r.title }}</div>
-                            <div class="url-result-title" v-else>{{ r.url }}</div>
-                            <div class="url-result-meta">
-                                <template v-if="r.status === 'saved'">
-                                    已保存至：{{ r.path }} · {{ r.char_count }} 字
-                                </template>
-                                <template v-else>
-                                    {{ r.error }}
-                                </template>
+                <div class="pipeline">
+                    <div class="pipeline-step" v-for="stepItem in pipelineSteps" :key="stepItem.n" :class="{ active: stage >= stepItem.n }">
+                        <img class="icon" :src="icon(stepItem.icon)" alt="" />
+                        <div>{{ stepItem.label }}</div>
+                    </div>
+                </div>
+
+                <div class="loading-card" v-if="loading">
+                    <div class="form-row"><span class="spinner"></span><strong>正在检索相关文档并生成报告</strong></div>
+                </div>
+                <div class="error-card" v-if="error" v-html="error"></div>
+
+                <template v-if="result && !loading">
+                    <div class="tabs">
+                        <button class="tab-btn" :class="{ active: activeTab === 'report' }" @click="activeTab = 'report'">分析报告</button>
+                        <button class="tab-btn" :class="{ active: activeTab === 'prompt' }" @click="activeTab = 'prompt'">Prompt 工程</button>
+                        <button class="tab-btn" :class="{ active: activeTab === 'chunks' }" @click="activeTab = 'chunks'">检索结果 {{ result.retrieved_chunks.length }}</button>
+                    </div>
+
+                    <div class="panel pad" v-show="activeTab === 'report'">
+                        <div class="form-row" style="margin-bottom: 12px;">
+                            <span class="badge"><img class="icon" :src="icon('clock')" alt="" /> {{ (result.generation_time_ms / 1000).toFixed(1) }}s</span>
+                            <span class="badge" v-if="result.domain && result.domain !== 'general'">{{ domainLabel }}</span>
+                        </div>
+                        <div class="report-body" v-html="renderedReport"></div>
+                    </div>
+
+                    <div class="panel pad" v-show="activeTab === 'prompt'">
+                        <div class="badge" v-if="result.pii_redacted > 0" style="margin-bottom: 12px;">
+                            <img class="icon" :src="icon('key-round')" alt="" /> 已脱敏 {{ result.pii_redacted }} 处
+                        </div>
+                        <h3>System Prompt</h3>
+                        <div class="prompt-box">{{ highlightedSystemPrompt }}</div>
+                        <h3>User Prompt</h3>
+                        <div class="prompt-box" v-html="highlightedUserPrompt"></div>
+                    </div>
+
+                    <div class="panel pad" v-show="activeTab === 'chunks'">
+                        <div class="form-grid">
+                            <div class="chunk-item" v-for="(chunk, idx) in result.retrieved_chunks" :key="idx">
+                                <div class="item-meta">
+                                    片段 #{{ chunk.chunk_id || chunk.metadata?.chunk_id || idx + 1 }} ·
+                                    相关度 {{ (1 - (chunk.distance || 0)).toFixed(3) }} ·
+                                    文档 {{ chunk.document_id || chunk.metadata?.document_id || '-' }}
+                                </div>
+                                <div class="chunk-text">{{ chunk.text || chunk.document }}</div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </template>
 
-        <!-- News Sources & Daily Fetch -->
-        <div class="card src-card">
-            <div class="src-header" @click="srcOpen = !srcOpen">
-                <span class="src-title">
-                    <span>📡</span> 信息源管理 & 每日日报
-                    <span style="font-weight:400;font-size:0.75rem;color:var(--text-muted);">
-                        {{ sources.length }} 个信息源
-                    </span>
-                </span>
-                <span class="src-chevron" :class="{ open: srcOpen }">▶</span>
-            </div>
-            <div class="src-body" v-show="srcOpen">
-                <!-- Add new source -->
-                <div class="src-add-row">
-                    <input v-model="newSourceName" type="text" placeholder="信息源名称，如：教育部官网"
-                        @keyup.enter="addSource" :disabled="srcAdding" />
-                    <input v-model="newSourceUrl" type="text" placeholder="网址，如：https://www.moe.gov.cn/"
-                        @keyup.enter="addSource" :disabled="srcAdding" />
-                    <button class="src-add-btn" @click="addSource" :disabled="srcAdding || !newSourceName.trim() || !newSourceUrl.trim()">
-                        {{ srcAdding ? '添加中...' : '添加' }}
-                    </button>
-                </div>
-
-                <!-- Source list -->
-                <div v-if="sources.length === 0" style="text-align:center;padding:12px;color:var(--text-muted);font-size:0.8rem;">
-                    暂无信息源，请添加您关注的教育资讯网站
-                </div>
-                <div class="src-item" v-for="src in sources" :key="src.id">
-                    <span class="src-item-icon">🌐</span>
-                    <div class="src-item-info">
-                        <div class="src-item-name">{{ src.name }}</div>
-                        <div class="src-item-url">{{ src.url }}</div>
+                <div class="panel empty-state" v-if="!loading && !result && !error">
+                    <span class="icon-badge"><img :src="icon('message-square')" alt="" /></span>
+                    <div>
+                        <strong>选择一个预设问题，或直接输入你的分析需求。</strong>
+                        <div class="item-meta">系统会完成检索、上下文注入、脱敏和报告生成。</div>
                     </div>
-                    <span class="src-item-status" :class="src.last_fetched_at ? 'ok' : 'never'">
-                        {{ src.last_fetched_at ? '已同步' : '未同步' }}
-                    </span>
-                    <button class="src-item-delete"
-                        @click="deleteSource(src)"
-                        :disabled="srcDeleting === src.id">
-                        {{ srcDeleting === src.id ? '...' : '删除' }}
-                    </button>
                 </div>
+            </template>
 
-                <!-- Daily Fetch -->
-                <div class="daily-fetch-section">
-                    <button class="daily-fetch-btn"
-                        @click="runDailyFetch"
-                        :disabled="fetchRunning || sources.length === 0">
-                        <span v-if="fetchRunning" class="url-mini-spinner"></span>
-                        <span v-else>📰</span>
-                        {{ fetchRunning ? '正在获取今日教育资讯...' : '一键获取今日日报' }}
-                    </button>
-                    <div class="daily-fetch-hint" v-if="sources.length > 0">
-                        从 {{ sources.length }} 个信息源获取今日（{{ todayDate }}）发布的最新教育资讯
-                    </div>
-                    <div class="daily-fetch-hint" v-else>
-                        请先添加信息源网址
-                    </div>
-
-                    <!-- Fetch results -->
-                    <div v-if="fetchResult" class="daily-fetch-result"
-                        :class="fetchResult.total_articles > 0 ? 'success' : (fetchResult.sources_checked > 0 ? 'partial' : 'error')">
-                        <div class="fetch-result-title">
-                            <span v-if="fetchResult.total_articles > 0">获取完成！共收录 {{ fetchResult.total_articles }} 篇今日资讯</span>
-                            <span v-else-if="fetchResult.sources_checked > 0">获取完成，但未找到今日资讯</span>
-                            <span v-else>获取失败</span>
+            <template v-if="activeMainTab === 'kb'">
+                <div class="panel" id="tutorial-kb-card">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title"><img class="icon-lg" :src="icon('book-open')" alt="" /> 知识库管理</div>
+                            <div class="panel-subtitle">{{ kbDocs.length }} 个文档，{{ kbDocs.reduce((s,d) => s + d.chunk_count, 0) }} 个分块</div>
                         </div>
-                        <div v-if="fetchResult.total_articles > 0" style="font-size:0.78rem;color:var(--text-muted);margin-bottom:8px;">
-                            批次：{{ fetchResult.batch_id }} | 已检查 {{ fetchResult.sources_checked }} 个信息源
+                        <div class="form-row">
+                            <button class="btn btn-ghost btn-sm" @click="loadKnowledge"><img class="icon" :src="icon('refresh-cw')" alt="" /> 刷新</button>
+                            <button class="btn btn-danger btn-sm" @click="deleteYesterdayKnowledge" :disabled="kbBulkDeleting">
+                                <img class="icon" :src="icon('calendar')" alt="" /> 清除昨天
+                            </button>
                         </div>
-                        <div class="fetch-result-item" v-for="(art, idx) in fetchResult.articles" :key="idx">
-                            <span class="fetch-icon">📄</span>
+                    </div>
+                    <div class="panel-body form-grid">
+                        <div class="upload-zone" :class="{ dragover: kbDragOver }" @dragover.prevent="kbDragOver = true" @dragleave.prevent="kbDragOver = false" @drop.prevent="onKbDrop">
+                            <span class="icon-badge"><img :src="icon('upload-cloud')" alt="" /></span>
+                            <strong>导入新的知识库文档</strong>
+                            <span class="item-meta">拖拽 .txt 文件到此处，或选择文件上传。首行会作为文档标题。</span>
+                            <label class="btn btn-primary" :class="{ disabled: kbUploading }">
+                                <img class="icon" :src="icon('file-up')" alt="" /> {{ kbUploading ? '上传中' : '选择文件' }}
+                                <input class="file-input" type="file" accept=".txt" multiple @change="onKbFileSelect" :disabled="kbUploading" />
+                            </label>
+                        </div>
+                        <div v-if="kbUploadStatus.msg" class="loading-card">{{ kbUploadStatus.msg }}</div>
+                        <button class="btn btn-ghost" @click="kbGuideOpen = !kbGuideOpen">
+                            <img class="icon" :src="icon('lightbulb')" alt="" /> 如何编写高质量知识库文档
+                        </button>
+                        <div class="panel pad" v-show="kbGuideOpen">
+                            <h3>文档格式要求</h3>
+                            <ul>
+                                <li>仅支持 UTF-8 编码的 .txt 文档。</li>
+                                <li>首行自动作为文档标题，后续正文按段落进入分块流程。</li>
+                                <li>段落之间使用空行分隔，建议每段 100 到 800 字。</li>
+                            </ul>
+                            <h3>分块规则</h3>
+                            <ul>
+                                <li>系统优先按空行分段，长段落会按句子继续切分。</li>
+                                <li>短于 50 字的片段会被过滤，相邻片段保留 200 字重叠。</li>
+                            </ul>
+                        </div>
+                        <div class="empty-state" v-if="kbDocs.length === 0 && !kbUploading">暂无文档，上传 .txt 文件后即可开始检索。</div>
+                        <div class="form-row" v-if="kbDocs.length > 0">
+                            <label class="form-row" style="font-weight:800;">
+                                <input type="checkbox" :checked="allKbSelected" @change="toggleAllKbDocs($event.target.checked)" />
+                                全选
+                            </label>
+                            <span class="item-meta">已选择 {{ selectedKbDocIds.length }} 个文档</span>
+                            <button class="btn btn-danger btn-sm" @click="bulkDeleteKnowledge" :disabled="selectedKbDocIds.length === 0 || kbBulkDeleting">
+                                <img class="icon" :src="icon('trash-2')" alt="" /> {{ kbBulkDeleting ? '删除中' : '批量删除' }}
+                            </button>
+                        </div>
+                        <div class="doc-item" v-for="doc in kbDocs" :key="doc.doc_id">
+                            <label class="check-cell">
+                                <input type="checkbox" :value="doc.doc_id" v-model="selectedKbDocIds" />
+                            </label>
+                            <span class="icon-badge"><img :src="icon('file-text')" alt="" /></span>
                             <div>
-                                <div style="font-weight:600;">{{ art.title }}</div>
-                                <div style="font-size:0.73rem;color:var(--text-muted);">
-                                    来源：{{ art.source_name }} | 日期：{{ art.publish_date }} |
-                                    {{ art.chunks }} 分块 | 文档 #{{ art.doc_id }}
-                                    <span v-if="art.original_url" style="margin-left:4px;">
-                                        <a :href="art.original_url" target="_blank" style="color:var(--primary);">原文链接</a>
-                                    </span>
+                                <div class="item-title">{{ doc.filename }}</div>
+                                <div class="item-meta">{{ doc.chunk_count }} 分块 · {{ doc.char_count }} 字 · {{ doc.created_at?.split('T')[0] || '-' }}</div>
+                            </div>
+                            <button class="btn btn-danger btn-sm" @click="deleteKbDoc(doc)" :disabled="kbDeleting === doc.doc_id">
+                                <img class="icon" :src="icon('trash-2')" alt="" /> {{ kbDeleting === doc.doc_id ? '删除中' : '删除' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title"><img class="icon-lg" :src="icon('wand-sparkles')" alt="" /> URL 提炼入库</div>
+                            <div class="panel-subtitle">抓取网页文本，调用 AI 提炼为结构化知识库文档。</div>
+                        </div>
+                    </div>
+                    <div class="panel-body form-grid">
+                        <textarea class="textarea" v-model="urlInput" placeholder="每行一个网址，例如：https://example.com/news/education" :disabled="urlProcessing"></textarea>
+                        <div class="form-row">
+                            <button class="btn btn-primary" @click="processUrls" :disabled="urlProcessing || !urlInput.trim()">
+                                <span v-if="urlProcessing" class="mini-spinner"></span>
+                                <img v-else class="icon" :src="icon('link')" alt="" /> {{ urlProcessing ? '处理中' : '提炼网址' }}
+                            </button>
+                            <button class="btn btn-green" @click="importSavedUrls" :disabled="urlImporting || urlSavedCount === 0">
+                                <img class="icon" :src="icon('download')" alt="" /> 导入已保存文档
+                            </button>
+                        </div>
+                        <div class="form-grid" v-if="urlResults.length">
+                            <div class="result-item" v-for="(r, idx) in urlResults" :key="idx">
+                                <span class="icon-badge" :class="r.status === 'saved' ? 'green' : 'red'">
+                                    <img :src="icon(r.status === 'saved' ? 'check-circle' : 'x-circle')" alt="" />
+                                </span>
+                                <div>
+                                    <div class="item-title">{{ r.title || r.url }}</div>
+                                    <div class="item-meta">{{ r.status === 'saved' ? r.filename : r.error }}</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="fetch-error" v-for="(err, idx) in fetchResult.errors" :key="'e'+idx">
-                            {{ err }}
+                    </div>
+                </div>
+            </template>
+
+            <template v-if="activeMainTab === 'sources'">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title"><img class="icon-lg" :src="icon('radio')" alt="" /> 信息源与日报</div>
+                            <div class="panel-subtitle">维护教育资讯源，并抓取今日发布内容。</div>
+                        </div>
+                    </div>
+                    <div class="panel-body form-grid">
+                        <div class="form-row">
+                            <input class="input" v-model="newSourceName" placeholder="信息源名称，如：教育部官网" @keyup.enter="addSource" :disabled="srcAdding" />
+                            <input class="input" style="flex: 1; min-width: 260px;" v-model="newSourceUrl" placeholder="网址，如：https://www.moe.gov.cn/" @keyup.enter="addSource" :disabled="srcAdding" />
+                            <button class="btn btn-primary" @click="addSource" :disabled="srcAdding || !newSourceName.trim() || !newSourceUrl.trim()">
+                                <img class="icon" :src="icon('plus')" alt="" /> 添加
+                            </button>
+                        </div>
+                        <div class="empty-state" v-if="sources.length === 0">暂无信息源。先添加一个教育资讯网站。</div>
+                        <div class="source-item" v-for="src in sources" :key="src.id">
+                            <span class="icon-badge teal"><img :src="icon('globe')" alt="" /></span>
+                            <div>
+                                <div class="item-title">{{ src.name }}</div>
+                                <div class="item-meta">{{ src.url }} · {{ src.last_fetched_at ? '上次同步 ' + src.last_fetched_at : '尚未同步' }}</div>
+                            </div>
+                            <button class="btn btn-danger btn-sm" @click="deleteSource(src)" :disabled="srcDeleting === src.id">
+                                <img class="icon" :src="icon('trash-2')" alt="" /> 删除
+                            </button>
+                        </div>
+                        <button class="btn btn-green" id="tutorial-daily-fetch" @click="runDailyFetch" :disabled="fetchRunning || sources.length === 0">
+                            <span v-if="fetchRunning" class="mini-spinner"></span>
+                            <img v-else class="icon" :src="icon('newspaper')" alt="" />
+                            {{ fetchRunning ? '正在获取今日资讯' : '获取今日日报' }}
+                        </button>
+                        <div class="panel pad" v-if="fetchResult">
+                            <strong>获取结果：{{ fetchResult.total_articles }} 篇文章</strong>
+                            <div class="item-meta">批次 {{ fetchResult.batch_id }} · 已检查 {{ fetchResult.sources_checked }} 个信息源</div>
+                            <div class="form-grid" style="margin-top: 12px;">
+                                <div class="result-item" v-for="(art, idx) in fetchResult.articles" :key="idx">
+                                    <span class="icon-badge"><img :src="icon('file-text')" alt="" /></span>
+                                    <div>
+                                        <div class="item-title">{{ art.title }}</div>
+                                        <div class="item-meta">来源 {{ art.source_name }} · 日期 {{ art.publish_date }} · {{ art.chunks }} 分块</div>
+                                    </div>
+                                </div>
+                                <div class="error-card" v-for="(err, idx) in fetchResult.errors" :key="'e'+idx">{{ err }}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </template>
 
-        <!-- Loading -->
-        <div class="loading-card" v-if="loading">
-            <div class="spinner"></div>
-            <div class="loading-text">
-                检索相关文档 → 构建 Prompt → LLM 生成分析报告...
-            </div>
-        </div>
-
-        <!-- Error -->
-        <div class="error-card" v-if="error" v-html="error"></div>
-
-        <!-- Results -->
-        <template v-if="result && !loading">
-            <!-- Tabs -->
-            <div class="tabs">
-                <button class="tab-btn" :class="{ active: activeTab === 'report' }" @click="activeTab = 'report'">分析报告</button>
-                <button class="tab-btn" :class="{ active: activeTab === 'prompt' }" @click="activeTab = 'prompt'">Prompt 工程</button>
-                <button class="tab-btn" :class="{ active: activeTab === 'chunks' }" @click="activeTab = 'chunks'">检索结果 ({{ result.retrieved_chunks.length }})</button>
-            </div>
-
-            <!-- Tab: Report -->
-            <div v-show="activeTab === 'report'">
-                <div class="card">
-                    <div class="report-body">
-                        <span class="gen-badge">生成耗时 {{ (result.generation_time_ms / 1000).toFixed(1) }}s</span>
-                        <span class="domain-badge" v-if="result.domain && result.domain !== 'general'" :class="'domain-' + result.domain">
-                            {{ domainLabel }}
-                        </span>
-                        <div v-html="renderedReport"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab: Prompt Engineering -->
-            <div v-show="activeTab === 'prompt'">
-                <div v-if="result.pii_redacted > 0" style="margin-bottom:12px;">
-                    <span class="pii-count">PII 已脱敏 {{ result.pii_redacted }} 处敏感信息</span>
-                </div>
-
-                <div class="prompt-legend">
-                    <span class="legend-item"><span class="legend-swatch ctx"></span> 检索上下文注入</span>
-                    <span class="legend-item"><span class="legend-swatch data"></span> 结构化数据注入</span>
-                    <span class="legend-item"><span class="legend-swatch query"></span> 用户查询</span>
-                </div>
-
-                <div class="prompt-section">
-                    <h3><span class="prompt-label system">System</span> 角色设定 Prompt</h3>
-                    <div class="prompt-box">{{ highlightedSystemPrompt }}</div>
-                </div>
-
-                <div class="prompt-section">
-                    <h3><span class="prompt-label user">User</span> 动态组装 Prompt（含上下文注入）</h3>
-                    <div class="prompt-box" v-html="highlightedUserPrompt"></div>
-                </div>
-            </div>
-
-            <!-- Tab: Chunks -->
-            <div v-show="activeTab === 'chunks'">
-                <div class="card">
-                    <div class="chunk-item" v-for="(chunk, idx) in result.retrieved_chunks" :key="chunk.chunk_id">
-                        <div class="chunk-meta">
-                            <span>片段 #{{ chunk.chunk_id }}</span>
-                            <span class="score">相关度 {{ (1 - chunk.distance).toFixed(3) }}</span>
-                            <span>文档 {{ chunk.document_id }}</span>
+            <template v-if="activeMainTab === 'advanced'">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title"><img class="icon-lg" :src="icon('bar-chart-3')" alt="" /> 批量分析与多平台日报</div>
+                            <div class="panel-subtitle">扫描未处理文章，批量生成摘要和平台版本。</div>
                         </div>
-                        <div class="chunk-text">{{ chunk.text }}</div>
+                    </div>
+                    <div class="panel-body form-grid">
+                        <div class="form-row">
+                            <select class="select" v-model="batchPlatform" :disabled="batchRunning">
+                                <option value="">仅日报摘要</option>
+                                <option value="wechat">微信公众号</option>
+                                <option value="xhs">小红书</option>
+                                <option value="douyin">抖音</option>
+                                <option value="podcast">播客</option>
+                                <option value="all">全部平台</option>
+                            </select>
+                            <label class="form-row"><input type="checkbox" v-model="batchForceAll" :disabled="batchRunning" /> 强制重新处理全部文章</label>
+                            <button class="btn btn-green" id="tutorial-batch-btn" @click="runBatchAnalysis" :disabled="batchRunning || !health.api_key_configured">
+                                <span v-if="batchRunning" class="mini-spinner"></span>
+                                <img v-else class="icon" :src="icon('list-check')" alt="" /> {{ batchRunning ? '批量分析中' : '开始批量分析' }}
+                            </button>
+                        </div>
+                        <div v-if="batchRunning" class="progress-wrap"><div class="progress-fill" :style="{ width: batchProgress + '%' }"></div></div>
+                        <div class="item-meta" v-if="batchRunning">{{ batchProgressText }}</div>
+                        <div class="panel pad" v-if="batchResult">
+                            <strong>处理完成：{{ batchResult.processed }} / {{ batchResult.total }} 篇文章</strong>
+                            <div class="item-meta" v-if="batchResult.report_path">日报路径：{{ batchResult.report_path }}</div>
+                            <div class="form-grid" style="margin-top: 12px;">
+                                <div class="summary-item" v-for="(s, idx) in batchResult.summaries" :key="idx">
+                                    <span class="icon-badge"><img :src="icon('file-text')" alt="" /></span>
+                                    <div><div class="item-title">{{ s.title }}</div><div class="item-meta">{{ s.summary }}</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title"><img class="icon-lg" :src="icon('palette')" alt="" /> 多平台内容生成</div>
+                            <div class="panel-subtitle">将已有内容改写为指定平台的表达风格。</div>
+                        </div>
+                    </div>
+                    <div class="panel-body form-grid">
+                        <select class="select" id="tutorial-platform-select" v-model="platformTarget" :disabled="platformGenerating">
+                            <option value="">请选择平台</option>
+                            <option value="wechat">微信公众号 - 深度长文</option>
+                            <option value="xhs">小红书 - 轻量笔记</option>
+                            <option value="douyin">抖音 - 口播脚本</option>
+                            <option value="podcast">播客 - 口播稿</option>
+                        </select>
+                        <textarea class="textarea" v-model="platformInput" placeholder="粘贴或输入要转换的内容" :disabled="platformGenerating"></textarea>
+                        <div class="privacy-banner">
+                            <span class="icon-badge amber"><img :src="icon('lightbulb')" alt="" /></span>
+                            <div>
+                                <strong>实例教学：</strong>点击“生成今日口播示例”，系统会基于当天知识库资讯生成一段适合短视频的 60 秒口播文本。
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <button class="btn btn-primary" @click="generatePlatformContent" :disabled="platformGenerating || !platformTarget || !platformInput.trim()">
+                                <span v-if="platformGenerating" class="mini-spinner"></span>
+                                <img v-else class="icon" :src="icon('wand-sparkles')" alt="" /> {{ platformGenerating ? '生成中' : '生成内容' }}
+                            </button>
+                            <button class="btn btn-ghost" @click="generateTodayVoiceoverExample" :disabled="platformGenerating || !health.api_key_configured">
+                                <img class="icon" :src="icon('newspaper')" alt="" /> 生成今日口播示例
+                            </button>
+                        </div>
+                        <div class="panel pad" v-if="platformResult">
+                            <div class="form-row" style="justify-content: space-between; margin-bottom: 10px;">
+                                <strong>{{ platformName(platformTarget) }} 结果</strong>
+                                <button class="btn btn-ghost btn-sm" @click="copyText(platformResult)"><img class="icon" :src="icon('copy')" alt="" /> 复制</button>
+                            </div>
+                            <div class="chunk-text">{{ platformResult }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel" id="tutorial-clipboard-card">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title"><img class="icon-lg" :src="icon('clipboard')" alt="" /> 剪贴板工具</div>
+                            <div class="panel-subtitle">复制最新日报或手动输入文本。</div>
+                        </div>
+                    </div>
+                    <div class="panel-body form-grid">
+                        <div class="form-row">
+                            <select class="select" v-model="clipPlatform">
+                                <option value="">每日汇总</option>
+                                <option value="wechat">微信公众号</option>
+                                <option value="xhs">小红书</option>
+                                <option value="douyin">抖音</option>
+                                <option value="podcast">播客</option>
+                            </select>
+                            <input class="input" type="date" v-model="clipDate" />
+                            <button class="btn btn-primary" @click="copyLatestReport" :disabled="clipCopying">
+                                <img class="icon" :src="icon('copy')" alt="" /> {{ clipCopying ? '复制中' : '复制到剪贴板' }}
+                            </button>
+                        </div>
+                        <textarea class="textarea" v-model="manualClipText" placeholder="或直接在此粘贴文本，再复制到剪贴板"></textarea>
+                        <button class="btn btn-ghost" @click="copyText(manualClipText)" :disabled="!manualClipText.trim()">
+                            <img class="icon" :src="icon('copy')" alt="" /> 复制上方文本
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title"><img class="icon-lg" :src="icon('clock')" alt="" /> 定时任务配置</div>
+                            <div class="panel-subtitle">此设置保存到浏览器本地，后台任务仍需启动 scheduler.py。</div>
+                        </div>
+                    </div>
+                    <div class="panel-body form-grid">
+                        <div class="form-row">
+                            <label class="toggle"><input type="checkbox" v-model="scheduleEnabled" @change="saveSchedule" /><span></span></label>
+                            <strong>{{ scheduleEnabled ? '已启用每日自动运行' : '已禁用' }}</strong>
+                        </div>
+                        <div class="form-row" v-if="scheduleEnabled">
+                            <select class="select" v-model="scheduleHour" @change="saveSchedule">
+                                <option v-for="h in 24" :key="h-1" :value="h-1">{{ String(h-1).padStart(2,'0') }}</option>
+                            </select>
+                            <span>:</span>
+                            <select class="select" v-model="scheduleMinute" @change="saveSchedule">
+                                <option v-for="m in 60" :key="m-1" :value="m-1">{{ String(m-1).padStart(2,'0') }}</option>
+                            </select>
+                            <span class="item-meta">每天自动获取资讯并批量分析</span>
+                        </div>
+                        <div class="privacy-banner">
+                            <span class="icon-badge amber"><img :src="icon('info')" alt="" /></span>
+                            <div>本页只保存前端配置。实际定时运行请在后台执行 <code>python scheduler.py</code> 或使用系统任务计划程序。</div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </section>
+
+        <aside class="side-column">
+            <div class="panel pad">
+                <div class="panel-title"><img class="icon-lg" :src="icon('server')" alt="" /> 系统状态</div>
+                <div class="status-list" style="margin-top: 14px;">
+                    <div class="status-item"><span>管道状态</span><span class="status-dot" :class="health.ready ? 'ok' : 'err'"></span></div>
+                    <div class="status-item"><span>API Key</span><span class="status-dot" :class="health.api_key_configured ? 'ok' : 'err'"></span></div>
+                    <div class="status-item"><span>结构化抽取</span><span class="status-dot" :class="health.extraction_done ? 'ok' : 'err'"></span></div>
+                </div>
+            </div>
+
+            <div class="panel pad">
+                <div class="panel-title"><img class="icon-lg" :src="icon('zap')" alt="" /> 快速动作</div>
+                <div class="form-grid" style="margin-top: 14px;">
+                    <button class="btn btn-ghost" @click="switchTab('kb')"><img class="icon" :src="icon('upload-cloud')" alt="" /> 上传知识文档</button>
+                    <button class="btn btn-ghost" @click="switchTab('sources')"><img class="icon" :src="icon('radio')" alt="" /> 管理信息源</button>
+                    <button class="btn btn-ghost" @click="switchTab('advanced')"><img class="icon" :src="icon('bar-chart-3')" alt="" /> 批量分析</button>
+                </div>
+            </div>
+
+            <div class="log-panel">
+                <div class="log-header" @click="logOpen = !logOpen">
+                    <span class="log-title"><img class="icon" :src="icon('terminal')" alt="" /> 运行日志 <span class="item-meta">({{ logs.length }} 条)</span></span>
+                    <div class="form-row" @click.stop>
+                        <button class="btn btn-ghost btn-sm" @click="logs = []; addLog('info', '日志已清空');">清空</button>
+                        <img class="icon" :src="icon('chevron-right')" alt="" :style="{ transform: logOpen ? 'rotate(90deg)' : 'none' }" />
+                    </div>
+                </div>
+                <div class="log-body" v-show="logOpen" ref="logBody">
+                    <div v-if="logs.length === 0" class="item-meta">暂无日志记录</div>
+                    <div class="log-entry" v-for="(entry, idx) in logs" :key="idx" :class="entry.type">
+                        <span class="log-time">{{ entry.time }}</span>
+                        <span class="log-msg">{{ entry.msg }}</span>
                     </div>
                 </div>
             </div>
-        </template>
+        </aside>
+    </main>
 
-        <!-- Empty -->
-        <div class="empty-state" v-if="!loading && !result && !error">
-            <div class="icon">&#x1F4DD;</div>
-            <p>输入教育相关问题，获取每日教育资讯分析</p>
-            <p style="font-size:0.8rem;margin-top:4px;">从检索 → Prompt 组装 → 报告生成，全链路可视化</p>
+    <div class="toast" v-if="toastMsg">{{ toastMsg }}</div>
+
+    <div class="modal-backdrop" v-if="apiKeyPromptOpen">
+        <div class="modal-card">
+            <div class="panel-title"><img class="icon-lg" :src="icon('key-round')" alt="" /> 配置 DeepSeek API Key</div>
+            <p class="item-meta" style="line-height:1.8;">
+                首次使用需要填入你自己的 DeepSeek API Key。保存后会写入项目根目录的 <code>.env</code>，并立即刷新后端客户端。
+            </p>
+            <div class="form-grid">
+                <input class="input" v-model="apiKeyInput" type="password" placeholder="sk-..." @keyup.enter="saveApiKey" :disabled="apiKeySaving" />
+                <div class="form-row" style="justify-content: flex-end;">
+                    <button class="btn btn-ghost" @click="dismissApiKeyPrompt" :disabled="apiKeySaving">稍后再说</button>
+                    <button class="btn btn-primary" @click="saveApiKey" :disabled="apiKeySaving || !apiKeyInput.trim()">
+                        <span v-if="apiKeySaving" class="mini-spinner"></span>
+                        <img v-else class="icon" :src="icon('key-round')" alt="" /> {{ apiKeySaving ? '保存中' : '保存 API Key' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tutorial-overlay" v-if="tutorialActive" :style="tutorialOverlayStyle" @click.self="tutorialOverlayClick">
+        <div class="tutorial-highlight" :style="tutorialHighlightStyle"></div>
+        <div class="tutorial-tooltip" :style="tutorialTooltipStyle">
+            <div class="panel-title"><img class="icon" :src="icon(currentTutorialStep.icon || 'info')" alt="" /> 第 {{ tutorialStep + 1 }} 步 / 共 {{ tutorialSteps.length }} 步</div>
+            <p class="item-meta">{{ currentTutorialStep.description }}</p>
+            <div class="form-row" style="justify-content: space-between;">
+                <button class="btn btn-ghost btn-sm" @click="prevTutorialStep" v-if="tutorialStep > 0">上一步</button>
+                <button class="btn btn-primary btn-sm" @click="nextTutorialStep">{{ tutorialStep < tutorialSteps.length - 1 ? '下一步' : '完成' }}</button>
+                <button class="btn btn-ghost btn-sm" @click="skipTutorial">跳过</button>
+            </div>
         </div>
     </div>
 </div>
@@ -1160,32 +1214,60 @@ const { createApp } = Vue;
 createApp({
     data() {
         return {
+            activeMainTab: "qa",
+            navItems: [
+                { key: "qa", label: "问答分析", icon: "search" },
+                { key: "kb", label: "知识库", icon: "book-open" },
+                { key: "sources", label: "信息源日报", icon: "radio" },
+                { key: "advanced", label: "高级功能", icon: "settings" },
+            ],
+            pipelineSteps: [
+                { n: 1, label: "输入查询", icon: "message-square" },
+                { n: 2, label: "向量检索", icon: "database" },
+                { n: 3, label: "Prompt 构建", icon: "layout-template" },
+                { n: 4, label: "LLM 生成", icon: "sparkles" },
+                { n: 5, label: "报告输出", icon: "file-text" },
+            ],
+            health: { ready: false, api_key_configured: false, extraction_done: false, document_count: 0, chunk_count: 0, vector_count: 0 },
+            appInitialized: false,
             query: "",
             loading: false,
             error: "",
             result: null,
             stage: 0,
             activeTab: "report",
-            health: { ready: false, api_key_configured: false, vector_count: 0 },
-            // Knowledge Base
-            kbOpen: false,
+            kbOpen: true,
             kbDocs: [],
-            kbDragOver: false,
+            selectedKbDocIds: [],
             kbUploading: false,
+            kbDragOver: false,
             kbDeleting: null,
+            kbBulkDeleting: false,
             kbUploadStatus: { msg: "", type: "info" },
             kbGuideOpen: false,
-            quickQueries: [],
-            // URL Ingestion
-            urlOpen: false,
+            quickQueries: [
+                { label: "今日政策重点", text: "请总结今日教育政策资讯中最值得关注的三项变化，并说明对学校管理者的影响。", icon: "newspaper" },
+                { label: "高考改革", text: "最近关于高考改革和招生政策有哪些值得持续跟踪的信号？", icon: "layers" },
+                { label: "双减动态", text: "近期双减政策执行中有哪些新要求、典型做法或风险点？", icon: "scissors" },
+                { label: "教师发展", text: "请分析近期教师队伍建设、培训和评价机制相关资讯的趋势。", icon: "book-open" },
+                { label: "学生心理", text: "近期学生心理健康教育有哪些政策动向和学校可执行建议？", icon: "heart" },
+                { label: "职业教育", text: "职业教育产教融合和专业建设方面最近有哪些新变化？", icon: "settings" },
+                { label: "AI 教育", text: "请梳理人工智能进入教学、评价和学校治理的机会与风险。", icon: "sparkles" },
+                { label: "课程改革", text: "近期课程改革、教材建设和课堂教学改进有哪些重点？", icon: "layout-template" },
+                { label: "教育公平", text: "最近教育公平、区域均衡和县域教育相关资讯有哪些要点？", icon: "globe" },
+                { label: "校园安全", text: "请分析近期校园安全、未成年人保护和风险治理相关信息。", icon: "key-round" },
+                { label: "学前教育", text: "近期学前教育普及普惠、托育和幼小衔接有哪些政策信号？", icon: "book-open" },
+                { label: "家校协同", text: "请总结近期家校社协同育人相关资讯，并给出学校行动建议。", icon: "message-square" },
+                { label: "数据治理", text: "教育数字化和数据治理方面近期有哪些值得注意的实践？", icon: "database" },
+                { label: "一周简报", text: "请基于知识库生成一份面向校长的教育资讯一周简报。", icon: "clipboard" },
+            ],
+            urlOpen: true,
             urlInput: "",
             urlProcessing: false,
             urlImporting: false,
             urlResults: [],
             urlSavedCount: 0,
             urlSaveDir: "",
-            // News Sources & Daily Fetch
-            srcOpen: false,
             sources: [],
             newSourceName: "",
             newSourceUrl: "",
@@ -1193,354 +1275,425 @@ createApp({
             srcDeleting: null,
             fetchRunning: false,
             fetchResult: null,
+            batchRunning: false,
+            batchPlatform: "",
+            batchForceAll: false,
+            batchResult: null,
+            batchProgress: 0,
+            batchProgressText: "",
+            platformTarget: "",
+            platformInput: "",
+            platformGenerating: false,
+            platformResult: "",
+            clipPlatform: "",
+            clipDate: "",
+            clipCopying: false,
+            manualClipText: "",
+            scheduleEnabled: false,
+            scheduleHour: 7,
+            scheduleMinute: 0,
+            logOpen: true,
+            logs: [],
+            toastMsg: "",
+            toastTimer: null,
+            apiKeyPromptOpen: false,
+            apiKeyDismissedThisSession: false,
+            apiKeyInput: "",
+            apiKeySaving: false,
+            tutorialActive: false,
+            tutorialStep: 0,
+            tutorialCompleted: false,
+            tutorialOverlayStyle: {},
+            tutorialHighlightStyle: {},
+            tutorialTooltipStyle: {},
+            tutorialSteps: [
+                { icon: "search", description: "在这里输入教育问题，系统会检索知识库并生成分析报告。", tab: "qa", selector: "#tutorial-qa-search", tooltipPos: "bottom" },
+                { icon: "book-open", description: "在知识库中上传、查看或删除 .txt 文档。", tab: "kb", selector: "#tutorial-kb-card", tooltipPos: "bottom" },
+                { icon: "newspaper", description: "从配置的信息源抓取今日教育资讯并索引入库。", tab: "sources", selector: "#tutorial-daily-fetch", tooltipPos: "top" },
+                { icon: "bar-chart-3", description: "批量分析未处理文章，并生成日报或多平台版本。", tab: "advanced", selector: "#tutorial-batch-btn", tooltipPos: "bottom" },
+                { icon: "palette", description: "将内容改写为微信公众号、小红书、抖音或播客风格。你也可以点击实例按钮，让系统基于当天知识库内容生成一段 60 秒口播文本。", tab: "advanced", selector: "#tutorial-platform-select", tooltipPos: "right" },
+                { icon: "clipboard", description: "复制最新日报或手动文本到剪贴板。", tab: "advanced", selector: "#tutorial-clipboard-card", tooltipPos: "top" },
+            ],
         };
     },
 
     computed: {
+        currentTutorialStep() {
+            return this.tutorialSteps[this.tutorialStep] || {};
+        },
+        allKbSelected() {
+            return this.kbDocs.length > 0 && this.selectedKbDocIds.length === this.kbDocs.length;
+        },
         todayDate() {
             const now = new Date();
-            return now.getFullYear() + '-' +
-                String(now.getMonth() + 1).padStart(2, '0') + '-' +
-                String(now.getDate()).padStart(2, '0');
+            return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
         },
-
         renderedReport() {
             if (!this.result?.report) return "";
             marked.setOptions({ breaks: true, gfm: true });
             return marked.parse(this.result.report);
         },
-
         highlightedSystemPrompt() {
             return this.result?.prompt_system || "";
         },
-
         domainLabel() {
             const labels = {
-                finance: "🏦 财经分析视角",
-                politics: "🏛️ 时政评论视角",
-                technology: "💻 科技分析视角",
-                healthcare: "🏥 医疗健康视角",
-                legal: "⚖️ 法律分析视角",
-                education: "📚 教育研究视角",
+                finance: "财经分析视角",
+                politics: "时政评论视角",
+                technology: "科技分析视角",
+                healthcare: "医疗健康视角",
+                legal: "法律分析视角",
+                education: "教育研究视角",
             };
             return labels[this.result?.domain] || "";
         },
-
         highlightedUserPrompt() {
             const text = this.result?.prompt_user || "";
             if (!text) return "";
-            // Escape HTML, then highlight semantic sections
             const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-            // Highlight: 检索到的相关文本片段 section
-            let out = esc(text);
-            out = out.replace(
-                /(## 检索到的相关文本片段[\s\S]*?)(## 结构化数据摘要)/,
-                (_, ctx, data) =>
-                    '<span class="highlight-ctx">' + ctx + '</span>' + data
-            );
-            out = out.replace(
-                /(## 结构化数据摘要[\s\S]*?)(## 用户问题)/,
-                (_, data, q) =>
-                    '<span class="highlight-data">' + data + '</span>' + q
-            );
-            out = out.replace(
-                /(## 用户问题[\s\S]*?)(请按以下结构生成分析报告：[\s\S]*)/,
-                (_, question, template) =>
-                    '<span class="highlight-query">' + question + '</span>' + template
-            );
-
-            return out;
+            return esc(text);
         },
     },
 
     mounted() {
-        this.checkHealth();
-        this.loadKnowledge();
-        this.loadSources();
+        const boot = () => this.initializeApp();
+        if (window.pywebview && window.pywebview.api) {
+            boot();
+        } else if (window.location.protocol === "file:") {
+            window.addEventListener("pywebviewready", boot, { once: true });
+            setTimeout(() => {
+                if (!this.appInitialized) this.addLog("warn", "桌面桥接初始化中，请稍候");
+            }, 1200);
+        } else {
+            boot();
+        }
+    },
+
+    beforeUnmount() {
+        this.detachTutorialListeners();
+    },
+
+    watch: {
+        logs: {
+            handler() {
+                if (this.logOpen) {
+                    this.$nextTick(() => {
+                        const body = this.$refs.logBody;
+                        if (body) body.scrollTop = body.scrollHeight;
+                    });
+                }
+            },
+            deep: true,
+        },
     },
 
     methods: {
+        initializeApp() {
+            if (this.appInitialized) return;
+            this.appInitialized = true;
+            this.checkHealth();
+            this.loadKnowledge();
+            this.loadSources();
+            this.loadSchedule();
+            this.clipDate = this.todayDate;
+            this.addLog("info", "EduDaily 前端已就绪");
+            this.initTutorial();
+        },
+        icon(name) {
+            const aliases = { heart: "activity" };
+            return `assets/icons/${aliases[name] || name}.svg`;
+        },
+        isDesktopApp() {
+            return Boolean(window.pywebview && window.pywebview.api);
+        },
+        async desktopCall(url, options = {}) {
+            const method = (options.method || "GET").toUpperCase();
+            let body = null;
+            if (options.body && typeof options.body === "string") {
+                try { body = JSON.parse(options.body); } catch (_) { body = options.body; }
+            }
+            const res = await window.pywebview.api.call(url, method, body);
+            if (!res || res.ok === false) {
+                throw new Error((res && (res.detail || res.error)) || "桌面接口调用失败");
+            }
+            return res.data;
+        },
+        switchTab(tab) {
+            this.activeMainTab = tab;
+            if (tab === "kb") this.loadKnowledge();
+            if (tab === "sources") this.loadSources();
+        },
+        addLog(type, msg) {
+            const now = new Date();
+            const time = now.toTimeString().slice(0, 8);
+            this.logs.push({ type, msg, time });
+            if (this.logs.length > 500) this.logs.splice(0, 50);
+        },
+        showToast(msg) {
+            this.toastMsg = msg;
+            clearTimeout(this.toastTimer);
+            this.toastTimer = setTimeout(() => { this.toastMsg = ""; }, 2200);
+        },
+        async fetchJson(url, options = {}, label = "") {
+            if (label) this.addLog("info", `${label} 开始`);
+            if (this.isDesktopApp()) {
+                const data = await this.desktopCall(url, options);
+                if (label) this.addLog("ok", `${label} 成功`);
+                return data;
+            }
+            const res = await fetch(url, options);
+            if (!res.ok) {
+                let detail = "";
+                try { detail = (await res.json()).detail || ""; } catch (_) { detail = await res.text(); }
+                throw new Error(detail || `HTTP ${res.status}`);
+            }
+            const data = await res.json();
+            if (label) this.addLog("ok", `${label} 成功`);
+            return data;
+        },
         async checkHealth() {
             try {
-                const res = await fetch("/api/health");
-                this.health = await res.json();
-            } catch(e) {
-                console.error("Health check failed:", e);
+                this.health = await this.fetchJson("/api/health");
+                this.addLog("ok", `健康检查：${this.health.vector_count} 向量`);
+                if (
+                    !this.health.api_key_configured &&
+                    !this.apiKeyDismissedThisSession &&
+                    (this.isDesktopApp() || localStorage.getItem("edudaily_api_key_prompt_dismissed") !== "true")
+                ) {
+                    this.apiKeyPromptOpen = true;
+                }
+            } catch (e) {
+                this.addLog("warn", "健康检查失败，服务可能未启动");
             }
         },
-
-        // ── Knowledge Base ──────────────────────────────────────────
-
         async loadKnowledge() {
             try {
-                const res = await fetch("/api/knowledge");
-                if (!res.ok) throw new Error("HTTP " + res.status);
-                const data = await res.json();
-                this.kbDocs = data.documents || [];
-            } catch(e) {
-                console.error("Knowledge load failed:", e);
+                const data = await this.fetchJson("/api/knowledge");
+                this.kbDocs = data.documents || data || [];
+                const existingIds = new Set(this.kbDocs.map(d => d.doc_id));
+                this.selectedKbDocIds = this.selectedKbDocIds.filter(id => existingIds.has(id));
+            } catch (e) {
+                this.addLog("err", "知识库加载失败：" + (e.message || ""));
             }
         },
-
-        clearKbStatus() {
-            this.kbUploadStatus = { msg: "", type: "info" };
+        toggleAllKbDocs(checked) {
+            this.selectedKbDocIds = checked ? this.kbDocs.map(d => d.doc_id) : [];
         },
-
-        async doUpload(files) {
-            const txtFiles = [...files].filter(f => f.name.toLowerCase().endsWith(".txt"));
-            if (txtFiles.length === 0) {
-                this.kbUploadStatus = { msg: "请选择 .txt 文件", type: "err" };
+        async uploadKbFiles(files) {
+            const txtFiles = Array.from(files || []).filter(f => f.name.toLowerCase().endsWith(".txt"));
+            if (!txtFiles.length) {
+                this.kbUploadStatus = { msg: "请选择 .txt 文件", type: "warn" };
                 return;
             }
-
             this.kbUploading = true;
-            this.kbUploadStatus = { msg: `正在上传并索引 ${txtFiles.length} 个文件...`, type: "info" };
-
-            try {
-                const form = new FormData();
-                txtFiles.forEach(f => form.append("files", f));
-
-                const res = await fetch("/api/knowledge/upload", {
-                    method: "POST",
-                    body: form,
-                });
-
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error(err.detail || "上传失败 (HTTP " + res.status + ")");
+            this.kbUploadStatus = { msg: "", type: "info" };
+            if (this.isDesktopApp()) {
+                try {
+                    const data = await window.pywebview.api.upload_knowledge_files();
+                    if (data && data.ok === false) throw new Error(data.detail || data.error || "上传失败");
+                    const uploaded = data.uploaded || [];
+                    this.kbUploadStatus = { msg: `上传完成：${uploaded.length} 个文档`, type: "ok" };
+                    await this.loadKnowledge();
+                    await this.checkHealth();
+                } catch (e) {
+                    this.kbUploadStatus = { msg: "上传失败：" + (e.message || ""), type: "err" };
+                    this.addLog("err", this.kbUploadStatus.msg);
+                } finally {
+                    this.kbUploading = false;
                 }
-
-                const data = await res.json();
-                const up = data.uploaded || [];
-                const sk = data.skipped || [];
-                let msgParts = [];
-                if (up.length > 0) msgParts.push(`成功导入 ${up.length} 个文档`);
-                if (sk.length > 0) msgParts.push(`${sk.length} 个跳过`);
-                this.kbUploadStatus = {
-                    msg: msgParts.join("，") || "上传完成",
-                    type: up.length > 0 ? "ok" : "err",
-                };
-
+                return;
+            }
+            const form = new FormData();
+            txtFiles.forEach(f => form.append("files", f));
+            try {
+                const data = await this.fetchJson("/api/knowledge/upload", { method: "POST", body: form }, "上传知识库文档");
+                const uploaded = data.uploaded || [];
+                this.kbUploadStatus = { msg: `上传完成：${uploaded.length} 个文档`, type: "ok" };
                 await this.loadKnowledge();
                 await this.checkHealth();
-            } catch(e) {
-                this.kbUploadStatus = { msg: e.message || "上传失败", type: "err" };
+            } catch (e) {
+                this.kbUploadStatus = { msg: "上传失败：" + (e.message || ""), type: "err" };
+                this.addLog("err", this.kbUploadStatus.msg);
             } finally {
                 this.kbUploading = false;
             }
         },
-
         onKbDrop(e) {
             this.kbDragOver = false;
-            if (e.dataTransfer?.files?.length) {
-                this.doUpload(e.dataTransfer.files);
-            }
+            this.uploadKbFiles(e.dataTransfer.files);
         },
-
         onKbFileSelect(e) {
-            if (e.target?.files?.length) {
-                this.doUpload(e.target.files);
-            }
+            this.uploadKbFiles(e.target.files);
             e.target.value = "";
         },
-
         async deleteKbDoc(doc) {
-            if (!confirm(`确认删除「${doc.filename}」？此操作不可撤销。`)) return;
-
+            if (!confirm(`确定删除 ${doc.filename}？`)) return;
             this.kbDeleting = doc.doc_id;
             try {
-                const res = await fetch(`/api/knowledge/${doc.doc_id}`, { method: "DELETE" });
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error(err.detail || "删除失败");
-                }
+                await this.fetchJson(`/api/knowledge/${doc.doc_id}`, { method: "DELETE" }, "删除知识库文档");
+                this.selectedKbDocIds = this.selectedKbDocIds.filter(id => id !== doc.doc_id);
                 await this.loadKnowledge();
                 await this.checkHealth();
-            } catch(e) {
-                alert("删除失败: " + (e.message || "未知错误"));
+            } catch (e) {
+                this.addLog("err", "删除失败：" + (e.message || ""));
             } finally {
                 this.kbDeleting = null;
             }
         },
-
-        // ── Query ────────────────────────────────────────────────────
-
+        async bulkDeleteKnowledge() {
+            if (!this.selectedKbDocIds.length) return;
+            if (!confirm(`确定批量删除选中的 ${this.selectedKbDocIds.length} 个知识库文档？`)) return;
+            this.kbBulkDeleting = true;
+            try {
+                const data = await this.fetchJson("/api/knowledge-bulk", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ doc_ids: this.selectedKbDocIds }),
+                }, "批量删除知识库文档");
+                this.selectedKbDocIds = [];
+                this.showToast(`已删除 ${data.deleted_count || 0} 个文档`);
+                await this.loadKnowledge();
+                await this.checkHealth();
+            } catch (e) {
+                this.addLog("err", "批量删除失败：" + (e.message || ""));
+            } finally {
+                this.kbBulkDeleting = false;
+            }
+        },
+        async deleteYesterdayKnowledge() {
+            if (!confirm("确定一键清除昨天创建的知识库文档？此操作不可撤销。")) return;
+            this.kbBulkDeleting = true;
+            try {
+                const data = await this.fetchJson("/api/knowledge-clear-yesterday", { method: "DELETE" }, "清除昨天知识库");
+                this.selectedKbDocIds = [];
+                this.showToast(`已清除 ${data.deleted_count || 0} 个昨天的文档`);
+                await this.loadKnowledge();
+                await this.checkHealth();
+            } catch (e) {
+                this.addLog("err", "清除昨天知识库失败：" + (e.message || ""));
+            } finally {
+                this.kbBulkDeleting = false;
+            }
+        },
         quickQuery(text) {
             this.query = text;
             this.submitQuery();
         },
-
-        removeQuickQuery(idx) {
-            this.quickQueries.splice(idx, 1);
+        async submitQuery() {
+            const q = this.query.trim();
+            if (!q || this.loading) return;
+            this.loading = true;
+            this.error = "";
+            this.result = null;
+            this.activeTab = "report";
+            this.stage = 1;
+            this.addLog("info", `提交查询：${q.substring(0, 48)}${q.length > 48 ? "..." : ""}`);
+            try {
+                setTimeout(() => { if (this.loading) this.stage = Math.max(this.stage, 2); }, 260);
+                setTimeout(() => { if (this.loading) this.stage = Math.max(this.stage, 3); }, 620);
+                setTimeout(() => { if (this.loading) this.stage = Math.max(this.stage, 4); }, 980);
+                const data = await this.fetchJson("/api/query", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ query: q, top_k: 5 }),
+                });
+                this.result = data;
+                this.stage = 5;
+                this.addLog("ok", `查询完成，耗时 ${(data.generation_time_ms / 1000).toFixed(1)}s`);
+            } catch (e) {
+                this.error = "查询失败：" + (e.message || "");
+                this.stage = 0;
+                this.addLog("err", this.error);
+            } finally {
+                this.loading = false;
+            }
         },
-
-        // ── URL Ingestion ─────────────────────────────────────────────
-
-        async submitUrls() {
-            const text = this.urlInput.trim();
-            if (!text || this.urlProcessing) return;
-
-            const urls = text.split("\n").map(s => s.trim()).filter(s => s.length > 0);
-            if (urls.length === 0) return;
-
+        async processUrls() {
+            const urls = this.urlInput.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+            if (!urls.length) return;
             this.urlProcessing = true;
             this.urlResults = [];
-
+            this.urlSavedCount = 0;
             try {
-                const res = await fetch("/api/knowledge/ingest-url", {
+                const data = await this.fetchJson("/api/knowledge/ingest-url", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ urls }),
-                });
-
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error(err.detail || "请求失败 (HTTP " + res.status + ")");
-                }
-
-                const data = await res.json();
+                }, "URL 提炼");
+                const saved = (data.saved || []).map(x => ({ ...x, status: "saved" }));
+                const failed = (data.failed || []).map(x => ({ ...x, status: "failed" }));
+                this.urlResults = [...saved, ...failed];
+                this.urlSavedCount = saved.length;
                 this.urlSaveDir = data.save_dir || "";
-
-                const results = [];
-                for (const s of data.saved || []) {
-                    results.push({ ...s, status: "saved" });
-                }
-                for (const f of data.failed || []) {
-                    results.push({ ...f, status: "failed" });
-                }
-                this.urlResults = results;
-                this.urlSavedCount = (data.saved || []).length;
-
-                if (data.saved && data.saved.length > 0) {
-                    const savedFiles = data.saved.map(s => s.filename).join("\n  ");
-                    const msg = `知识库文档已保存到本地！\n\n保存位置：${this.urlSaveDir}\n\n已生成文档：\n  ${savedFiles}\n\n点击下方「导入已提炼的文档」按钮即可加载到知识库中。`;
-                    alert(msg);
-                }
-
-                if (!data.saved || data.saved.length === 0) {
-                    alert("所有网址处理失败，请检查网址是否正确或稍后再试。");
-                }
-
             } catch (e) {
-                this.urlResults = [{ status: "failed", url: "", error: e.message || "网络错误" }];
-                alert("处理失败: " + (e.message || "未知错误"));
+                this.addLog("err", "网址处理失败：" + (e.message || ""));
             } finally {
                 this.urlProcessing = false;
             }
         },
-
-        async importSavedDocs() {
-            if (this.urlImporting || this.urlSavedCount === 0) return;
-
+        async importSavedUrls() {
             this.urlImporting = true;
             try {
-                const res = await fetch("/api/knowledge/import-saved", { method: "POST" });
-
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error(err.detail || "导入失败 (HTTP " + res.status + ")");
-                }
-
-                const data = await res.json();
-                const imported = data.imported || [];
-                const skipped = data.skipped || [];
-
-                if (imported.length > 0) {
-                    alert(`成功导入 ${imported.length} 个文档到知识库！\n\n${imported.map(d => `  - ${d.filename} (${d.chunks} 个分块)`).join("\n")}`);
-                } else {
-                    alert("没有新文档需要导入。（所有文件已在知识库中）");
-                }
-
+                await this.fetchJson("/api/knowledge/import-saved", { method: "POST" }, "导入已保存文档");
                 this.urlSavedCount = 0;
-
-                // Refresh KB state
                 await this.loadKnowledge();
                 await this.checkHealth();
-
             } catch (e) {
-                alert("导入失败: " + (e.message || "未知错误"));
+                this.addLog("err", "导入失败：" + (e.message || ""));
             } finally {
                 this.urlImporting = false;
             }
         },
-
-        // ── News Sources ───────────────────────────────────────────
-
         async loadSources() {
             try {
-                const res = await fetch("/api/sources");
-                if (!res.ok) throw new Error("HTTP " + res.status);
-                const data = await res.json();
+                const data = await this.fetchJson("/api/sources");
                 this.sources = data.sources || [];
-            } catch(e) {
-                console.error("Load sources failed:", e);
+            } catch (e) {
+                this.addLog("err", "信息源加载失败：" + (e.message || ""));
             }
         },
-
         async addSource() {
             const name = this.newSourceName.trim();
             const url = this.newSourceUrl.trim();
-            if (!name || !url || this.srcAdding) return;
-
+            if (!name || !url) return;
             this.srcAdding = true;
             try {
-                const res = await fetch("/api/sources", {
+                await this.fetchJson("/api/sources", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ name, url }),
-                });
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error(err.detail || "添加失败");
-                }
+                }, "添加信息源");
                 this.newSourceName = "";
                 this.newSourceUrl = "";
                 await this.loadSources();
-            } catch(e) {
-                alert("添加信息源失败: " + (e.message || "未知错误"));
+            } catch (e) {
+                this.addLog("err", "添加失败：" + (e.message || ""));
             } finally {
                 this.srcAdding = false;
             }
         },
-
         async deleteSource(src) {
-            if (!confirm(`确认删除信息源「${src.name}」？关联的文章记录也会被删除。`)) return;
-
+            if (!confirm(`确定删除信息源 ${src.name}？`)) return;
             this.srcDeleting = src.id;
             try {
-                const res = await fetch(`/api/sources/${src.id}`, { method: "DELETE" });
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error(err.detail || "删除失败");
-                }
+                await this.fetchJson(`/api/sources/${src.id}`, { method: "DELETE" }, "删除信息源");
                 await this.loadSources();
-            } catch(e) {
-                alert("删除失败: " + (e.message || "未知错误"));
+            } catch (e) {
+                this.addLog("err", "删除失败：" + (e.message || ""));
             } finally {
                 this.srcDeleting = null;
             }
         },
-
-        // ── Daily Fetch ──────────────────────────────────────────────
-
         async runDailyFetch() {
             if (this.fetchRunning || this.sources.length === 0) return;
-
             this.fetchRunning = true;
             this.fetchResult = null;
             try {
-                const res = await fetch("/api/daily-fetch", { method: "POST" });
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error(err.detail || "获取失败 (HTTP " + res.status + ")");
-                }
-                this.fetchResult = await res.json();
-                // Refresh knowledge base stats
+                this.fetchResult = await this.fetchJson("/api/daily-fetch", { method: "POST" }, "获取今日日报");
                 await this.loadKnowledge();
                 await this.loadSources();
                 await this.checkHealth();
-            } catch(e) {
+            } catch (e) {
                 this.fetchResult = {
                     batch_id: "",
                     today: this.todayDate,
@@ -1548,53 +1701,267 @@ createApp({
                     sources_checked: 0,
                     sources_failed: this.sources.length,
                     articles: [],
-                    errors: [e.message || "网络错误"],
+                    errors: [e.message || "日报获取失败"],
                 };
+                this.addLog("err", "日报获取失败：" + (e.message || ""));
             } finally {
                 this.fetchRunning = false;
             }
         },
-
-        async submitQuery() {
-            const q = this.query.trim();
-            if (!q || this.loading) return;
-
-            this.loading = true;
-            this.error = "";
-            this.result = null;
-            this.stage = 1;
-            this.activeTab = "report";
-
+        async runBatchAnalysis() {
+            if (this.batchRunning) return;
+            this.batchRunning = true;
+            this.batchResult = null;
+            this.batchProgress = 10;
+            this.batchProgressText = "正在启动批量分析";
+            const timer = setInterval(() => {
+                if (this.batchProgress < 88) {
+                    this.batchProgress += Math.random() * 8 + 2;
+                    this.batchProgressText = `正在处理文章，${Math.round(this.batchProgress)}%`;
+                }
+            }, 600);
             try {
-                this.stage = 1;
-                await new Promise(r => setTimeout(r, 150)); // show stage 1
-
-                const res = await fetch("/api/query", {
+                const params = new URLSearchParams();
+                if (this.batchForceAll) params.set("force_all", "true");
+                if (this.batchPlatform) params.set("platform", this.batchPlatform);
+                this.batchResult = await this.fetchJson(`/api/batch-analyze?${params.toString()}`, { method: "POST" }, "批量分析");
+                this.batchProgress = 100;
+                this.batchProgressText = "处理完成";
+            } catch (e) {
+                this.addLog("err", "批量分析失败：" + (e.message || ""));
+                this.batchProgress = 0;
+            } finally {
+                clearInterval(timer);
+                setTimeout(() => {
+                    this.batchRunning = false;
+                    this.batchProgressText = "";
+                }, 450);
+            }
+        },
+        platformName(key) {
+            return ({ wechat: "微信公众号", xhs: "小红书", douyin: "抖音", podcast: "播客", all: "全部平台" })[key] || key || "每日汇总";
+        },
+        async generatePlatformContent() {
+            if (!this.platformTarget || !this.platformInput.trim()) return;
+            this.platformGenerating = true;
+            this.platformResult = "";
+            try {
+                const data = await this.fetchJson("/api/query", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ query: q, top_k: 5 }),
-                });
-
-                this.stage = 2; // Retrieved
-
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    const detail = err.detail || `请求失败 (HTTP ${res.status})`;
-                    if (res.status === 401) throw new Error(`[API Key 未配置] ${detail}`);
-                    throw new Error(detail);
-                }
-
-                this.result = await res.json();
-                this.stage = 4; // LLM done
-                await new Promise(r => setTimeout(r, 100));
-                this.stage = 5; // Complete
-
+                    body: JSON.stringify({
+                        query: `请将以下内容改写为${this.platformName(this.platformTarget)}平台的文案风格：\n\n${this.platformInput}`,
+                        top_k: 3,
+                    }),
+                }, "多平台内容生成");
+                this.platformResult = data.report || "";
             } catch (e) {
-                this.stage = 0;
-                this.error = e.message || "网络错误，请检查服务是否启动";
+                this.addLog("err", "内容生成失败：" + (e.message || ""));
             } finally {
-                this.loading = false;
+                this.platformGenerating = false;
             }
+        },
+        async generateTodayVoiceoverExample() {
+            this.platformTarget = "douyin";
+            this.platformInput = "请基于今天知识库中的教育资讯，生成一段 60 秒短视频口播文本。要求：开头 3 秒抓人，正文包含 3 个重点，每个重点给一句解释，结尾给出面向教育工作者的行动建议。";
+            await this.generatePlatformContent();
+        },
+        dismissApiKeyPrompt() {
+            this.apiKeyPromptOpen = false;
+            this.apiKeyDismissedThisSession = true;
+            localStorage.setItem("edudaily_api_key_prompt_dismissed", "true");
+        },
+        async saveApiKey() {
+            const apiKey = this.apiKeyInput.trim();
+            if (!apiKey) return;
+            this.apiKeySaving = true;
+            try {
+                await this.fetchJson("/api/config/api-key", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ api_key: apiKey }),
+                }, "保存 API Key");
+                this.apiKeyInput = "";
+                this.apiKeyPromptOpen = false;
+                localStorage.removeItem("edudaily_api_key_prompt_dismissed");
+                this.showToast("API Key 已保存");
+                await this.checkHealth();
+            } catch (e) {
+                this.addLog("err", "API Key 保存失败：" + (e.message || ""));
+            } finally {
+                this.apiKeySaving = false;
+            }
+        },
+        async copyText(text) {
+            if (!text) return;
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(text);
+                } else {
+                    const ta = document.createElement("textarea");
+                    ta.value = text;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(ta);
+                }
+                this.showToast("已复制到剪贴板");
+                this.addLog("ok", "内容已复制到剪贴板");
+            } catch (e) {
+                this.addLog("err", "剪贴板复制失败");
+            }
+        },
+        async copyLatestReport() {
+            this.clipCopying = true;
+            try {
+                const params = new URLSearchParams();
+                if (this.clipPlatform) params.set("platform", this.clipPlatform);
+                const data = await this.fetchJson(`/api/batch-analyze?${params.toString()}`, { method: "POST" });
+                let content = "";
+                if (data.report_path) {
+                    content = `# EduDaily 日报 - ${this.clipDate}\n\n报告已生成：${data.report_path}`;
+                } else if (data.summaries?.length) {
+                    content = data.summaries.map(s => `## ${s.title}\n\n${s.summary}`).join("\n\n");
+                } else {
+                    content = this.manualClipText || `# EduDaily 日报 - ${this.clipDate}\n\n暂无分析结果。`;
+                }
+                await this.copyText(content);
+            } catch (e) {
+                this.addLog("warn", "获取报告失败，尝试复制手动输入内容");
+                await this.copyText(this.manualClipText);
+            } finally {
+                this.clipCopying = false;
+            }
+        },
+        loadSchedule() {
+            try {
+                const saved = localStorage.getItem("edudaily_schedule");
+                if (!saved) return;
+                const cfg = JSON.parse(saved);
+                this.scheduleEnabled = !!cfg.enabled;
+                this.scheduleHour = Number(cfg.hour ?? 7);
+                this.scheduleMinute = Number(cfg.minute ?? 0);
+            } catch (_) {}
+        },
+        saveSchedule() {
+            try {
+                localStorage.setItem("edudaily_schedule", JSON.stringify({
+                    enabled: this.scheduleEnabled,
+                    hour: this.scheduleHour,
+                    minute: this.scheduleMinute,
+                }));
+                this.addLog("ok", `定时配置已保存：${this.scheduleEnabled ? String(this.scheduleHour).padStart(2,'0') + ':' + String(this.scheduleMinute).padStart(2,'0') : '已禁用'}`);
+            } catch (e) {
+                this.addLog("err", "定时配置保存失败");
+            }
+        },
+        initTutorial() {
+            const done = localStorage.getItem("edudaily_tutorial_completed");
+            this.tutorialCompleted = done === "true";
+            if (!this.tutorialCompleted) setTimeout(() => this.startTutorial(), 500);
+        },
+        startTutorial() {
+            this.tutorialStep = 0;
+            this.tutorialActive = true;
+            this.attachTutorialListeners();
+            this.goTutorialStep();
+        },
+        skipTutorial() {
+            this.tutorialActive = false;
+            this.tutorialCompleted = true;
+            this.detachTutorialListeners();
+            localStorage.setItem("edudaily_tutorial_completed", "true");
+        },
+        prevTutorialStep() {
+            if (this.tutorialStep > 0) {
+                this.tutorialStep -= 1;
+                this.goTutorialStep();
+            }
+        },
+        nextTutorialStep() {
+            if (this.tutorialStep < this.tutorialSteps.length - 1) {
+                this.tutorialStep += 1;
+                this.goTutorialStep();
+            } else {
+                this.tutorialActive = false;
+                this.tutorialCompleted = true;
+                this.detachTutorialListeners();
+                localStorage.setItem("edudaily_tutorial_completed", "true");
+            }
+        },
+        tutorialOverlayClick() {},
+        attachTutorialListeners() {
+            this.detachTutorialListeners();
+            this._tutorialPositionHandler = () => {
+                if (this.tutorialActive) this.updateTutorialPosition();
+            };
+            window.addEventListener("scroll", this._tutorialPositionHandler, true);
+            window.addEventListener("resize", this._tutorialPositionHandler);
+        },
+        detachTutorialListeners() {
+            if (!this._tutorialPositionHandler) return;
+            window.removeEventListener("scroll", this._tutorialPositionHandler, true);
+            window.removeEventListener("resize", this._tutorialPositionHandler);
+            this._tutorialPositionHandler = null;
+        },
+        goTutorialStep() {
+            const step = this.currentTutorialStep;
+            if (!step) return;
+            this.switchTab(step.tab);
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    this.updateTutorialPosition(true);
+                }, 80);
+            });
+        },
+        updateTutorialPosition(scrollIntoView = false) {
+            const step = this.currentTutorialStep;
+            const el = step?.selector ? document.querySelector(step.selector) : null;
+            const doc = document.documentElement;
+            const body = document.body;
+            const pageHeight = Math.max(
+                body.scrollHeight, doc.scrollHeight,
+                body.offsetHeight, doc.offsetHeight,
+                window.innerHeight
+            );
+            this.tutorialOverlayStyle = { height: `${pageHeight}px` };
+            if (!el) return;
+
+            if (scrollIntoView) {
+                el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+                setTimeout(() => this.updateTutorialPosition(false), 260);
+            }
+
+            const r = el.getBoundingClientRect();
+            const scrollX = window.scrollX || doc.scrollLeft || 0;
+            const scrollY = window.scrollY || doc.scrollTop || 0;
+            const pad = 8;
+            const highlightLeft = Math.max(8, r.left + scrollX - pad);
+            const highlightTop = Math.max(8, r.top + scrollY - pad);
+
+            this.tutorialHighlightStyle = {
+                left: `${highlightLeft}px`,
+                top: `${highlightTop}px`,
+                width: `${Math.max(32, r.width + pad * 2)}px`,
+                height: `${Math.max(32, r.height + pad * 2)}px`,
+            };
+
+            const tooltipWidth = Math.min(360, window.innerWidth - 32);
+            let tooltipLeft = r.left + scrollX;
+            let tooltipTop = r.bottom + scrollY + 18;
+            if (step.tooltipPos === "top") tooltipTop = r.top + scrollY - 176;
+            if (step.tooltipPos === "right") {
+                tooltipLeft = r.right + scrollX + 18;
+                tooltipTop = r.top + scrollY;
+            }
+            tooltipLeft = Math.max(16, Math.min(doc.scrollWidth - tooltipWidth - 16, tooltipLeft));
+            tooltipTop = Math.max(scrollY + 16, tooltipTop);
+
+            this.tutorialTooltipStyle = {
+                top: `${tooltipTop}px`,
+                left: `${tooltipLeft}px`,
+                width: `${tooltipWidth}px`,
+            };
         },
     },
 }).mount("#app");

@@ -19,6 +19,7 @@ import logging
 import sqlite3
 import sys
 import time
+from datetime import datetime, timedelta
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -41,12 +42,18 @@ from db import repository as repo
 from db.schema import init_db
 from modules.chunker import chunk_document
 from modules.data_loader import load_documents
-from modules.embedder import build_chroma_collection, embed_and_store_chunks, encode_text
+from modules.embedder import (
+    build_chroma_collection,
+    embed_and_store_chunks,
+    encode_text,
+    rebuild_chroma_collection_safely,
+)
 from modules.extractor import run_extraction_pipeline
 from modules.generator import generate_report
 from modules.retriever import retrieve_relevant_chunks
 from modules.url_ingester import ingest_urls
 from modules.daily_fetcher import run_daily_fetch
+from batch_processor import process_batch
 from db.repository import list_news_sources, insert_news_source, delete_news_source
 from utils.helpers import setup_logging
 
@@ -93,6 +100,179 @@ def _sync_docs_from_db() -> list:
                 c.char_count = cr["char_count"] or 0
                 doc._chunks.append(c)
     return docs
+
+
+def _cleanup_indexed_document(
+    doc_id: int | None = None,
+    filename: str | None = None,
+    disk_path: Path | None = None,
+    chunk_ids: list[str] | None = None,
+) -> None:
+    """Best-effort rollback for partially indexed documents."""
+    conn = state.get("conn")
+    collection = state.get("collection")
+
+    if conn and doc_id and chunk_ids is None:
+        try:
+            rows = conn.execute(
+                "SELECT id FROM chunks WHERE document_id = ?", (doc_id,)
+            ).fetchall()
+            chunk_ids = [f"chunk_{r['id']}" for r in rows]
+        except Exception:
+            chunk_ids = []
+
+    if collection and chunk_ids:
+        try:
+            collection.delete(ids=chunk_ids)
+        except Exception:
+            pass
+
+    if conn and doc_id:
+        try:
+            conn.execute("DELETE FROM documents WHERE id = ?", (doc_id,))
+            conn.commit()
+        except Exception:
+            pass
+
+    if disk_path is None and filename:
+        disk_path = Path(config.SAMPLE_DOCS_DIR) / filename
+    if disk_path and disk_path.exists():
+        try:
+            disk_path.unlink()
+        except Exception:
+            pass
+
+
+def _index_text_document(
+    filename: str,
+    content: str,
+    dest_path: Path,
+    *,
+    write_file: bool = True,
+    cleanup_disk_on_error: bool = True,
+) -> dict:
+    """Persist and index one text document with rollback on partial failure."""
+    doc_id = None
+    chunk_ids: list[str] = []
+    try:
+        if write_file:
+            dest_path.write_text(content, encoding="utf-8")
+
+        lines = content.split("\n", 1)
+        title = lines[0].strip() if lines else filename
+        body = lines[1].strip() if len(lines) > 1 else content
+
+        doc_id = insert_document(state["conn"], filename, title, str(dest_path))
+        chunks = chunk_document(
+            doc_id, body,
+            max_chars=config.CHUNK_MAX_CHARS,
+            overlap_chars=config.CHUNK_OVERLAP_CHARS,
+            min_chars=config.CHUNK_MIN_CHARS,
+        )
+        for c in chunks:
+            c.chunk_id = insert_chunk(state["conn"], doc_id, c.chunk_index, c.content)
+        update_document_total_chunks(state["conn"], doc_id, len(chunks))
+
+        if chunks:
+            chunk_ids = [f"chunk_{c.chunk_id}" for c in chunks]
+            chunk_texts = [c.content for c in chunks]
+            chunk_metadatas = [
+                {"document_id": str(doc_id), "chunk_index": c.chunk_index, "chunk_id": str(c.chunk_id)}
+                for c in chunks
+            ]
+            chunk_embeddings = [encode_text(state["embedding_model"], ct) for ct in chunk_texts]
+            state["collection"].add(
+                ids=chunk_ids,
+                embeddings=chunk_embeddings,
+                documents=chunk_texts,
+                metadatas=chunk_metadatas,
+            )
+
+        doc_obj = type("Doc", (), {})()
+        doc_obj._db_id = doc_id
+        doc_obj._chunks = chunks
+        doc_obj.filename = filename
+        doc_obj.title = title
+        doc_obj.content = body
+        state["docs"].append(doc_obj)
+
+        return {
+            "filename": filename,
+            "title": title,
+            "doc_id": doc_id,
+            "chunks": len(chunks),
+            "total_chars": sum(c.char_count for c in chunks),
+        }
+    except Exception:
+        _cleanup_indexed_document(
+            doc_id,
+            filename,
+            dest_path if cleanup_disk_on_error else None,
+            chunk_ids,
+        )
+        state["docs"] = _sync_docs_from_db()
+        raise
+
+
+def _delete_document_by_id(doc_id: int) -> dict:
+    """Delete one document from SQLite, Chroma, disk, and in-memory state."""
+    if not state["conn"]:
+        raise HTTPException(status_code=503, detail="数据库未就绪")
+
+    row = state["conn"].execute(
+        "SELECT id, filename FROM documents WHERE id = ?", (doc_id,)
+    ).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="文档不存在")
+
+    filename = row["filename"]
+    chunk_rows = state["conn"].execute(
+        "SELECT id FROM chunks WHERE document_id = ?", (doc_id,)
+    ).fetchall()
+    chunk_ids = [f"chunk_{cr['id']}" for cr in chunk_rows]
+
+    if chunk_ids:
+        try:
+            state["collection"].delete(ids=chunk_ids)
+        except Exception:
+            pass
+
+    state["conn"].execute("DELETE FROM documents WHERE id = ?", (doc_id,))
+    state["conn"].commit()
+
+    disk_path = Path(config.SAMPLE_DOCS_DIR) / filename
+    if disk_path.exists():
+        disk_path.unlink()
+
+    return {
+        "doc_id": doc_id,
+        "filename": filename,
+        "removed_chunks": len(chunk_ids),
+    }
+
+
+def _refresh_docs_state() -> None:
+    state["docs"] = _sync_docs_from_db()
+
+
+def _set_dotenv_value(key: str, value: str) -> None:
+    dotenv_path = Path(config.BASE_DIR) / ".env"
+    lines = []
+    updated = False
+    if dotenv_path.exists():
+        lines = dotenv_path.read_text(encoding="utf-8").splitlines()
+
+    output = []
+    for line in lines:
+        if line.strip().startswith(f"{key}=") or line.strip().startswith(f"{key} ="):
+            output.append(f'{key} = "{value}"')
+            updated = True
+        else:
+            output.append(line)
+    if not updated:
+        output.append(f'{key} = "{value}"')
+
+    dotenv_path.write_text("\n".join(output).strip() + "\n", encoding="utf-8")
 
 
 # ── Models ────────────────────────────────────────────────────────────
@@ -169,6 +349,14 @@ class DailyFetchResponse(BaseModel):
     sources_failed: int
     articles: list[dict]
     errors: list[str]
+
+
+class BulkDeleteRequest(BaseModel):
+    doc_ids: list[int]
+
+
+class ApiKeyRequest(BaseModel):
+    api_key: str
 
 
 # ── Lifecycle ─────────────────────────────────────────────────────────
@@ -267,18 +455,21 @@ async def lifespan(app: FastAPI):
 
     if needs_rebuild:
         print("  Building ChromaDB collection ...")
-        state["collection"] = build_chroma_collection(
-            config.CHROMA_PERSIST_DIR, config.CHROMA_COLLECTION_NAME
-        )
         all_chunks = []
         for doc in state["docs"]:
             all_chunks.extend(doc._chunks)
         if all_chunks:
-            embed_and_store_chunks(
-                state["embedding_model"], state["collection"], all_chunks
+            state["collection"] = rebuild_chroma_collection_safely(
+                state["embedding_model"],
+                config.CHROMA_PERSIST_DIR,
+                config.CHROMA_COLLECTION_NAME,
+                all_chunks,
             )
             print(f"  [OK] ChromaDB: {state['collection'].count()} vectors indexed")
         else:
+            state["collection"] = build_chroma_collection(
+                config.CHROMA_PERSIST_DIR, config.CHROMA_COLLECTION_NAME
+            )
             print(f"  [OK] ChromaDB initialized (empty — waiting for documents)")
 
     state["ready"] = True
@@ -299,6 +490,9 @@ app = FastAPI(title="EduDaily API", lifespan=lifespan)
 frontend_dir = Path(__file__).parent / "frontend"
 frontend_dir.mkdir(exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(frontend_dir)), name="static")
+assets_dir = frontend_dir / "assets"
+assets_dir.mkdir(exist_ok=True)
+app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
 
 
 # ── Existing endpoints ────────────────────────────────────────────────
@@ -306,7 +500,14 @@ app.mount("/static", StaticFiles(directory=str(frontend_dir)), name="static")
 
 @app.get("/")
 async def root():
-    return FileResponse(str(frontend_dir / "index.html"))
+    return FileResponse(
+        str(frontend_dir / "index.html"),
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        },
+    )
 
 
 @app.get("/api/health", response_model=HealthResponse)
@@ -323,6 +524,29 @@ async def health():
         chunk_count=chunk_count,
         vector_count=vec_count,
     )
+
+
+@app.post("/api/config/api-key")
+async def set_api_key(req: ApiKeyRequest):
+    """Persist DeepSeek API key locally and refresh the API client."""
+    api_key = req.api_key.strip()
+    if not api_key:
+        raise HTTPException(status_code=400, detail="API Key 不能为空")
+    if not api_key.startswith("sk-"):
+        raise HTTPException(status_code=400, detail="API Key 格式看起来不正确，应以 sk- 开头")
+
+    try:
+        _set_dotenv_value("DEEPSEEK_API_KEY", api_key)
+        config.DEEPSEEK_API_KEY = api_key
+        state["client"] = openai.OpenAI(
+            api_key=api_key,
+            base_url=config.DEEPSEEK_BASE_URL,
+        )
+        state["api_key_valid"] = True
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"保存 API Key 失败: {e}")
+
+    return {"status": "ok", "api_key_configured": True}
 
 
 @app.post("/api/extract")
@@ -483,61 +707,11 @@ async def upload_knowledge(files: list[UploadFile] = File(...)):
             skipped.append({"filename": file.filename, "reason": "文件名已存在，请重命名后上传"})
             continue
 
-        # Save to disk
         dest_path = Path(config.SAMPLE_DOCS_DIR) / file.filename
-        dest_path.write_text(content, encoding="utf-8")
-
-        # Parse title from first line
-        lines = content.split("\n", 1)
-        title = lines[0].strip() if lines else file.filename
-        body = lines[1].strip() if len(lines) > 1 else content
-
-        # Insert document
-        doc_id = insert_document(state["conn"], file.filename, title, str(dest_path))
-
-        # Chunk
-        chunks = chunk_document(
-            doc_id, body,
-            max_chars=config.CHUNK_MAX_CHARS,
-            overlap_chars=config.CHUNK_OVERLAP_CHARS,
-            min_chars=config.CHUNK_MIN_CHARS,
-        )
-        for c in chunks:
-            c.chunk_id = insert_chunk(state["conn"], doc_id, c.chunk_index, c.content)
-        update_document_total_chunks(state["conn"], doc_id, len(chunks))
-
-        # Embed & add to ChromaDB
-        if chunks:
-            chunk_ids = [f"chunk_{c.chunk_id}" for c in chunks]
-            chunk_texts = [c.content for c in chunks]
-            chunk_metadatas = [
-                {"document_id": str(doc_id), "chunk_index": c.chunk_index, "chunk_id": str(c.chunk_id)}
-                for c in chunks
-            ]
-            chunk_embeddings = []
-            for ct in chunk_texts:
-                chunk_embeddings.append(encode_text(state["embedding_model"], ct))
-            state["collection"].add(
-                ids=chunk_ids, embeddings=chunk_embeddings,
-                documents=chunk_texts, metadatas=chunk_metadatas,
-            )
-
-        # Update state
-        doc_obj = type("Doc", (), {})()
-        doc_obj._db_id = doc_id
-        doc_obj._chunks = chunks
-        doc_obj.filename = file.filename
-        doc_obj.title = title
-        doc_obj.content = body
-        state["docs"].append(doc_obj)
-
-        uploaded.append({
-            "filename": file.filename,
-            "title": title,
-            "doc_id": doc_id,
-            "chunks": len(chunks),
-            "total_chars": sum(c.char_count for c in chunks),
-        })
+        try:
+            uploaded.append(_index_text_document(file.filename, content, dest_path))
+        except Exception as e:
+            skipped.append({"filename": file.filename, "reason": f"入库失败: {e}"})
 
     return {
         "uploaded": uploaded,
@@ -547,50 +721,86 @@ async def upload_knowledge(files: list[UploadFile] = File(...)):
     }
 
 
-@app.delete("/api/knowledge/{doc_id}")
+@app.delete("/api/knowledge/{doc_id:int}")
 async def delete_knowledge(doc_id: int):
     """Remove a document and all its data from the knowledge base."""
-    if not state["conn"]:
-        raise HTTPException(status_code=503, detail="数据库未就绪")
-
-    row = state["conn"].execute(
-        "SELECT id, filename FROM documents WHERE id = ?", (doc_id,)
-    ).fetchone()
-    if not row:
-        raise HTTPException(status_code=404, detail="文档不存在")
-
-    filename = row["filename"]
-
-    # Get chunk IDs to remove from ChromaDB
-    chunk_rows = state["conn"].execute(
-        "SELECT id FROM chunks WHERE document_id = ?", (doc_id,)
-    ).fetchall()
-    chunk_ids = [f"chunk_{cr['id']}" for cr in chunk_rows]
-
-    # Remove from ChromaDB
-    if chunk_ids:
-        try:
-            state["collection"].delete(ids=chunk_ids)
-        except Exception:
-            pass
-
-    # Remove from SQLite (CASCADE handles chunks, entities)
-    state["conn"].execute("DELETE FROM documents WHERE id = ?", (doc_id,))
-    state["conn"].commit()
-
-    # Remove file from disk
-    disk_path = Path(config.SAMPLE_DOCS_DIR) / filename
-    if disk_path.exists():
-        disk_path.unlink()
-
-    # Rebuild state["docs"]
-    state["docs"] = _sync_docs_from_db()
+    deleted = _delete_document_by_id(doc_id)
+    _refresh_docs_state()
 
     return {
         "status": "ok",
-        "deleted_doc_id": doc_id,
-        "deleted_filename": filename,
-        "removed_chunks": len(chunk_ids),
+        "deleted_doc_id": deleted["doc_id"],
+        "deleted_filename": deleted["filename"],
+        "removed_chunks": deleted["removed_chunks"],
+        "total_documents": len(state["docs"]),
+        "total_vectors": state["collection"].count(),
+    }
+
+
+@app.delete("/api/knowledge-bulk")
+async def bulk_delete_knowledge(req: BulkDeleteRequest):
+    """Delete multiple knowledge-base documents in one request."""
+    unique_ids = []
+    seen = set()
+    for doc_id in req.doc_ids:
+        if doc_id not in seen:
+            unique_ids.append(doc_id)
+            seen.add(doc_id)
+
+    if not unique_ids:
+        raise HTTPException(status_code=400, detail="请至少选择一个知识库文档")
+
+    deleted = []
+    failed = []
+    for doc_id in unique_ids:
+        try:
+            deleted.append(_delete_document_by_id(doc_id))
+        except HTTPException as e:
+            failed.append({"doc_id": doc_id, "reason": e.detail})
+        except Exception as e:
+            failed.append({"doc_id": doc_id, "reason": str(e)})
+
+    _refresh_docs_state()
+    return {
+        "status": "ok",
+        "deleted": deleted,
+        "failed": failed,
+        "deleted_count": len(deleted),
+        "failed_count": len(failed),
+        "total_documents": len(state["docs"]),
+        "total_vectors": state["collection"].count(),
+    }
+
+
+@app.delete("/api/knowledge-clear-yesterday")
+async def delete_yesterday_knowledge():
+    """Delete documents created yesterday according to local server date."""
+    if not state["conn"]:
+        raise HTTPException(status_code=503, detail="数据库未就绪")
+
+    yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    rows = state["conn"].execute(
+        "SELECT id FROM documents WHERE date(created_at) = date(?)",
+        (yesterday,),
+    ).fetchall()
+    doc_ids = [r["id"] for r in rows]
+
+    deleted = []
+    failed = []
+    for doc_id in doc_ids:
+        try:
+            deleted.append(_delete_document_by_id(doc_id))
+        except Exception as e:
+            failed.append({"doc_id": doc_id, "reason": str(e)})
+
+    _refresh_docs_state()
+    return {
+        "status": "ok",
+        "target_date": yesterday,
+        "deleted": deleted,
+        "failed": failed,
+        "deleted_count": len(deleted),
+        "failed_count": len(failed),
         "total_documents": len(state["docs"]),
         "total_vectors": state["collection"].count(),
     }
@@ -659,49 +869,18 @@ async def import_saved_files():
         if not content:
             continue
 
-        lines = content.split("\n", 1)
-        title = lines[0].strip() if lines else txt_file.stem
-        body = lines[1].strip() if len(lines) > 1 else content
-
-        doc_id = insert_document(state["conn"], txt_file.name, title, str(txt_file))
-
-        chunks = chunk_document(
-            doc_id, body,
-            max_chars=config.CHUNK_MAX_CHARS,
-            overlap_chars=config.CHUNK_OVERLAP_CHARS,
-            min_chars=config.CHUNK_MIN_CHARS,
-        )
-        for c in chunks:
-            c.chunk_id = insert_chunk(state["conn"], doc_id, c.chunk_index, c.content)
-        update_document_total_chunks(state["conn"], doc_id, len(chunks))
-
-        if chunks:
-            chunk_ids = [f"chunk_{c.chunk_id}" for c in chunks]
-            chunk_texts = [c.content for c in chunks]
-            chunk_metadatas = [
-                {"document_id": str(doc_id), "chunk_index": c.chunk_index, "chunk_id": str(c.chunk_id)}
-                for c in chunks
-            ]
-            chunk_embeddings = [encode_text(state["embedding_model"], ct) for ct in chunk_texts]
-            state["collection"].add(
-                ids=chunk_ids, embeddings=chunk_embeddings,
-                documents=chunk_texts, metadatas=chunk_metadatas,
+        try:
+            imported.append(
+                _index_text_document(
+                    txt_file.name,
+                    content,
+                    txt_file,
+                    write_file=False,
+                    cleanup_disk_on_error=False,
+                )
             )
-
-        doc_obj = type("Doc", (), {})()
-        doc_obj._db_id = doc_id
-        doc_obj._chunks = chunks
-        doc_obj.filename = txt_file.name
-        doc_obj.title = title
-        doc_obj.content = body
-        state["docs"].append(doc_obj)
-
-        imported.append({
-            "filename": txt_file.name,
-            "title": title,
-            "doc_id": doc_id,
-            "chunks": len(chunks),
-        })
+        except Exception as e:
+            skipped.append({"filename": txt_file.name, "reason": f"入库失败: {e}"})
 
     return {
         "imported": imported,
@@ -787,6 +966,90 @@ async def daily_fetch():
         sources_failed=result["sources_failed"],
         articles=result["articles"],
         errors=result["errors"],
+    )
+
+
+# ── Batch Analysis ────────────────────────────────────────────────────
+
+
+class BatchAnalyzeResponse(BaseModel):
+    processed: int
+    total: int
+    report_path: str | None = None
+    summaries: list[dict] = []
+    platform_results: list[dict] = []
+
+
+@app.post("/api/batch-analyze", response_model=BatchAnalyzeResponse)
+async def batch_analyze(force_all: bool = False, platform: str | None = None):
+    """Batch process all unanalyzed .txt articles and generate a daily report.
+
+    Scans data/sample_docs/ for .txt files not yet recorded in
+    data/processed.json, generates LLM summaries for each, and compiles
+    them into output/daily_summary_DATE.md.
+
+    Args:
+        force_all: Reprocess even already-processed files
+        platform: Generate platform-specific versions (wechat/xhs/douyin/podcast/all)
+    """
+    if not state["ready"]:
+        raise HTTPException(status_code=503, detail="管道尚未就绪")
+    if not state["api_key_valid"] or state["client"] is None:
+        raise HTTPException(status_code=401, detail="请先配置 DEEPSEEK_API_KEY")
+
+    # Resolve platform argument
+    platforms = None
+    if platform:
+        if platform == "all":
+            platforms = ["all"]
+        elif "," in platform:
+            platforms = [p.strip() for p in platform.split(",")]
+        else:
+            platforms = [platform]
+
+    try:
+        result = process_batch(
+            client=state["client"],
+            conn=state["conn"],
+            embedding_model=state["embedding_model"],
+            collection=state["collection"],
+            force_all=force_all,
+            platforms=platforms,
+        )
+    except openai.AuthenticationError:
+        raise HTTPException(status_code=401, detail="DeepSeek API 认证失败")
+    except openai.RateLimitError:
+        raise HTTPException(status_code=429, detail="API 请求频率超限，请稍后再试")
+    except openai.APIError as e:
+        raise HTTPException(status_code=502, detail=f"DeepSeek API 错误: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"批量分析失败: {e}")
+
+    return BatchAnalyzeResponse(
+        processed=result["processed"],
+        total=result["total"],
+        report_path=result["report_path"],
+        summaries=[
+            {
+                "filename": s["filename"],
+                "title": s["title"],
+                "summary": s["summary"][:200] + "..."
+                if len(s["summary"]) > 200
+                else s["summary"],
+            }
+            for s in result["summaries"]
+        ],
+        platform_results=[
+            {
+                "title": pr["title"],
+                "platforms": [
+                    {"platform": r["platform"], "file_path": r["file_path"]}
+                    for r in pr.get("results", [])
+                    if r.get("file_path")
+                ],
+            }
+            for pr in result.get("platform_results", [])
+        ],
     )
 
 
