@@ -16,9 +16,12 @@ Endpoints:
 
 import json
 import logging
+import os
+import shutil
 import sqlite3
 import sys
 import time
+import uuid
 from datetime import datetime, timedelta
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -73,6 +76,87 @@ state = {
 }
 
 # ── Helpers ───────────────────────────────────────────────────────────
+
+KEYRING_SERVICE = "EduDaily.DeepSeek"
+SETTINGS_FILENAME = "settings.json"
+
+
+def _settings_path() -> Path:
+    return Path(config.DATA_DIR) / "data" / SETTINGS_FILENAME
+
+
+def _load_settings() -> dict:
+    path = _settings_path()
+    if not path.exists():
+        return {"api_keys": [], "active_api_key_id": None, "sample_docs_dir": None}
+    try:
+        return json.loads(path.read_text(encoding="utf-8-sig"))
+    except Exception:
+        return {"api_keys": [], "active_api_key_id": None, "sample_docs_dir": None}
+
+
+def _save_settings(settings: dict) -> None:
+    path = _settings_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(settings, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _mask_api_key(api_key: str) -> str:
+    if not api_key:
+        return ""
+    if len(api_key) <= 10:
+        return api_key[:3] + "****"
+    return api_key[:3] + "****" + api_key[-4:]
+
+
+def _keyring_get(key_id: str) -> str:
+    try:
+        import keyring
+
+        return keyring.get_password(KEYRING_SERVICE, key_id) or ""
+    except Exception:
+        return ""
+
+
+def _keyring_set(key_id: str, api_key: str) -> None:
+    import keyring
+
+    keyring.set_password(KEYRING_SERVICE, key_id, api_key)
+
+
+def _keyring_delete(key_id: str) -> None:
+    try:
+        import keyring
+
+        keyring.delete_password(KEYRING_SERVICE, key_id)
+    except Exception:
+        pass
+
+
+def _apply_api_key(api_key: str) -> None:
+    config.DEEPSEEK_API_KEY = api_key
+    state["client"] = openai.OpenAI(api_key=api_key, base_url=config.DEEPSEEK_BASE_URL)
+    state["api_key_valid"] = True
+
+
+def _copy_dir_contents(src: Path, dst: Path) -> None:
+    if not src.exists():
+        return
+    dst.mkdir(parents=True, exist_ok=True)
+    for item in src.iterdir():
+        target = dst / item.name
+        if item.is_dir():
+            shutil.copytree(item, target, dirs_exist_ok=True)
+        else:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(item, target)
+
+
+def _connect_sqlite() -> sqlite3.Connection:
+    conn = sqlite3.connect(config.SQLITE_DB_PATH, check_same_thread=False)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
 
 
 def _sync_docs_from_db() -> list:
@@ -255,6 +339,94 @@ def _refresh_docs_state() -> None:
     state["docs"] = _sync_docs_from_db()
 
 
+def _open_runtime_database() -> None:
+    if state.get("conn"):
+        try:
+            state["conn"].close()
+        except Exception:
+            pass
+
+    db_dir = Path(config.SQLITE_DB_PATH).parent
+    db_dir.mkdir(parents=True, exist_ok=True)
+    conn = _connect_sqlite()
+    init_db(conn)
+    state["conn"] = conn
+
+
+def _load_runtime_documents() -> None:
+    Path(config.SAMPLE_DOCS_DIR).mkdir(parents=True, exist_ok=True)
+    existing = state["conn"].execute("SELECT DISTINCT filename FROM documents").fetchall()
+    existing_filenames = {r["filename"] for r in existing}
+
+    if existing_filenames:
+        state["docs"] = _sync_docs_from_db()
+        return
+
+    docs = load_documents(config.SAMPLE_DOCS_DIR)
+    for doc in docs:
+        doc._db_id = insert_document(state["conn"], doc.filename, doc.title, doc.source)
+        doc._chunks = chunk_document(
+            doc._db_id,
+            doc.content,
+            max_chars=config.CHUNK_MAX_CHARS,
+            overlap_chars=config.CHUNK_OVERLAP_CHARS,
+            min_chars=config.CHUNK_MIN_CHARS,
+        )
+        for chunk in doc._chunks:
+            chunk.chunk_id = insert_chunk(
+                state["conn"], doc._db_id, chunk.chunk_index, chunk.content
+            )
+        update_document_total_chunks(state["conn"], doc._db_id, len(doc._chunks))
+    state["docs"] = docs
+
+
+def _open_runtime_collection() -> None:
+    chunk_count = state["conn"].execute("SELECT COUNT(*) FROM chunks").fetchone()[0]
+    chroma_client = chromadb.PersistentClient(path=config.CHROMA_PERSIST_DIR)
+    needs_rebuild = False
+    try:
+        state["collection"] = chroma_client.get_collection(config.CHROMA_COLLECTION_NAME)
+        needs_rebuild = state["collection"].count() != chunk_count
+    except Exception:
+        needs_rebuild = True
+
+    if needs_rebuild:
+        all_chunks = []
+        for doc in state["docs"] or []:
+            all_chunks.extend(doc._chunks)
+        if all_chunks:
+            state["collection"] = rebuild_chroma_collection_safely(
+                state["embedding_model"],
+                config.CHROMA_PERSIST_DIR,
+                config.CHROMA_COLLECTION_NAME,
+                all_chunks,
+            )
+        else:
+            state["collection"] = build_chroma_collection(
+                config.CHROMA_PERSIST_DIR,
+                config.CHROMA_COLLECTION_NAME,
+            )
+
+
+def _refresh_extraction_status() -> None:
+    if not state.get("conn"):
+        state["extraction_done"] = False
+        return
+    entity_count = state["conn"].execute(
+        "SELECT COUNT(*) FROM extracted_entities WHERE confidence_score > 0"
+    ).fetchone()[0]
+    state["extraction_done"] = entity_count > 0
+
+
+def _reload_runtime_storage() -> None:
+    state["ready"] = False
+    _open_runtime_database()
+    _load_runtime_documents()
+    _refresh_extraction_status()
+    _open_runtime_collection()
+    state["ready"] = True
+
+
 def _set_dotenv_value(key: str, value: str) -> None:
     dotenv_path = Path(config.BASE_DIR) / ".env"
     lines = []
@@ -359,6 +531,18 @@ class ApiKeyRequest(BaseModel):
     api_key: str
 
 
+class ApiKeyCreateRequest(BaseModel):
+    name: str
+    api_key: str
+    activate: bool = True
+
+
+class PathSettingsRequest(BaseModel):
+    data_dir: str | None = None
+    sample_docs_dir: str | None = None
+    migrate: bool = False
+
+
 # ── Lifecycle ─────────────────────────────────────────────────────────
 
 
@@ -375,15 +559,22 @@ async def lifespan(app: FastAPI):
     # ── Init SQLite ──
     db_dir = Path(config.SQLITE_DB_PATH).parent
     db_dir.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(config.SQLITE_DB_PATH)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON")
+    conn = _connect_sqlite()
     init_db(conn)
     state["conn"] = conn
     print(f"  [OK] SQLite: {config.SQLITE_DB_PATH}")
 
     # ── Init DeepSeek client ──
     api_key = config.DEEPSEEK_API_KEY
+    settings = _load_settings()
+    active_key_id = settings.get("active_api_key_id")
+    if active_key_id:
+        stored_api_key = _keyring_get(active_key_id)
+        if stored_api_key:
+            api_key = stored_api_key
+            config.DEEPSEEK_API_KEY = stored_api_key
+    if settings.get("sample_docs_dir"):
+        config.configure_sample_docs_dir(settings["sample_docs_dir"])
     state["api_key_valid"] = bool(api_key) and api_key not in ("", "sk-your-key-here")
     if not state["api_key_valid"]:
         print("  [!] WARNING: DEEPSEEK_API_KEY not configured!")
@@ -526,28 +717,207 @@ async def health():
     )
 
 
-@app.post("/api/config/api-key")
-async def set_api_key(req: ApiKeyRequest):
-    """Persist DeepSeek API key locally and refresh the API client."""
+@app.get("/api/settings")
+async def get_settings():
+    settings = _load_settings()
+    active_id = settings.get("active_api_key_id")
+    keys = []
+    for item in settings.get("api_keys", []):
+        key_id = item.get("id", "")
+        secret = _keyring_get(key_id)
+        keys.append({
+            "id": key_id,
+            "name": item.get("name", ""),
+            "masked": _mask_api_key(secret) if secret else item.get("masked", ""),
+            "active": key_id == active_id,
+            "created_at": item.get("created_at", ""),
+        })
+
+    return {
+        "api_keys": keys,
+        "paths": {
+            "data_dir": str(config.DATA_DIR),
+            "sample_docs_dir": config.SAMPLE_DOCS_DIR,
+            "sqlite_db_path": config.SQLITE_DB_PATH,
+            "chroma_persist_dir": config.CHROMA_PERSIST_DIR,
+            "output_dir": config.OUTPUT_DIR,
+            "log_file": config.LOG_FILE,
+        },
+        "health": (await health()).model_dump(),
+    }
+
+
+@app.post("/api/settings/api-keys")
+async def add_api_key(req: ApiKeyCreateRequest):
     api_key = req.api_key.strip()
+    name = req.name.strip()
+    if not name:
+        raise HTTPException(status_code=400, detail="API Key 名称不能为空")
     if not api_key:
         raise HTTPException(status_code=400, detail="API Key 不能为空")
     if not api_key.startswith("sk-"):
         raise HTTPException(status_code=400, detail="API Key 格式看起来不正确，应以 sk- 开头")
 
+    settings = _load_settings()
+    key_id = uuid.uuid4().hex
+    _keyring_set(key_id, api_key)
+    entry = {
+        "id": key_id,
+        "name": name,
+        "masked": _mask_api_key(api_key),
+        "created_at": datetime.now().isoformat(timespec="seconds"),
+    }
+    settings.setdefault("api_keys", []).append(entry)
+    if req.activate or not settings.get("active_api_key_id"):
+        settings["active_api_key_id"] = key_id
+        _apply_api_key(api_key)
+    _save_settings(settings)
+    return {"status": "ok", "key": {**entry, "active": settings.get("active_api_key_id") == key_id}}
+
+
+@app.post("/api/settings/api-keys/{key_id}/activate")
+async def activate_api_key(key_id: str):
+    settings = _load_settings()
+    entry = next((x for x in settings.get("api_keys", []) if x.get("id") == key_id), None)
+    if not entry:
+        raise HTTPException(status_code=404, detail="API Key 不存在")
+    api_key = _keyring_get(key_id)
+    if not api_key:
+        raise HTTPException(status_code=500, detail="系统凭据管理器中未找到该 API Key")
+    settings["active_api_key_id"] = key_id
+    _save_settings(settings)
+    _apply_api_key(api_key)
+    return {"status": "ok", "active_api_key_id": key_id, "api_key_configured": True}
+
+
+@app.delete("/api/settings/api-keys/{key_id}")
+async def delete_api_key(key_id: str):
+    settings = _load_settings()
+    before = len(settings.get("api_keys", []))
+    settings["api_keys"] = [x for x in settings.get("api_keys", []) if x.get("id") != key_id]
+    if len(settings["api_keys"]) == before:
+        raise HTTPException(status_code=404, detail="API Key 不存在")
+    _keyring_delete(key_id)
+    if settings.get("active_api_key_id") == key_id:
+        settings["active_api_key_id"] = None
+        state["client"] = None
+        state["api_key_valid"] = False
+    _save_settings(settings)
+    return {"status": "ok", "deleted_id": key_id}
+
+
+@app.post("/api/settings/paths")
+async def update_paths(req: PathSettingsRequest):
+    settings = _load_settings()
+    old_data_dir = Path(config.DATA_DIR)
+    old_sample_dir = Path(config.SAMPLE_DOCS_DIR)
+    new_data_dir = Path(req.data_dir).expanduser().resolve() if req.data_dir else old_data_dir
+    new_sample_dir = (
+        Path(req.sample_docs_dir).expanduser().resolve()
+        if req.sample_docs_dir
+        else (new_data_dir / "data" / "sample_docs" if req.data_dir else old_sample_dir)
+    )
+
+    if req.migrate:
+        if new_data_dir != old_data_dir:
+            _copy_dir_contents(old_data_dir, new_data_dir)
+        if new_sample_dir != old_sample_dir:
+            _copy_dir_contents(old_sample_dir, new_sample_dir)
+
+    new_data_dir.mkdir(parents=True, exist_ok=True)
+    new_sample_dir.mkdir(parents=True, exist_ok=True)
+    config.configure_data_dir(new_data_dir)
+    config.configure_sample_docs_dir(new_sample_dir)
+
+    settings["sample_docs_dir"] = str(new_sample_dir)
+    _save_settings(settings)
+    _reload_runtime_storage()
+    return {
+        "status": "ok",
+        "paths": {
+            "data_dir": str(config.DATA_DIR),
+            "sample_docs_dir": config.SAMPLE_DOCS_DIR,
+            "sqlite_db_path": config.SQLITE_DB_PATH,
+            "chroma_persist_dir": config.CHROMA_PERSIST_DIR,
+        },
+        "health": (await health()).model_dump(),
+    }
+
+
+@app.get("/api/settings/rag-diagnostics")
+async def rag_diagnostics():
+    checks = []
+
+    def add(name: str, ok: bool, detail: str = ""):
+        checks.append({"name": name, "ok": ok, "detail": detail})
+
+    add("API Key", bool(state["api_key_valid"] and state["client"]), "已配置" if state["api_key_valid"] else "未配置")
+    model_path = Path(config.EMBEDDING_MODEL_NAME)
+    add("本地嵌入模型", model_path.exists() if model_path.is_absolute() else True, config.EMBEDDING_MODEL_NAME)
+
     try:
-        _set_dotenv_value("DEEPSEEK_API_KEY", api_key)
-        config.DEEPSEEK_API_KEY = api_key
-        state["client"] = openai.OpenAI(
-            api_key=api_key,
-            base_url=config.DEEPSEEK_BASE_URL,
-        )
-        state["api_key_valid"] = True
+        Path(config.SQLITE_DB_PATH).parent.mkdir(parents=True, exist_ok=True)
+        if state.get("conn"):
+            state["conn"].execute("CREATE TEMP TABLE IF NOT EXISTS rag_diag_tmp (id INTEGER)")
+            state["conn"].execute("DROP TABLE IF EXISTS rag_diag_tmp")
+        add("SQLite 读写", True, config.SQLITE_DB_PATH)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"保存 API Key 失败: {e}")
+        add("SQLite 读写", False, str(e))
 
-    return {"status": "ok", "api_key_configured": True}
+    try:
+        count = state["collection"].count() if state.get("collection") else 0
+        add("Chroma 向量库", state.get("collection") is not None, f"{count} vectors")
+    except Exception as e:
+        add("Chroma 向量库", False, str(e))
 
+    try:
+        h = (await health()).model_dump()
+        add("完整健康检查", bool(h["ready"]), json.dumps(h, ensure_ascii=False))
+    except Exception as e:
+        add("完整健康检查", False, str(e))
+
+    report_lines = [
+        "EduDaily RAG Diagnostics",
+        f"Time: {datetime.now().isoformat(timespec='seconds')}",
+        f"Data dir: {config.DATA_DIR}",
+        f"Knowledge dir: {config.SAMPLE_DOCS_DIR}",
+        "",
+    ]
+    for check in checks:
+        report_lines.append(f"[{'OK' if check['ok'] else 'FAIL'}] {check['name']}: {check['detail']}")
+    return {"checks": checks, "report": "\n".join(report_lines)}
+
+
+@app.post("/api/settings/rag/rebuild")
+async def rebuild_rag_channel():
+    if not state["ready"]:
+        raise HTTPException(status_code=503, detail="管道尚未就绪")
+    all_chunks = []
+    for doc in state["docs"] or []:
+        all_chunks.extend(doc._chunks)
+    state["collection"] = rebuild_chroma_collection_safely(
+        state["embedding_model"],
+        config.CHROMA_PERSIST_DIR,
+        config.CHROMA_COLLECTION_NAME,
+        all_chunks,
+    )
+    return {"status": "ok", "vector_count": state["collection"].count()}
+
+
+@app.post("/api/settings/rag/reload")
+async def reload_rag_documents():
+    _reload_runtime_storage()
+    return {"status": "ok", "health": (await health()).model_dump()}
+
+
+@app.post("/api/config/api-key")
+async def set_api_key(req: ApiKeyRequest):
+    """Backward-compatible API Key save endpoint."""
+    return await add_api_key(ApiKeyCreateRequest(
+        name="默认 Key",
+        api_key=req.api_key,
+        activate=True,
+    ))
 
 @app.post("/api/extract")
 async def extract():

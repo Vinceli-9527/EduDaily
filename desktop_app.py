@@ -12,6 +12,8 @@ import json
 import traceback
 import os
 import sys
+import webbrowser
+import threading
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
@@ -144,6 +146,7 @@ def run_async(coro):
 class DesktopApi:
     def __init__(self) -> None:
         write_desktop_log("Starting EduDaily desktop runtime")
+        self._api_lock = threading.RLock()
         configure_runtime()
         write_desktop_log(f"Data dir: {config.DATA_DIR}")
         import server
@@ -179,7 +182,15 @@ class DesktopApi:
 
     def call(self, url: str, method: str = "GET", body=None):
         try:
-            return self._ok(run_async(self._dispatch(url, method.upper(), body or {})))
+            with self._api_lock:
+                return self._ok(run_async(self._dispatch(url, method.upper(), body or {})))
+        except Exception as exc:
+            return self._error(exc)
+
+    def open_external(self, url: str):
+        try:
+            webbrowser.open(url, new=2)
+            return {"ok": True}
         except Exception as exc:
             return self._error(exc)
 
@@ -190,6 +201,22 @@ class DesktopApi:
 
         if method == "GET" and path == "/api/health":
             return await s.health()
+        if method == "GET" and path == "/api/settings":
+            return await s.get_settings()
+        if method == "POST" and path == "/api/settings/api-keys":
+            return await s.add_api_key(s.ApiKeyCreateRequest(**body))
+        if method == "POST" and path.startswith("/api/settings/api-keys/") and path.endswith("/activate"):
+            return await s.activate_api_key(path.split("/")[-2])
+        if method == "DELETE" and path.startswith("/api/settings/api-keys/"):
+            return await s.delete_api_key(path.rsplit("/", 1)[1])
+        if method == "POST" and path == "/api/settings/paths":
+            return await s.update_paths(s.PathSettingsRequest(**body))
+        if method == "GET" and path == "/api/settings/rag-diagnostics":
+            return await s.rag_diagnostics()
+        if method == "POST" and path == "/api/settings/rag/rebuild":
+            return await s.rebuild_rag_channel()
+        if method == "POST" and path == "/api/settings/rag/reload":
+            return await s.reload_rag_documents()
         if method == "POST" and path == "/api/config/api-key":
             return self._set_api_key(body)
         if method == "POST" and path == "/api/extract":
@@ -225,23 +252,17 @@ class DesktopApi:
         raise HTTPException(status_code=404, detail=f"Unsupported desktop API route: {method} {path}")
 
     def _set_api_key(self, body):
-        api_key = (body or {}).get("api_key", "").strip()
-        if not api_key:
-            raise HTTPException(status_code=400, detail="API Key 不能为空")
-        if not api_key.startswith("sk-"):
-            raise HTTPException(status_code=400, detail="API Key 格式看起来不正确，应以 sk- 开头")
-
-        save_secret_api_key(api_key)
-        config.DEEPSEEK_API_KEY = api_key
-        self.server.config.DEEPSEEK_API_KEY = api_key
-        self.server.state["client"] = openai.OpenAI(
-            api_key=api_key,
-            base_url=config.DEEPSEEK_BASE_URL,
-        )
-        self.server.state["api_key_valid"] = True
-        return {"status": "ok", "api_key_configured": True}
+        return run_async(self.server.add_api_key(self.server.ApiKeyCreateRequest(
+            name=(body or {}).get("name") or "默认 Key",
+            api_key=(body or {}).get("api_key", ""),
+            activate=True,
+        )))
 
     def upload_knowledge_files(self):
+        with self._api_lock:
+            return self._upload_knowledge_files_locked()
+
+    def _upload_knowledge_files_locked(self):
         try:
             paths = window.create_file_dialog(
                 webview.OPEN_DIALOG,

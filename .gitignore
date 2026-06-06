@@ -24,6 +24,7 @@ chroma_store/
 
 # Generated output
 output/
+.tmp/
 
 # Logs
 *.log

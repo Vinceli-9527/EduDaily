@@ -80,6 +80,12 @@ def configure_data_dir(data_dir: str | os.PathLike) -> None:
     OUTPUT_DIR = str(DATA_DIR / "output")
     LOG_FILE = str(DATA_DIR / "pipeline.log")
 
+
+def configure_sample_docs_dir(sample_docs_dir: str | os.PathLike) -> None:
+    """Override the knowledge-base text document directory."""
+    global SAMPLE_DOCS_DIR
+    SAMPLE_DOCS_DIR = str(Path(sample_docs_dir).expanduser().resolve())
+
 # ---- Chunking ----
 CHUNK_MAX_CHARS = 1000
 CHUNK_OVERLAP_CHARS = 200

@@ -1,8 +1,20 @@
 # EduDaily — 每日教育资讯智能检索与分析系统
 
+![EduDaily 教育资讯智能检索与分析](assets/branding/readme-hero.png)
+
 一个**面向教育工作者**的本地化每日资讯聚合与智能分析系统。设定关注的信息源，一键获取当日最新教育资讯，AI 自动提炼、索引、生成结构化日报，并**一键适配微信公众号、小红书、抖音、播客等多种平台**。
 
 **你不需要会编程**——只需要跟着下面的步骤做，10 分钟就能跑起来。
+
+---
+
+## 当前版本亮点
+
+- **Windows 桌面版**：支持打包为安装包，安装后可从桌面快捷方式启动，不需要用户手动打开终端。
+- **设置页**：首页可进入独立设置页，统一管理 API Key、数据目录、.txt 知识库目录和 RAG 通道检修。
+- **多 API Key 管理**：每个 Key 都可以命名；页面只显示脱敏形式，真实 Key 保存在系统凭据管理器中。
+- **RAG 通道检修**：可检查 API Key、本地嵌入模型、SQLite、Chroma，并支持重新加载知识库和重建向量库。
+- **使用教程**：第一步会引导用户前往 DeepSeek API Keys 页面创建 Key，并用大白话说明 Key 的用途、保密和余额要求。
 
 ---
 
@@ -756,32 +768,34 @@ MIT License
 
 ---
 
-## Windows desktop packaging
+## Windows 桌面版封装
 
-Desktop mode uses `desktop_app.py` and `pywebview`. It opens the existing Vue page in a native window and calls backend logic through a Python bridge, so it does not start a local Web server or expose a localhost port.
+桌面版入口是 `desktop_app.py`，使用 `pywebview` 承载现有 HTML/Vue 前端，并通过 Python 桌面桥接直接调用后端逻辑。桌面版不会启动本地 Web 服务，也不会暴露 localhost 端口。
 
-Build the portable app directory:
+本版本已经使用 `assets/branding/app-icon.png` 生成应用图标 `assets/branding/app-icon.ico`，安装包、桌面快捷方式和 `EduDaily.exe` 都会使用这个图标。
+
+生成便携版程序目录：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\build_windows.ps1
 ```
 
-Output:
+输出位置：
 
 ```text
 dist\EduDaily\EduDaily.exe
 ```
 
-Build the installer after installing Inno Setup 6:
+安装 Inno Setup 6 后生成安装包：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\build_windows_installer.ps1
 ```
 
-Output:
+输出位置：
 
 ```text
-dist\installer\
+dist\installer\EduDailySetup-0.1.2.exe
 ```
 
-On first desktop launch, the app asks the user to choose a data directory. The DeepSeek API Key is stored in the system credential manager instead of `.env`.
+首次启动桌面版时，用户可以选择数据目录。进入首页后的“设置”页面可以继续管理 API Key、整体数据目录、.txt 知识库目录，并运行 RAG 通道检修。DeepSeek API Key 不会明文显示在页面上，真实内容保存在系统凭据管理器中。

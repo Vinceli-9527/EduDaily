@@ -458,6 +458,28 @@
         }
         .chunk-item { grid-template-columns: minmax(0, 1fr); align-items: start; }
         .doc-item { grid-template-columns: 32px 38px minmax(0, 1fr) auto; }
+        .api-key-item {
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr) auto;
+            gap: 14px;
+            align-items: center;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #fbfdff;
+        }
+        .api-key-item .item-title {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+        .api-key-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-end;
+        }
         .item-title { font-weight: 900; color: #122f48; }
         .item-meta { margin-top: 4px; color: var(--muted); font-size: 0.76rem; line-height: 1.55; }
         .chunk-text { color: #344e66; font-size: 0.84rem; line-height: 1.75; white-space: pre-wrap; }
@@ -714,6 +736,8 @@
             .chunk-item, .doc-item, .source-item, .result-item, .summary-item { grid-template-columns: 34px minmax(0, 1fr); }
             .doc-item { grid-template-columns: 28px 34px minmax(0, 1fr); }
             .doc-item .btn { grid-column: 3; justify-self: start; }
+            .api-key-item { grid-template-columns: 42px minmax(0, 1fr); }
+            .api-key-actions { grid-column: 2; justify-content: flex-start; }
             .source-item .btn { grid-column: 2; justify-self: start; }
         }
     </style>
@@ -1133,6 +1157,98 @@
                     </div>
                 </div>
             </template>
+
+            <template v-if="activeMainTab === 'settings'">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-title"><img class="icon-lg" :src="icon('key-round')" alt="" /> 系统设置</div>
+                            <div class="panel-subtitle">管理 DeepSeek API Key、数据目录、知识库目录和 RAG 通道状态。</div>
+                        </div>
+                        <button class="btn btn-ghost btn-sm" @click="loadSettings" :disabled="settingsLoading">
+                            <img class="icon" :src="icon('refresh-cw')" alt="" /> 刷新
+                        </button>
+                    </div>
+                    <div class="panel-body form-grid">
+                        <div class="panel pad" id="tutorial-api-key-card">
+                            <div class="panel-title"><img class="icon" :src="icon('key-round')" alt="" /> API Key 管理</div>
+                            <div class="panel-subtitle">Key 仅以脱敏形式显示，真实内容保存在系统凭据管理器中。</div>
+                            <div class="form-row" style="margin-top: 14px;">
+                                <input class="input" v-model="newApiKeyName" placeholder="Key 名称，例如：默认 Key" :disabled="settingsSavingKey" />
+                                <input class="input" v-model="newApiKeyValue" type="password" placeholder="sk-..." :disabled="settingsSavingKey" />
+                                <button class="btn btn-primary" @click="addManagedApiKey" :disabled="settingsSavingKey || !newApiKeyName.trim() || !newApiKeyValue.trim()">
+                                    <span v-if="settingsSavingKey" class="mini-spinner"></span>
+                                    <img v-else class="icon" :src="icon('plus')" alt="" /> 新增并启用
+                                </button>
+                            </div>
+                            <div class="empty-state" v-if="settingsData.api_keys.length === 0">尚未保存 API Key。</div>
+                            <div class="api-key-item" v-for="key in settingsData.api_keys" :key="key.id">
+                                <span class="icon-badge" :class="key.active ? 'green' : ''"><img :src="icon(key.active ? 'check-circle' : 'key-round')" alt="" /></span>
+                                <div>
+                                    <div class="item-title">{{ key.name }} <span class="badge" v-if="key.active">当前使用</span></div>
+                                    <div class="item-meta">{{ key.masked }} · {{ key.created_at || '-' }}</div>
+                                </div>
+                                <div class="api-key-actions">
+                                    <button class="btn btn-ghost btn-sm" @click="activateManagedApiKey(key)" :disabled="key.active">启用</button>
+                                    <button class="btn btn-danger btn-sm" @click="deleteManagedApiKey(key)">
+                                        <img class="icon" :src="icon('trash-2')" alt="" /> 删除
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel pad">
+                            <div class="panel-title"><img class="icon" :src="icon('database')" alt="" /> 数据与知识库路径</div>
+                            <div class="panel-subtitle">数据目录包含 SQLite、Chroma、日志和输出文件；知识库目录用于保存 .txt 文档。</div>
+                            <div class="form-grid" style="margin-top: 14px;">
+                                <label class="item-meta">整个数据目录</label>
+                                <input class="input" v-model="settingsDataDir" placeholder="例如：D:\\EduDailyData" :disabled="settingsPathSaving" />
+                                <label class="item-meta">.txt 知识库目录</label>
+                                <input class="input" v-model="settingsSampleDocsDir" placeholder="例如：D:\\EduDailyDocs" :disabled="settingsPathSaving" />
+                                <button class="btn btn-primary" @click="savePathSettings" :disabled="settingsPathSaving || (!settingsDataDir.trim() && !settingsSampleDocsDir.trim())">
+                                    <span v-if="settingsPathSaving" class="mini-spinner"></span>
+                                    <img v-else class="icon" :src="icon('database')" alt="" /> 保存路径设置
+                                </button>
+                            </div>
+                            <div class="prompt-box" style="margin-top: 14px;">
+数据目录：{{ settingsData.paths.data_dir || '-' }}
+知识库目录：{{ settingsData.paths.sample_docs_dir || '-' }}
+SQLite：{{ settingsData.paths.sqlite_db_path || '-' }}
+Chroma：{{ settingsData.paths.chroma_persist_dir || '-' }}
+                            </div>
+                        </div>
+
+                        <div class="panel pad">
+                            <div class="panel-title"><img class="icon" :src="icon('activity')" alt="" /> RAG 通道检修</div>
+                            <div class="panel-subtitle">检查 API Key、本地嵌入模型、SQLite、Chroma，并可重建或重载 RAG 通道。</div>
+                            <div class="form-row" style="margin-top: 14px;">
+                                <button class="btn btn-primary" @click="runDiagnostics" :disabled="diagnosticsRunning">
+                                    <span v-if="diagnosticsRunning" class="mini-spinner"></span>
+                                    <img v-else class="icon" :src="icon('activity')" alt="" /> 运行完整检查
+                                </button>
+                                <button class="btn btn-ghost" @click="reloadRagDocuments" :disabled="!!ragActionRunning">
+                                    <span v-if="ragActionRunning === 'reload'" class="mini-spinner"></span>
+                                    <img v-else class="icon" :src="icon('refresh-cw')" alt="" /> 重新加载知识库
+                                </button>
+                                <button class="btn btn-danger" @click="rebuildRagChannel" :disabled="!!ragActionRunning">
+                                    <span v-if="ragActionRunning === 'rebuild'" class="mini-spinner"></span>
+                                    <img v-else class="icon" :src="icon('database')" alt="" /> 重建向量库
+                                </button>
+                                <button class="btn btn-ghost" @click="copyText(diagnosticsReport)" :disabled="!diagnosticsReport">
+                                    <img class="icon" :src="icon('copy')" alt="" /> 复制诊断报告
+                                </button>
+                            </div>
+                            <div class="status-list" style="margin-top: 14px;" v-if="diagnosticsChecks.length">
+                                <div class="status-item" v-for="check in diagnosticsChecks" :key="check.name">
+                                    <span>{{ check.name }}</span>
+                                    <span class="status-dot" :class="check.ok ? 'ok' : 'err'"></span>
+                                </div>
+                            </div>
+                            <div class="prompt-box" v-if="diagnosticsReport" style="margin-top: 14px;">{{ diagnosticsReport }}</div>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </section>
 
         <aside class="side-column">
@@ -1151,6 +1267,7 @@
                     <button class="btn btn-ghost" @click="switchTab('kb')"><img class="icon" :src="icon('upload-cloud')" alt="" /> 上传知识文档</button>
                     <button class="btn btn-ghost" @click="switchTab('sources')"><img class="icon" :src="icon('radio')" alt="" /> 管理信息源</button>
                     <button class="btn btn-ghost" @click="switchTab('advanced')"><img class="icon" :src="icon('bar-chart-3')" alt="" /> 批量分析</button>
+                    <button class="btn btn-ghost" @click="switchTab('settings')"><img class="icon" :src="icon('settings')" alt="" /> 设置与检修</button>
                 </div>
             </div>
 
@@ -1199,6 +1316,9 @@
         <div class="tutorial-tooltip" :style="tutorialTooltipStyle">
             <div class="panel-title"><img class="icon" :src="icon(currentTutorialStep.icon || 'info')" alt="" /> 第 {{ tutorialStep + 1 }} 步 / 共 {{ tutorialSteps.length }} 步</div>
             <p class="item-meta">{{ currentTutorialStep.description }}</p>
+            <button class="btn btn-ghost btn-sm" v-if="currentTutorialStep.link" @click="openExternalLink(currentTutorialStep.link)">
+                <img class="icon" :src="icon(currentTutorialStep.linkIcon || 'link')" alt="" /> {{ currentTutorialStep.linkLabel || '打开官方页面' }}
+            </button>
             <div class="form-row" style="justify-content: space-between;">
                 <button class="btn btn-ghost btn-sm" @click="prevTutorialStep" v-if="tutorialStep > 0">上一步</button>
                 <button class="btn btn-primary btn-sm" @click="nextTutorialStep">{{ tutorialStep < tutorialSteps.length - 1 ? '下一步' : '完成' }}</button>
@@ -1215,11 +1335,13 @@ createApp({
     data() {
         return {
             activeMainTab: "qa",
+            hashListener: null,
             navItems: [
                 { key: "qa", label: "问答分析", icon: "search" },
                 { key: "kb", label: "知识库", icon: "book-open" },
                 { key: "sources", label: "信息源日报", icon: "radio" },
                 { key: "advanced", label: "高级功能", icon: "settings" },
+                { key: "settings", label: "设置", icon: "key-round" },
             ],
             pipelineSteps: [
                 { n: 1, label: "输入查询", icon: "message-square" },
@@ -1300,6 +1422,18 @@ createApp({
             apiKeyDismissedThisSession: false,
             apiKeyInput: "",
             apiKeySaving: false,
+            settingsLoading: false,
+            settingsData: { api_keys: [], paths: {}, health: {} },
+            newApiKeyName: "",
+            newApiKeyValue: "",
+            settingsSavingKey: false,
+            settingsPathSaving: false,
+            settingsDataDir: "",
+            settingsSampleDocsDir: "",
+            diagnosticsRunning: false,
+            diagnosticsReport: "",
+            diagnosticsChecks: [],
+            ragActionRunning: "",
             tutorialActive: false,
             tutorialStep: 0,
             tutorialCompleted: false,
@@ -1307,6 +1441,16 @@ createApp({
             tutorialHighlightStyle: {},
             tutorialTooltipStyle: {},
             tutorialSteps: [
+                {
+                    icon: "key-round",
+                    description: "先配置你自己的 DeepSeek API Key。它可以理解为“调用 DeepSeek 的通行证”：EduDaily 用它请求模型生成分析内容，所以没有 Key 或账号余额不足时，问答、批量分析、多平台生成都会不可用。点击下方官方页面，在 DeepSeek 平台新建并复制 Key，回到这里填入 Key 名称和 sk-... 内容后点“新增并启用”。Key 不要发给别人；以后要换 Key，就在这里新增并启用新的，旧的可以删除。",
+                    tab: "settings",
+                    selector: "#tutorial-api-key-card",
+                    tooltipPos: "bottom",
+                    link: "https://platform.deepseek.com/api_keys",
+                    linkLabel: "打开 DeepSeek API Keys 页面",
+                    linkIcon: "link",
+                },
                 { icon: "search", description: "在这里输入教育问题，系统会检索知识库并生成分析报告。", tab: "qa", selector: "#tutorial-qa-search", tooltipPos: "bottom" },
                 { icon: "book-open", description: "在知识库中上传、查看或删除 .txt 文档。", tab: "kb", selector: "#tutorial-kb-card", tooltipPos: "bottom" },
                 { icon: "newspaper", description: "从配置的信息源抓取今日教育资讯并索引入库。", tab: "sources", selector: "#tutorial-daily-fetch", tooltipPos: "top" },
@@ -1356,6 +1500,13 @@ createApp({
     },
 
     mounted() {
+        this.hashListener = () => {
+            const tab = window.location.hash.replace("#", "");
+            if (this.navItems.some((item) => item.key === tab)) {
+                this.switchTab(tab, { syncHash: false });
+            }
+        };
+        window.addEventListener("hashchange", this.hashListener);
         const boot = () => this.initializeApp();
         if (window.pywebview && window.pywebview.api) {
             boot();
@@ -1370,6 +1521,7 @@ createApp({
     },
 
     beforeUnmount() {
+        if (this.hashListener) window.removeEventListener("hashchange", this.hashListener);
         this.detachTutorialListeners();
     },
 
@@ -1391,9 +1543,14 @@ createApp({
         initializeApp() {
             if (this.appInitialized) return;
             this.appInitialized = true;
+            const initialTab = window.location.hash.replace("#", "");
+            if (this.navItems.some((item) => item.key === initialTab)) {
+                this.activeMainTab = initialTab;
+            }
             this.checkHealth();
             this.loadKnowledge();
             this.loadSources();
+            this.loadSettings();
             this.loadSchedule();
             this.clipDate = this.todayDate;
             this.addLog("info", "EduDaily 前端已就绪");
@@ -1418,10 +1575,14 @@ createApp({
             }
             return res.data;
         },
-        switchTab(tab) {
+        switchTab(tab, options = {}) {
             this.activeMainTab = tab;
+            if (options.syncHash !== false && window.location.hash !== `#${tab}`) {
+                window.history.replaceState(null, "", `#${tab}`);
+            }
             if (tab === "kb") this.loadKnowledge();
             if (tab === "sources") this.loadSources();
+            if (tab === "settings") this.loadSettings();
         },
         addLog(type, msg) {
             const now = new Date();
@@ -1433,6 +1594,18 @@ createApp({
             this.toastMsg = msg;
             clearTimeout(this.toastTimer);
             this.toastTimer = setTimeout(() => { this.toastMsg = ""; }, 2200);
+        },
+        async openExternalLink(url) {
+            if (!url) return;
+            try {
+                if (window.pywebview && window.pywebview.api?.open_external) {
+                    await window.pywebview.api.open_external(url);
+                    return;
+                }
+            } catch (e) {
+                this.addLog("warn", "打开外部链接失败，已尝试在浏览器新标签打开：" + (e.message || ""));
+            }
+            window.open(url, "_blank", "noopener,noreferrer");
         },
         async fetchJson(url, options = {}, label = "") {
             if (label) this.addLog("info", `${label} 开始`);
@@ -1790,6 +1963,129 @@ createApp({
                 this.addLog("err", "API Key 保存失败：" + (e.message || ""));
             } finally {
                 this.apiKeySaving = false;
+            }
+        },
+        async loadSettings() {
+            this.settingsLoading = true;
+            try {
+                const data = await this.fetchJson("/api/settings");
+                this.settingsData = data;
+                this.settingsDataDir = data.paths?.data_dir || "";
+                this.settingsSampleDocsDir = data.paths?.sample_docs_dir || "";
+                if (data.health) this.health = data.health;
+            } catch (e) {
+                this.addLog("err", "设置加载失败：" + (e.message || ""));
+            } finally {
+                this.settingsLoading = false;
+            }
+        },
+        async addManagedApiKey() {
+            const name = this.newApiKeyName.trim();
+            const apiKey = this.newApiKeyValue.trim();
+            if (!name || !apiKey) return;
+            this.settingsSavingKey = true;
+            try {
+                await this.fetchJson("/api/settings/api-keys", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, api_key: apiKey, activate: true }),
+                }, "新增 API Key");
+                this.newApiKeyName = "";
+                this.newApiKeyValue = "";
+                this.apiKeyPromptOpen = false;
+                localStorage.removeItem("edudaily_api_key_prompt_dismissed");
+                await this.loadSettings();
+                await this.checkHealth();
+            } catch (e) {
+                this.addLog("err", "新增 API Key 失败：" + (e.message || ""));
+            } finally {
+                this.settingsSavingKey = false;
+            }
+        },
+        async activateManagedApiKey(key) {
+            try {
+                await this.fetchJson(`/api/settings/api-keys/${key.id}/activate`, { method: "POST" }, "启用 API Key");
+                await this.loadSettings();
+                await this.checkHealth();
+            } catch (e) {
+                this.addLog("err", "启用 API Key 失败：" + (e.message || ""));
+            }
+        },
+        async deleteManagedApiKey(key) {
+            if (!confirm(`确定删除 API Key：${key.name}？`)) return;
+            try {
+                await this.fetchJson(`/api/settings/api-keys/${key.id}`, { method: "DELETE" }, "删除 API Key");
+                await this.loadSettings();
+                await this.checkHealth();
+            } catch (e) {
+                this.addLog("err", "删除 API Key 失败：" + (e.message || ""));
+            }
+        },
+        async savePathSettings() {
+            const dataDir = this.settingsDataDir.trim();
+            const sampleDocsDir = this.settingsSampleDocsDir.trim();
+            const currentDataDir = this.settingsData.paths?.data_dir || "";
+            const currentSampleDir = this.settingsData.paths?.sample_docs_dir || "";
+            const changed = dataDir !== currentDataDir || sampleDocsDir !== currentSampleDir;
+            if (!changed) return;
+            const migrate = confirm("是否将旧目录中的现有数据迁移到新目录？\n\n选择“确定”会复制旧数据；选择“取消”则只切换路径。");
+            this.settingsPathSaving = true;
+            try {
+                const data = await this.fetchJson("/api/settings/paths", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        data_dir: dataDir || null,
+                        sample_docs_dir: sampleDocsDir || null,
+                        migrate,
+                    }),
+                }, "保存路径设置");
+                if (data.health) this.health = data.health;
+                await this.loadSettings();
+                await this.loadKnowledge();
+            } catch (e) {
+                this.addLog("err", "路径设置失败：" + (e.message || ""));
+            } finally {
+                this.settingsPathSaving = false;
+            }
+        },
+        async runDiagnostics() {
+            this.diagnosticsRunning = true;
+            try {
+                const data = await this.fetchJson("/api/settings/rag-diagnostics", {}, "RAG 通道检修");
+                this.diagnosticsChecks = data.checks || [];
+                this.diagnosticsReport = data.report || "";
+            } catch (e) {
+                this.diagnosticsReport = "诊断失败：" + (e.message || "");
+                this.addLog("err", this.diagnosticsReport);
+            } finally {
+                this.diagnosticsRunning = false;
+            }
+        },
+        async reloadRagDocuments() {
+            this.ragActionRunning = "reload";
+            try {
+                const data = await this.fetchJson("/api/settings/rag/reload", { method: "POST" }, "重新加载知识库");
+                if (data.health) this.health = data.health;
+                await this.loadKnowledge();
+                await this.runDiagnostics();
+            } catch (e) {
+                this.addLog("err", "重新加载知识库失败：" + (e.message || ""));
+            } finally {
+                this.ragActionRunning = "";
+            }
+        },
+        async rebuildRagChannel() {
+            if (!confirm("确定要重建 Chroma 向量库吗？文档较多时可能需要较长时间。")) return;
+            this.ragActionRunning = "rebuild";
+            try {
+                await this.fetchJson("/api/settings/rag/rebuild", { method: "POST" }, "重建向量库");
+                await this.checkHealth();
+                await this.runDiagnostics();
+            } catch (e) {
+                this.addLog("err", "重建向量库失败：" + (e.message || ""));
+            } finally {
+                this.ragActionRunning = "";
             }
         },
         async copyText(text) {

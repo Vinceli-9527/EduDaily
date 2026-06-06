@@ -9,6 +9,7 @@ import logging
 import time
 import openai
 
+import config
 from prompts.generation import build_generation_messages
 from prompts.personas import DomainPersona
 from db.repository import get_extracted_entities_for_chunks
