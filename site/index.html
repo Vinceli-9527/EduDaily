@@ -1,0 +1,1752 @@
+<!--
+  ---------------------------------------------------------------
+  docmd : the zero-config documentation engine.
+  @website https://docmd.io
+  [docmd-source] - Please do not remove this header.
+  ---------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="generator" content="docmd v0.5.x">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>/**
+ * --------------------------------------------------------------------
+ * docmd : the zero-config documentation engine.
+ *
+ * @package     @docmd/core (and ecosystem)
+ * @website     https://docmd.io
+ * @repository  https://github.com/docmd-io/docmd
+ * @license     MIT
+ * @copyright   Copyright (c) 2025-present docmd.io
+ *
+ * [docmd-source] - Please do not remove this header.
+ * --------------------------------------------------------------------
+ */
+
+(function () {
+  try {
+    // 1. Determine Theme
+    var localValue = localStorage.getItem('docmd-theme');
+    var configValue = window.DOCMD_DEFAULT_MODE || 'light';
+    var theme = localValue ? localValue : configValue;
+
+    if (theme === 'system') {
+      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    // 2. Apply to Root
+    document.documentElement.setAttribute('data-theme', theme);
+
+    // 3. Highlight.js Toggle Strategy
+    var lightLink = document.getElementById('hljs-light');
+    var darkLink = document.getElementById('hljs-dark');
+
+    if (lightLink && darkLink) {
+      if (theme === 'dark') {
+        lightLink.disabled = true;
+        darkLink.disabled = false;
+      } else {
+        lightLink.disabled = false;
+        darkLink.disabled = true;
+      }
+    }
+
+    document.documentElement.style.visibility = "visible";
+  } catch (e) {
+    document.documentElement.style.visibility = "visible";
+    console.error('Theme init failed', e);
+  }
+})();</script>
+    <style>
+      html {
+        visibility: hidden;
+      }
+    </style>
+    
+    <script>
+      var root = "./";
+      if (root && !root.endsWith('/')) root += '/';
+      if (root === '') root = './';
+      window.DOCMD_ROOT = root;
+
+      var siteRoot = "./";
+      if (siteRoot && !siteRoot.endsWith('/')) siteRoot += '/';
+      if (siteRoot === '') siteRoot = './';
+      window.DOCMD_SITE_ROOT = siteRoot;
+
+      window.DOCMD_APPEARANCE = "system";
+      window.DOCMD_VERSION_ROOT = "/";
+      window.DOCMD_BASE = "/";
+      window.DOCMD_LOCALE = "";
+      window.DOCMD_DEFAULT_LOCALE = "";
+    </script>
+    <title>
+      EduDaily — 每日教育资讯智能检索与分析系统 : EduDaily
+    </title>
+    
+    <link rel="stylesheet" href="./assets/css/docmd-main.css?v=mqazjik5">
+    
+    <link rel="stylesheet" href="./assets/css/docmd-highlight-light.css?v=mqazjik5" id="hljs-light" >
+    <link rel="stylesheet" href="./assets/css/docmd-highlight-dark.css?v=mqazjik5" id="hljs-dark" disabled>
+    
+    
+<meta name="description" content="">
+<link rel="canonical" href="/">
+<meta property="og:title" content="EduDaily — 每日教育资讯智能检索与分析系统 - EduDaily">
+<meta property="og:description" content="">
+<meta property="og:url" content="/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="EduDaily — 每日教育资讯智能检索与分析系统 - EduDaily">
+<meta name="twitter:description" content="">
+
+
+
+<link rel="stylesheet" href="./assets/css/docmd-git.css?v=mqazjik5" >
+<link rel="stylesheet" href="./assets/css/docmd-openapi.css?v=mqazjik5" >
+
+    
+    <script>/**
+ * --------------------------------------------------------------------
+ * docmd : the zero-config documentation engine.
+ *
+ * @package     @docmd/core (and ecosystem)
+ * @website     https://docmd.io
+ * @repository  https://github.com/docmd-io/docmd
+ * @license     MIT
+ * @copyright   Copyright (c) 2025-present docmd.io
+ *
+ * [docmd-source] - Please do not remove this header.
+ * --------------------------------------------------------------------
+ */
+
+(function () {
+  try {
+    // 1. Determine Theme
+    var localValue = localStorage.getItem('docmd-theme');
+    var configValue = window.DOCMD_DEFAULT_MODE || 'light';
+    var theme = localValue ? localValue : configValue;
+
+    if (theme === 'system') {
+      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    // 2. Apply to Root
+    document.documentElement.setAttribute('data-theme', theme);
+
+    // 3. Highlight.js Toggle Strategy
+    var lightLink = document.getElementById('hljs-light');
+    var darkLink = document.getElementById('hljs-dark');
+
+    if (lightLink && darkLink) {
+      if (theme === 'dark') {
+        lightLink.disabled = true;
+        darkLink.disabled = false;
+      } else {
+        lightLink.disabled = false;
+        darkLink.disabled = true;
+      }
+    }
+
+    document.documentElement.style.visibility = "visible";
+  } catch (e) {
+    document.documentElement.style.visibility = "visible";
+    console.error('Theme init failed', e);
+  }
+})();</script>
+  </head>
+  <body
+    class="sidebar-collapsible"
+    data-default-collapsed="false"
+    data-copy-code-enabled="false" data-spa-enabled="true" data-source-file="docs/index.md">
+
+    <a href="#main-content" class="skip-link">skipToContent</a>
+
+    
+    
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          
+            <h1><a href="./">
+                EduDaily
+              </a></h1>
+          
+          <span class="mobile-view sidebar-menu-button float-right">
+            
+<svg class="lucide-icon icon-menu " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-menu"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M4 5h16" />
+  <path d="M4 12h16" />
+  <path d="M4 19h16" />
+</svg>
+
+          </span>
+        </div>
+        <div class="sidebar-top-group">
+          
+          
+          
+          
+        </div>
+        
+
+<nav class="sidebar-nav" aria-label="mainNavigation">
+  <ul>
+    
+      <li class="active" >
+      
+        <a href="./" class="active "
+          >
+          
+          <span class="nav-item-title">
+            EduDaily — 每日教育资讯智能检索与分析系统
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+  </ul>
+</nav>
+        <div class="sidebar-bottom-group mt-auto">
+          
+          
+          
+          
+        </div>
+      </aside>
+      
+      <div class="main-content-wrapper">
+        
+        
+          <header class="page-header">
+            <div class="header-left">
+              
+                <button id="sidebar-toggle-button" class="sidebar-toggle-button"
+                  aria-label="toggleSidebar">
+                  
+<svg class="lucide-icon icon-chevron-left " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-left"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m15 18-6-6 6-6" />
+</svg>
+
+                </button>
+              
+              <div class="header-titles-wrapper">
+                <span class="header-title">
+                  EduDaily — 每日教育资讯智能检索与分析系统
+                </span>
+              </div>
+            </div>
+            <div class="header-right">
+              
+                
+
+
+<div class="docmd-options-menu">
+    
+    <button class="docmd-search-trigger" aria-label="search">
+        
+<svg class="lucide-icon icon-search " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-search"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m21 21-4.34-4.34" />
+  <circle cx="11" cy="11" r="8" />
+</svg>
+
+        <span class="search-label">search</span>
+        <span class="search-keys"><kbd class="docmd-kbd">⌘</kbd><kbd class="docmd-kbd">K</kbd></span>
+    </button>
+    
+
+    
+
+    
+
+    
+    <button class="theme-toggle-button" aria-label="toggleTheme">
+        
+<svg class="lucide-icon icon-sun icon-sun" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-sun"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <circle cx="12" cy="12" r="4" />
+  <path d="M12 2v2" />
+  <path d="M12 20v2" />
+  <path d="m4.93 4.93 1.41 1.41" />
+  <path d="m17.66 17.66 1.41 1.41" />
+  <path d="M2 12h2" />
+  <path d="M20 12h2" />
+  <path d="m6.34 17.66-1.41 1.41" />
+  <path d="m19.07 4.93-1.41 1.41" />
+</svg>
+ 
+<svg class="lucide-icon icon-moon icon-moon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-moon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
+</svg>
+
+    </button>
+    
+
+    
+</div>
+
+              
+            </div>
+          </header>
+        
+        <div class="content-theme-cover">
+          <main class="content-area" id="main-content">
+            <div class="content-layout">
+              <div class="main-content">
+                <div class="docmd-breadcrumbs-row">
+                  <div id="docmd-raw-markdown" data-content="%23%20EduDaily%20%E2%80%94%20%E6%AF%8F%E6%97%A5%E6%95%99%E8%82%B2%E8%B5%84%E8%AE%AF%E6%99%BA%E8%83%BD%E6%A3%80%E7%B4%A2%E4%B8%8E%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F%0A%0A!%5BEduDaily%20%E6%95%99%E8%82%B2%E8%B5%84%E8%AE%AF%E6%99%BA%E8%83%BD%E6%A3%80%E7%B4%A2%E4%B8%8E%E5%88%86%E6%9E%90%5D(assets%2Fbranding%2Freadme-hero.png)%0A%0A%E4%B8%80%E4%B8%AA**%E9%9D%A2%E5%90%91%E6%95%99%E8%82%B2%E5%B7%A5%E4%BD%9C%E8%80%85**%E7%9A%84%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%AF%8F%E6%97%A5%E8%B5%84%E8%AE%AF%E8%81%9A%E5%90%88%E4%B8%8E%E6%99%BA%E8%83%BD%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F%E3%80%82%E8%AE%BE%E5%AE%9A%E5%85%B3%E6%B3%A8%E7%9A%84%E4%BF%A1%E6%81%AF%E6%BA%90%EF%BC%8C%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96%E5%BD%93%E6%97%A5%E6%9C%80%E6%96%B0%E6%95%99%E8%82%B2%E8%B5%84%E8%AE%AF%EF%BC%8CAI%20%E8%87%AA%E5%8A%A8%E6%8F%90%E7%82%BC%E3%80%81%E7%B4%A2%E5%BC%95%E3%80%81%E7%94%9F%E6%88%90%E7%BB%93%E6%9E%84%E5%8C%96%E6%97%A5%E6%8A%A5%EF%BC%8C%E5%B9%B6**%E4%B8%80%E9%94%AE%E9%80%82%E9%85%8D%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E3%80%81%E5%B0%8F%E7%BA%A2%E4%B9%A6%E3%80%81%E6%8A%96%E9%9F%B3%E3%80%81%E6%92%AD%E5%AE%A2%E7%AD%89%E5%A4%9A%E7%A7%8D%E5%B9%B3%E5%8F%B0**%E3%80%82%0A%0A**%E4%BD%A0%E4%B8%8D%E9%9C%80%E8%A6%81%E4%BC%9A%E7%BC%96%E7%A8%8B**%E2%80%94%E2%80%94%E5%8F%AA%E9%9C%80%E8%A6%81%E8%B7%9F%E7%9D%80%E4%B8%8B%E9%9D%A2%E7%9A%84%E6%AD%A5%E9%AA%A4%E5%81%9A%EF%BC%8C10%20%E5%88%86%E9%92%9F%E5%B0%B1%E8%83%BD%E8%B7%91%E8%B5%B7%E6%9D%A5%E3%80%82%0A%0A---%0A%0A%23%23%20%E5%BD%93%E5%89%8D%E7%89%88%E6%9C%AC%E4%BA%AE%E7%82%B9%0A%0A-%20**Windows%20%E6%A1%8C%E9%9D%A2%E7%89%88**%EF%BC%9A%E6%94%AF%E6%8C%81%E6%89%93%E5%8C%85%E4%B8%BA%E5%AE%89%E8%A3%85%E5%8C%85%EF%BC%8C%E5%AE%89%E8%A3%85%E5%90%8E%E5%8F%AF%E4%BB%8E%E6%A1%8C%E9%9D%A2%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F%E5%90%AF%E5%8A%A8%EF%BC%8C%E4%B8%8D%E9%9C%80%E8%A6%81%E7%94%A8%E6%88%B7%E6%89%8B%E5%8A%A8%E6%89%93%E5%BC%80%E7%BB%88%E7%AB%AF%E3%80%82%0A-%20**%E8%AE%BE%E7%BD%AE%E9%A1%B5**%EF%BC%9A%E9%A6%96%E9%A1%B5%E5%8F%AF%E8%BF%9B%E5%85%A5%E7%8B%AC%E7%AB%8B%E8%AE%BE%E7%BD%AE%E9%A1%B5%EF%BC%8C%E7%BB%9F%E4%B8%80%E7%AE%A1%E7%90%86%20API%20Key%E3%80%81%E6%95%B0%E6%8D%AE%E7%9B%AE%E5%BD%95%E3%80%81.txt%20%E7%9F%A5%E8%AF%86%E5%BA%93%E7%9B%AE%E5%BD%95%E5%92%8C%20RAG%20%E9%80%9A%E9%81%93%E6%A3%80%E4%BF%AE%E3%80%82%0A-%20**%E5%A4%9A%20API%20Key%20%E7%AE%A1%E7%90%86**%EF%BC%9A%E6%AF%8F%E4%B8%AA%20Key%20%E9%83%BD%E5%8F%AF%E4%BB%A5%E5%91%BD%E5%90%8D%EF%BC%9B%E9%A1%B5%E9%9D%A2%E5%8F%AA%E6%98%BE%E7%A4%BA%E8%84%B1%E6%95%8F%E5%BD%A2%E5%BC%8F%EF%BC%8C%E7%9C%9F%E5%AE%9E%20Key%20%E4%BF%9D%E5%AD%98%E5%9C%A8%E7%B3%BB%E7%BB%9F%E5%87%AD%E6%8D%AE%E7%AE%A1%E7%90%86%E5%99%A8%E4%B8%AD%E3%80%82%0A-%20**RAG%20%E9%80%9A%E9%81%93%E6%A3%80%E4%BF%AE**%EF%BC%9A%E5%8F%AF%E6%A3%80%E6%9F%A5%20API%20Key%E3%80%81%E6%9C%AC%E5%9C%B0%E5%B5%8C%E5%85%A5%E6%A8%A1%E5%9E%8B%E3%80%81SQLite%E3%80%81Chroma%EF%BC%8C%E5%B9%B6%E6%94%AF%E6%8C%81%E9%87%8D%E6%96%B0%E5%8A%A0%E8%BD%BD%E7%9F%A5%E8%AF%86%E5%BA%93%E5%92%8C%E9%87%8D%E5%BB%BA%E5%90%91%E9%87%8F%E5%BA%93%E3%80%82%0A-%20**%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B**%EF%BC%9A%E7%AC%AC%E4%B8%80%E6%AD%A5%E4%BC%9A%E5%BC%95%E5%AF%BC%E7%94%A8%E6%88%B7%E5%89%8D%E5%BE%80%20DeepSeek%20API%20Keys%20%E9%A1%B5%E9%9D%A2%E5%88%9B%E5%BB%BA%20Key%EF%BC%8C%E5%B9%B6%E7%94%A8%E5%A4%A7%E7%99%BD%E8%AF%9D%E8%AF%B4%E6%98%8E%20Key%20%E7%9A%84%E7%94%A8%E9%80%94%E3%80%81%E4%BF%9D%E5%AF%86%E5%92%8C%E4%BD%99%E9%A2%9D%E8%A6%81%E6%B1%82%E3%80%82%0A%0A---%0A%0A%3E%20**%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%A3%B0%E6%98%8E**%EF%BC%9A%E6%9C%AC%E9%A1%B9%E7%9B%AE%E6%98%AF%E5%9F%BA%E4%BA%8E%20%5B**KnowledgeVault**%5D(https%3A%2F%2Fgithub.com%2FVinceli-9527%2FKnowledgeVault)%20%E2%80%94%E2%80%94%20%E4%B8%80%E4%B8%AA%E9%80%9A%E7%94%A8%20RAG%20%E7%9F%A5%E8%AF%86%E5%BA%93%E6%A3%80%E7%B4%A2%E4%B8%8E%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F%20%E2%80%94%E2%80%94%20%E8%A1%8D%E7%94%9F%E8%80%8C%E6%9D%A5%E7%9A%84**%E6%95%99%E8%82%B2%E9%A2%86%E5%9F%9F%E4%B8%93%E7%94%A8%E5%88%86%E6%94%AF**%E3%80%82EduDaily%20%E7%BB%A7%E6%89%BF%E4%BA%86%20KnowledgeVault%20%E7%9A%84%E6%A0%B8%E5%BF%83%20RAG%20%E7%AE%A1%E9%81%93%E6%9E%B6%E6%9E%84%EF%BC%88%E5%8A%A0%E8%BD%BD%E2%86%92%E5%88%86%E5%9D%97%E2%86%92%E6%8A%BD%E5%8F%96%E2%86%92%E5%B5%8C%E5%85%A5%E2%86%92%E6%A3%80%E7%B4%A2%E2%86%92%E7%94%9F%E6%88%90%E2%86%92%E8%AF%84%E4%BC%B0%EF%BC%89%EF%BC%8C%E5%B9%B6%E5%9C%A8%E6%AD%A4%E5%9F%BA%E7%A1%80%E4%B8%8A%E9%92%88%E5%AF%B9**%E6%95%99%E8%82%B2%E5%B7%A5%E4%BD%9C%E8%80%85%E6%AF%8F%E6%97%A5%E8%B5%84%E8%AE%AF%E8%8E%B7%E5%8F%96**%E7%9A%84%E9%9C%80%E6%B1%82%E8%BF%9B%E8%A1%8C%E4%BA%86%E4%B8%93%E9%A1%B9%E6%94%B9%E9%80%A0%EF%BC%8C%E5%8C%85%E6%8B%AC%EF%BC%9A%E6%96%B0%E5%A2%9E%E4%BF%A1%E6%81%AF%E6%BA%90%E7%AE%A1%E7%90%86%E3%80%81%E4%B8%80%E9%94%AE%E6%97%A5%E6%8A%A5%E6%8A%93%E5%8F%96%E3%80%81%E6%95%99%E8%82%B2%E5%AE%9E%E4%BD%93%E6%8A%BD%E5%8F%96%E3%80%81%E8%B5%84%E8%AE%AF%E6%BA%AF%E6%BA%90%E5%BD%92%E6%A1%A3%E3%80%81%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%E3%80%81%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E9%80%82%E9%85%8D%E3%80%81%E5%AE%9A%E6%97%B6%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E8%A1%8C%E7%AD%89%E5%8A%9F%E8%83%BD%E3%80%82%E5%A6%82%E6%9E%9C%E4%BD%A0%E9%9C%80%E8%A6%81%E4%B8%80%E4%B8%AA%E9%80%9A%E7%94%A8%E9%A2%86%E5%9F%9F%E7%9A%84%E7%9F%A5%E8%AF%86%E5%BA%93%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F%EF%BC%8C%E8%AF%B7%E8%AE%BF%E9%97%AE%E6%BA%90%E9%A1%B9%E7%9B%AE%20%5BKnowledgeVault%5D(https%3A%2F%2Fgithub.com%2FVinceli-9527%2FKnowledgeVault)%E3%80%82%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E7%9B%AE%E5%BD%95%0D%0A%0D%0A-%20%5B%E4%BD%A0%E8%83%BD%E7%94%A8%E5%AE%83%E5%81%9A%E4%BB%80%E4%B9%88%5D(%23%E4%BD%A0%E8%83%BD%E7%94%A8%E5%AE%83%E5%81%9A%E4%BB%80%E4%B9%88)%0D%0A-%20%5B%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82%5D(%23%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82)%0D%0A-%20%5B5%20%E5%88%86%E9%92%9F%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%5D(%235-%E5%88%86%E9%92%9F%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B)%0D%0A-%20%5BWeb%20%E7%95%8C%E9%9D%A2%E6%8C%87%E5%8D%97%5D(%23web-%E7%95%8C%E9%9D%A2%E6%8C%87%E5%8D%97)%0D%0A-%20%5B%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%EF%BC%88%E8%BF%9B%E9%98%B6%E5%8A%9F%E8%83%BD%EF%BC%89%5D(%23%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%8A%9F%E8%83%BD)%0D%0A%20%20-%20%5B%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%5D(%23%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90-batch_processor)%0D%0A%20%20-%20%5B%E5%AE%9A%E6%97%B6%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%5D(%23%E5%AE%9A%E6%97%B6%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C-scheduler)%0D%0A%20%20-%20%5B%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E9%80%82%E9%85%8D%5D(%23%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E9%80%82%E9%85%8D-template_engine)%0D%0A%20%20-%20%5B%E4%B8%80%E9%94%AE%E5%A4%8D%E5%88%B6%E5%88%B0%E5%89%AA%E8%B4%B4%E6%9D%BF%5D(%23%E4%B8%80%E9%94%AE%E5%A4%8D%E5%88%B6%E5%88%B0%E5%89%AA%E8%B4%B4%E6%9D%BF-clipboard)%0D%0A%20%20-%20%5B%E5%8F%91%E9%80%81%E8%8D%89%E7%A8%BF%E5%88%B0%E5%B9%B3%E5%8F%B0%5D(%23%E5%8F%91%E9%80%81%E8%8D%89%E7%A8%BF%E5%88%B0%E5%B9%B3%E5%8F%B0-publisher)%0D%0A-%20%5B%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E6%A0%BC%E5%BC%8F%E8%AF%B4%E6%98%8E%5D(%23%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E6%A0%BC%E5%BC%8F%E8%AF%B4%E6%98%8E)%0D%0A-%20%5B%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%E7%BC%96%E5%86%99%E6%8C%87%E5%8D%97%5D(%23%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%E7%BC%96%E5%86%99%E6%8C%87%E5%8D%97)%0D%0A-%20%5B%E7%BD%91%E5%9D%80%E6%8F%90%E7%82%BC%E5%8A%9F%E8%83%BD%5D(%23%E7%BD%91%E5%9D%80%E6%8F%90%E7%82%BC%E5%8A%9F%E8%83%BD)%0D%0A-%20%5B%E4%BF%A1%E6%81%AF%E6%BA%90%E7%AE%A1%E7%90%86%20%26%20%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5%5D(%23%E4%BF%A1%E6%81%AF%E6%BA%90%E7%AE%A1%E7%90%86--%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5)%0D%0A-%20%5B%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%5D(%23%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84)%0D%0A-%20%5BAPI%20%E6%8E%A5%E5%8F%A3%5D(%23api-%E6%8E%A5%E5%8F%A3)%0D%0A-%20%5B%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6%5D(%23%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6)%0D%0A-%20%5B%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84%5D(%23%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84)%0D%0A-%20%5B%E5%8F%AF%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0%5D(%23%E5%8F%AF%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0)%0D%0A-%20%5B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%5D(%23%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)%0D%0A-%20%5B%E8%AE%B8%E5%8F%AF%E8%AF%81%5D(%23%E8%AE%B8%E5%8F%AF%E8%AF%81)%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E4%BD%A0%E8%83%BD%E7%94%A8%E5%AE%83%E5%81%9A%E4%BB%80%E4%B9%88%0D%0A%0D%0A-%20**%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5**%20%E2%80%94%20%E8%AE%BE%E5%AE%9A%E6%95%99%E8%82%B2%E8%B5%84%E8%AE%AF%E7%BD%91%E7%AB%99%E4%B8%BA%E4%BF%A1%E6%81%AF%E6%BA%90%EF%BC%8C%E7%82%B9%E4%B8%80%E4%B8%AA%E6%8C%89%E9%92%AE%EF%BC%88%E6%88%96%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%EF%BC%89%E8%87%AA%E5%8A%A8%E6%8A%93%E5%8F%96%E4%BB%8A%E6%97%A5%E5%8F%91%E5%B8%83%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%0D%0A-%20**AI%20%E8%87%AA%E5%8A%A8%E6%8F%90%E7%82%BC%E5%BD%92%E6%A1%A3**%20%E2%80%94%20%E6%96%87%E7%AB%A0%E5%86%85%E5%AE%B9%E7%BB%8F%20LLM%20%E6%8F%90%E7%82%BC%E4%B8%BA%E7%BB%93%E6%9E%84%E5%8C%96%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%EF%BC%8C%E8%87%AA%E5%8A%A8%E5%88%86%E5%9D%97%E3%80%81%E5%90%91%E9%87%8F%E5%8C%96%E3%80%81%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95%0D%0A-%20**%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%E7%94%9F%E6%88%90%E6%97%A5%E6%8A%A5**%20%E2%80%94%20%E5%9C%A8%E7%BD%91%E9%A1%B5%E4%B8%8A%E7%82%B9%E4%B8%80%E4%B8%AA%E6%8C%89%E9%92%AE%EF%BC%8C%E6%89%AB%E6%8F%8F%E6%89%80%E6%9C%89%E6%9C%AA%E5%A4%84%E7%90%86%E6%96%87%E7%AB%A0%EF%BC%8C%E4%B8%80%E6%AC%A1%E6%80%A7%E7%94%9F%E6%88%90%E5%BD%93%E5%A4%A9%E6%97%A5%E6%8A%A5%E6%91%98%E8%A6%81%EF%BC%8C%E5%AE%9E%E6%97%B6%E6%98%BE%E7%A4%BA%E5%A4%84%E7%90%86%E8%BF%9B%E5%BA%A6%0D%0A-%20**%E5%A4%9A%E5%B9%B3%E5%8F%B0%E4%B8%80%E9%94%AE%E9%80%82%E9%85%8D**%20%E2%80%94%20%E5%90%8C%E4%B8%80%E4%BB%BD%E5%86%85%E5%AE%B9%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E3%80%81%E5%B0%8F%E7%BA%A2%E4%B9%A6%E3%80%81%E6%8A%96%E9%9F%B3%E8%84%9A%E6%9C%AC%E3%80%81%E6%92%AD%E5%AE%A2%E5%8F%A3%E6%92%AD%E7%A8%BF%E5%9B%9B%E7%A7%8D%E7%89%88%E6%9C%AC%EF%BC%8C%E7%BD%91%E9%A1%B5%E4%B8%8A%E7%9B%B4%E6%8E%A5%E9%80%89%E6%8B%A9%E5%92%8C%E9%A2%84%E8%A7%88%0D%0A-%20**%E4%B8%80%E9%94%AE%E5%A4%8D%E5%88%B6**%20%E2%80%94%20%E7%BD%91%E9%A1%B5%E5%86%85%E7%BD%AE%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%B7%A5%E5%85%B7%EF%BC%8C%E9%80%89%E6%8B%A9%E5%B9%B3%E5%8F%B0%E5%92%8C%E6%97%A5%E6%9C%9F%E5%8D%B3%E5%8F%AF%E5%A4%8D%E5%88%B6%E6%97%A5%E6%8A%A5%E5%86%85%E5%AE%B9%EF%BC%8C%E4%B9%9F%E5%8F%AF%E8%87%AA%E7%94%B1%E7%B2%98%E8%B4%B4%E6%96%87%E6%9C%AC%E5%90%8E%E5%A4%8D%E5%88%B6%0D%0A-%20**%E5%AE%9A%E6%97%B6%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C**%20%E2%80%94%20%E5%9C%A8%E7%BD%91%E9%A1%B5%E4%B8%8A%E8%AE%BE%E5%AE%9A%E6%AF%8F%E6%97%A5%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4%EF%BC%8C%E9%85%8D%E7%BD%AE%E8%87%AA%E5%8A%A8%E4%BF%9D%E5%AD%98%E5%88%B0%E6%B5%8F%E8%A7%88%E5%99%A8%EF%BC%9B%E9%85%8D%E5%90%88%E5%90%8E%E5%8F%B0%20%60scheduler.py%60%20%E5%AE%9E%E7%8E%B0%E5%85%A8%E8%87%AA%E5%8A%A8%E8%BF%90%E8%BD%AC%0D%0A-%20**%E8%B5%84%E8%AE%AF%E5%8F%AF%E6%BA%AF%E6%BA%90**%20%E2%80%94%20%E6%AF%8F%E6%9D%A1%E5%85%A5%E5%BA%93%E6%96%87%E6%A1%A3%E6%A0%87%E6%B3%A8%E6%9D%A5%E6%BA%90%E7%BD%91%E7%AB%99%E5%92%8C%E5%8F%91%E5%B8%83%E6%97%A5%E6%9C%9F%EF%BC%8C%E9%9A%8F%E6%97%B6%E8%BF%BD%E6%BA%AF%E5%88%B0%E5%8E%9F%E5%A7%8B%E5%87%BA%E5%A4%84%0D%0A-%20**%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E6%9F%A5%E8%AF%A2**%20%E2%80%94%20%E5%83%8F%E8%81%8A%E5%A4%A9%E4%B8%80%E6%A0%B7%E6%8F%90%E9%97%AE%EF%BC%8C%E7%B3%BB%E7%BB%9F%E4%BB%8E%E7%9F%A5%E8%AF%86%E5%BA%93%E4%B8%AD%E6%A3%80%E7%B4%A2%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%EF%BC%8C%E7%94%9F%E6%88%90%E5%B8%A6%E5%BC%95%E7%94%A8%E6%9D%A5%E6%BA%90%E7%9A%84%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A%0D%0A-%20**%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3%E5%8D%B3%E7%94%A8**%20%E2%80%94%20%E6%8B%96%E6%8B%BD%20%60.txt%60%20%E6%96%87%E4%BB%B6%E5%88%B0%E7%BD%91%E9%A1%B5%EF%BC%88%E6%94%BF%E7%AD%96%E6%96%87%E4%BB%B6%E3%80%81%E6%95%99%E7%A0%94%E6%8A%A5%E5%91%8A%E7%AD%89%EF%BC%89%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%B4%A2%E5%BC%95%0D%0A-%20**%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4**%20%E2%80%94%20%E6%8A%A5%E5%91%8A%E5%8F%91%E9%80%81%E5%88%B0%E4%BA%91%E7%AB%AF%20API%20%E5%89%8D%EF%BC%8C%E8%87%AA%E5%8A%A8%E9%9A%90%E8%97%8F%E6%89%8B%E6%9C%BA%E5%8F%B7%E3%80%81%E8%BA%AB%E4%BB%BD%E8%AF%81%E7%AD%89%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%0D%0A-%20**%E5%85%A8%E8%BF%87%E7%A8%8B%E5%8F%AF%E8%A7%86%E5%8C%96**%20%E2%80%94%20%E5%9C%A8%E7%BD%91%E9%A1%B5%E4%B8%8A%E6%9F%A5%E7%9C%8B%E5%AE%8C%E6%95%B4%E7%9A%84%20Prompt%20%E6%98%AF%E5%A6%82%E4%BD%95%E7%BB%84%E8%A3%85%E7%9A%84%EF%BC%8C%E5%BA%95%E9%83%A8%E6%97%A5%E5%BF%97%E9%9D%A2%E6%9D%BF%E8%AE%B0%E5%BD%95%E6%AF%8F%E4%B8%80%E6%AC%A1%E6%93%8D%E4%BD%9C%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82%0D%0A%0D%0A%7C%20%E4%BD%A0%E9%9C%80%E8%A6%81%E6%9C%89%20%7C%20%E8%AF%B4%E6%98%8E%20%7C%0D%0A%7C---------%7C------%7C%0D%0A%7C%20**%E4%B8%80%E5%8F%B0%E7%94%B5%E8%84%91**%20%7C%20Windows%20%2F%20Mac%20%2F%20Linux%20%E9%83%BD%E5%8F%AF%E4%BB%A5%20%7C%0D%0A%7C%20**Python%203.10%2B**%20%7C%20%5Bpython.org%5D(https%3A%2F%2Fwww.python.org%2Fdownloads%2F)%20%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%20%7C%0D%0A%7C%20**DeepSeek%20API%20Key**%20%7C%20%5Bplatform.deepseek.com%5D(https%3A%2F%2Fplatform.deepseek.com%2F)%20%E6%B3%A8%E5%86%8C%E8%8E%B7%E5%8F%96%EF%BC%88%E6%96%B0%E7%94%A8%E6%88%B7%E6%9C%89%E5%85%8D%E8%B4%B9%E9%A2%9D%E5%BA%A6%EF%BC%89%20%7C%0D%0A%7C%20**%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5**%20%7C%20%E8%B0%83%E7%94%A8%20DeepSeek%20API%20%E6%97%B6%E9%9C%80%E8%A6%81%20%7C%0D%0A%0D%0A%3E%20%E4%B8%8D%E9%9C%80%E8%A6%81%20GPU%EF%BC%8C%E4%B8%8D%E9%9C%80%E8%A6%81%20Docker%EF%BC%8C%E4%B8%8D%E9%9C%80%E8%A6%81%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%8D%E5%8A%A1%E3%80%82%E6%89%80%E6%9C%89%E7%BB%84%E4%BB%B6%E9%83%BD%E5%9C%A8%E6%9C%AC%E5%9C%B0%E8%BF%90%E8%A1%8C%E3%80%82%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%205%20%E5%88%86%E9%92%9F%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%0D%0A%0D%0A%23%23%23%20%E7%AC%AC%201%20%E6%AD%A5%EF%BC%9A%E4%B8%8B%E8%BD%BD%E9%A1%B9%E7%9B%AE%0D%0A%0D%0A%60%60%60bash%0D%0Agit%20clone%20https%3A%2F%2Fgithub.com%2FVinceli-9527%2FEduDaily.git%0D%0Acd%20EduDaily%0D%0A%60%60%60%0D%0A%0D%0A%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%B2%A1%E6%9C%89%20Git%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E5%9C%A8%20GitHub%20%E9%A1%B5%E9%9D%A2%E7%82%B9%E5%87%BB%E7%BB%BF%E8%89%B2%E7%9A%84%E3%80%8CCode%E3%80%8D%E6%8C%89%E9%92%AE%20%E2%86%92%E3%80%8CDownload%20ZIP%E3%80%8D%EF%BC%8C%E8%A7%A3%E5%8E%8B%E5%90%8E%E8%BF%9B%E5%85%A5%E6%96%87%E4%BB%B6%E5%A4%B9%E3%80%82%0D%0A%0D%0A%23%23%23%20%E7%AC%AC%202%20%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%0D%0A%0D%0A%E6%89%93%E5%BC%80**%E7%BB%88%E7%AB%AF**%EF%BC%88Windows%20%E6%8C%89%20%60Win%2BR%60%20%E8%BE%93%E5%85%A5%20%60cmd%60%EF%BC%8CMac%20%E6%89%93%E5%BC%80%E3%80%8C%E7%BB%88%E7%AB%AF%E3%80%8D%EF%BC%89%EF%BC%8C%E8%BF%9B%E5%85%A5%E9%A1%B9%E7%9B%AE%E6%96%87%E4%BB%B6%E5%A4%B9%E5%90%8E%E8%BF%90%E8%A1%8C%EF%BC%9A%0D%0A%0D%0A%60%60%60bash%0D%0Apip%20install%20-r%20requirements.txt%0D%0A%60%60%60%0D%0A%0D%0A%3E%20%E5%A6%82%E6%9E%9C%E6%8F%90%E7%A4%BA%20%60pip%60%20%E6%89%BE%E4%B8%8D%E5%88%B0%EF%BC%8C%E8%AF%95%E8%AF%95%20%60pip3%20install%20-r%20requirements.txt%60%E3%80%82%0D%0A%0D%0A%E9%A6%96%E6%AC%A1%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BC%9A%E8%87%AA%E5%8A%A8%E4%B8%8B%E8%BD%BD%E4%B8%80%E4%B8%AA%E7%BA%A6%20100MB%20%E7%9A%84%E4%B8%AD%E6%96%87%20Embedding%20%E6%A8%A1%E5%9E%8B%EF%BC%8C%E4%B9%8B%E5%90%8E%E5%B0%B1%E4%B8%8D%E9%9C%80%E8%A6%81%E5%86%8D%E4%B8%8B%E8%BD%BD%E4%BA%86%E3%80%82%0D%0A%0D%0A%23%23%23%20%E7%AC%AC%203%20%E6%AD%A5%EF%BC%9A%E9%85%8D%E7%BD%AE%20API%20Key%0D%0A%0D%0A%60%60%60bash%0D%0A%23%20%E5%A4%8D%E5%88%B6%E4%B8%80%E4%BB%BD%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%0D%0Acp%20.env.example%20.env%0D%0A%60%60%60%0D%0A%0D%0A%E7%84%B6%E5%90%8E%E7%94%A8**%E8%AE%B0%E4%BA%8B%E6%9C%AC**%E6%89%93%E5%BC%80%20%60.env%60%20%E6%96%87%E4%BB%B6%EF%BC%8C%E6%8A%8A%E9%87%8C%E9%9D%A2%E7%9A%84%E5%86%85%E5%AE%B9%E6%94%B9%E6%88%90%E4%BD%A0%E7%9C%9F%E5%AE%9E%E7%9A%84%20API%20Key%EF%BC%9A%0D%0A%0D%0A%60%60%60%0D%0ADEEPSEEK_API_KEY%20%3D%20%22sk-%E4%BD%A0%E7%9A%84%E7%9C%9F%E5%AE%9E%E5%AF%86%E9%92%A5%22%0D%0A%60%60%60%0D%0A%0D%0A%3E%20%60.env%60%20%E6%96%87%E4%BB%B6%E5%B7%B2%E5%8A%A0%E5%85%A5%20%60.gitignore%60%EF%BC%8C%E4%B8%8D%E4%BC%9A%E8%A2%AB%E4%B8%8A%E4%BC%A0%E5%88%B0%20GitHub%EF%BC%8C%E6%94%BE%E5%BF%83%E3%80%82%0D%0A%0D%0A%23%23%23%20%E7%AC%AC%204%20%E6%AD%A5%EF%BC%9A%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%0D%0A%0D%0A%60%60%60bash%0D%0Apython%20server.py%0D%0A%60%60%60%0D%0A%0D%0A%E7%9C%8B%E5%88%B0%20%60EduDaily%20server%20ready!%20Open%20http%3A%2F%2Flocalhost%3A8765%60%20%E5%B0%B1%E8%AF%B4%E6%98%8E%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%E4%BA%86%E3%80%82%0D%0A%0D%0A%23%23%23%20%E7%AC%AC%205%20%E6%AD%A5%EF%BC%9A%E6%89%93%E5%BC%80%E6%B5%8F%E8%A7%88%E5%99%A8%0D%0A%0D%0A%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9C%B0%E5%9D%80%E6%A0%8F%E8%BE%93%E5%85%A5%20**%60http%3A%2F%2Flocalhost%3A8765%60**%EF%BC%8C%E5%B0%B1%E8%83%BD%E7%9C%8B%E5%88%B0%E7%95%8C%E9%9D%A2%E4%BA%86%E3%80%82%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20Web%20%E7%95%8C%E9%9D%A2%E6%8C%87%E5%8D%97%0D%0A%0D%0A%E6%89%93%E5%BC%80%E7%BD%91%E9%A1%B5%E5%90%8E%EF%BC%8C%E9%A1%B6%E9%83%A8%E7%8A%B6%E6%80%81%E6%A0%8F%E6%98%BE%E7%A4%BA%E4%B8%89%E4%B8%AA%E7%8A%B6%E6%80%81%E6%8C%87%E7%A4%BA%E7%81%AF%EF%BC%88%E7%AE%A1%E9%81%93%E5%B0%B1%E7%BB%AA%E3%80%81API%20Key%20%E9%85%8D%E7%BD%AE%E7%8A%B6%E6%80%81%E3%80%81%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95%E6%95%B0%E9%87%8F%EF%BC%89%E3%80%82%E4%B8%8B%E6%96%B9%E6%98%AF%20**%E5%9B%9B%E4%B8%AA%E4%B8%BB%E5%AF%BC%E8%88%AA%E6%A0%87%E7%AD%BE%E9%A1%B5**%EF%BC%8C%E5%88%86%E5%88%AB%E5%AF%B9%E5%BA%94%E4%B8%8D%E5%90%8C%E7%9A%84%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97%EF%BC%9A%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%23%20%F0%9F%94%8D%20%E9%97%AE%E7%AD%94%E5%88%86%E6%9E%90%0D%0A%0D%0A%E8%BE%93%E5%85%A5%E9%97%AE%E9%A2%98%EF%BC%8CAI%20%E4%BB%8E%E7%9F%A5%E8%AF%86%E5%BA%93%E4%B8%AD%E6%A3%80%E7%B4%A2%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%E5%B9%B6%E7%94%9F%E6%88%90%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A%E3%80%82%0D%0A%0D%0A-%20**%E6%90%9C%E7%B4%A2%E6%A1%86**%EF%BC%9A%E8%BE%93%E5%85%A5%E4%BD%A0%E5%85%B3%E5%BF%83%E7%9A%84%E6%95%99%E8%82%B2%E9%97%AE%E9%A2%98%EF%BC%88%E5%A6%82%22%E6%9C%80%E6%96%B0%E9%AB%98%E8%80%83%E6%94%B9%E9%9D%A9%E6%94%BF%E7%AD%96%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8F%98%E5%8C%96%EF%BC%9F%22%EF%BC%89%EF%BC%8C%E7%82%B9%E5%87%BB%E3%80%8C%E5%BC%80%E5%A7%8B%E5%88%86%E6%9E%90%E3%80%8D%E6%88%96%E6%8C%89%E5%9B%9E%E8%BD%A6%0D%0A-%20**%E7%AE%A1%E9%81%93%E8%BF%9B%E5%BA%A6%E6%9D%A1**%EF%BC%9A%E5%AE%9E%E6%97%B6%E6%98%BE%E7%A4%BA%205%20%E4%B8%AA%E5%A4%84%E7%90%86%E9%98%B6%E6%AE%B5%EF%BC%88%E8%BE%93%E5%85%A5%20%E2%86%92%20%E6%A3%80%E7%B4%A2%20%E2%86%92%20Prompt%20%E6%9E%84%E5%BB%BA%20%E2%86%92%20LLM%20%E7%94%9F%E6%88%90%20%E2%86%92%20%E6%8A%A5%E5%91%8A%E8%BE%93%E5%87%BA%EF%BC%89%0D%0A-%20**%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A**%EF%BC%9AAI%20%E7%94%9F%E6%88%90%E7%9A%84%20Markdown%20%E6%A0%BC%E5%BC%8F%E4%B8%93%E4%B8%9A%E6%8A%A5%E5%91%8A%EF%BC%8C%E9%A1%B6%E9%83%A8%E6%A0%87%E6%B3%A8%E7%94%9F%E6%88%90%E8%80%97%E6%97%B6%E5%92%8C%E4%BD%BF%E7%94%A8%E7%9A%84%E5%88%86%E6%9E%90%E8%A7%86%E8%A7%92%0D%0A-%20**Prompt%20%E5%B7%A5%E7%A8%8B**%EF%BC%9A%E6%9F%A5%E7%9C%8B%E5%AE%8C%E6%95%B4%E7%9A%84%20System%20Prompt%20%E5%92%8C%20User%20Prompt%EF%BC%8C%E4%B8%8D%E5%90%8C%E9%A2%9C%E8%89%B2%E6%A0%87%E6%B3%A8%E6%A3%80%E7%B4%A2%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%88%E7%B4%AB%E8%89%B2%EF%BC%89%E3%80%81%E7%BB%93%E6%9E%84%E5%8C%96%E6%95%B0%E6%8D%AE%EF%BC%88%E7%BB%BF%E8%89%B2%EF%BC%89%E3%80%81%E7%94%A8%E6%88%B7%E6%9F%A5%E8%AF%A2%EF%BC%88%E6%A9%99%E8%89%B2%EF%BC%89%0D%0A-%20**%E6%A3%80%E7%B4%A2%E7%BB%93%E6%9E%9C**%EF%BC%9A%E5%B1%95%E7%A4%BA%E6%A3%80%E7%B4%A2%E5%88%B0%E7%9A%84%E6%96%87%E6%A1%A3%E7%89%87%E6%AE%B5%EF%BC%8C%E6%AF%8F%E4%B8%AA%E7%89%87%E6%AE%B5%E6%98%BE%E7%A4%BA%E7%9B%B8%E5%85%B3%E5%BA%A6%E5%88%86%E6%95%B0%E5%92%8C%E6%9D%A5%E6%BA%90%E6%96%87%E6%A1%A3%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%23%20%F0%9F%93%9A%20%E7%9F%A5%E8%AF%86%E5%BA%93%E7%AE%A1%E7%90%86%0D%0A%0D%0A%E7%AE%A1%E7%90%86%E6%89%80%E6%9C%89%E5%B7%B2%E7%B4%A2%E5%BC%95%E7%9A%84%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%E3%80%82%0D%0A%0D%0A-%20**%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3**%EF%BC%9A%E6%8B%96%E6%8B%BD%20%60.txt%60%20%E6%96%87%E4%BB%B6%E5%88%B0%E4%B8%8A%E4%BC%A0%E5%8C%BA%E5%9F%9F%EF%BC%8C%E6%88%96%E7%82%B9%E5%87%BB%E6%8C%89%E9%92%AE%E9%80%89%E6%8B%A9%E6%96%87%E4%BB%B6%0D%0A-%20**%E6%96%87%E6%A1%A3%E5%88%97%E8%A1%A8**%EF%BC%9A%E6%9F%A5%E7%9C%8B%E5%B7%B2%E4%B8%8A%E4%BC%A0%E7%9A%84%E6%96%87%E6%A1%A3%E5%90%8D%E7%A7%B0%E3%80%81%E5%88%86%E5%9D%97%E6%95%B0%E3%80%81%E5%AD%97%E6%95%B0%E3%80%81%E5%88%9B%E5%BB%BA%E6%97%A5%E6%9C%9F%0D%0A-%20**%E5%88%A0%E9%99%A4**%EF%BC%9A%E6%AF%8F%E4%B8%AA%E6%96%87%E6%A1%A3%E6%97%81%E6%9C%89%E5%88%A0%E9%99%A4%E6%8C%89%E9%92%AE%EF%BC%88%E5%B8%A6%E7%A1%AE%E8%AE%A4%E6%8F%90%E7%A4%BA%EF%BC%89%0D%0A-%20**%E7%BC%96%E5%86%99%E6%8C%87%E5%8D%97**%EF%BC%9A%E5%B1%95%E5%BC%80%E3%80%8C%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99%E9%AB%98%E8%B4%A8%E9%87%8F%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%EF%BC%9F%E3%80%8D%E6%9F%A5%E7%9C%8B%E6%A0%BC%E5%BC%8F%E8%A7%84%E8%8C%83%E5%92%8C%E6%8E%A8%E8%8D%90%E6%A8%A1%E6%9D%BF%0D%0A-%20**%E7%BD%91%E5%9D%80%E6%8F%90%E7%82%BC**%EF%BC%88%F0%9F%AA%84%20%E9%9D%A2%E6%9D%BF%EF%BC%89%EF%BC%9A%E7%B2%98%E8%B4%B4%E7%BD%91%E5%9D%80%EF%BC%88%E6%AF%8F%E8%A1%8C%E4%B8%80%E4%B8%AA%EF%BC%89%EF%BC%8CAI%20%E8%87%AA%E5%8A%A8%E6%8A%93%E5%8F%96%E5%86%85%E5%AE%B9%E5%B9%B6%E6%8F%90%E7%82%BC%E4%B8%BA%E7%BB%93%E6%9E%84%E5%8C%96%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%EF%BC%8C%E6%8F%90%E7%82%BC%E5%AE%8C%E6%88%90%E5%90%8E%E5%8F%AF%E4%B8%80%E9%94%AE%E5%AF%BC%E5%85%A5%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%23%20%F0%9F%93%A1%20%E4%BF%A1%E6%81%AF%E6%BA%90%E4%B8%8E%E6%97%A5%E6%8A%A5%0D%0A%0D%0A%E7%AE%A1%E7%90%86%E6%95%99%E8%82%B2%E8%B5%84%E8%AE%AF%E8%AE%A2%E9%98%85%E6%BA%90%EF%BC%8C%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5%E3%80%82%0D%0A%0D%0A-%20**%E6%B7%BB%E5%8A%A0%E4%BF%A1%E6%81%AF%E6%BA%90**%EF%BC%9A%E8%BE%93%E5%85%A5%E5%90%8D%E7%A7%B0%E5%92%8C%E7%BD%91%E5%9D%80%EF%BC%88%E5%A6%82%22%E6%95%99%E8%82%B2%E9%83%A8%E5%AE%98%E7%BD%91%22%20%2B%20%60https%3A%2F%2Fwww.moe.gov.cn%2F%60%EF%BC%89%0D%0A-%20**%E4%BF%A1%E6%81%AF%E6%BA%90%E5%88%97%E8%A1%A8**%EF%BC%9A%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E5%B7%B2%E9%85%8D%E7%BD%AE%E7%9A%84%E4%BF%A1%E6%81%AF%E6%BA%90%E5%8F%8A%E5%85%B6%E5%90%8C%E6%AD%A5%E7%8A%B6%E6%80%81%EF%BC%88%E5%B7%B2%E5%90%8C%E6%AD%A5%2F%E6%9C%AA%E5%90%8C%E6%AD%A5%EF%BC%89%0D%0A-%20**%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96%E6%97%A5%E6%8A%A5**%EF%BC%9A%E7%82%B9%E5%87%BB%E7%BB%BF%E8%89%B2%E6%8C%89%E9%92%AE%EF%BC%8C%E8%87%AA%E5%8A%A8%E4%BB%8E%E6%89%80%E6%9C%89%E4%BF%A1%E6%81%AF%E6%BA%90%E6%8A%93%E5%8F%96%E4%BB%8A%E6%97%A5%E5%8F%91%E5%B8%83%E7%9A%84%E6%9C%80%E6%96%B0%E8%B5%84%E8%AE%AF%EF%BC%8CAI%20%E9%80%90%E7%AF%87%E6%8F%90%E7%82%BC%E5%B9%B6%E7%B4%A2%E5%BC%95%E5%85%A5%E5%BA%93%0D%0A-%20**%E8%8E%B7%E5%8F%96%E7%BB%93%E6%9E%9C**%EF%BC%9A%E5%B1%95%E7%A4%BA%E6%AF%8F%E7%AF%87%E6%96%87%E7%AB%A0%E7%9A%84%E6%A0%87%E9%A2%98%E3%80%81%E6%9D%A5%E6%BA%90%E3%80%81%E6%97%A5%E6%9C%9F%E3%80%81%E5%88%86%E5%9D%97%E6%95%B0%E3%80%81%E5%8E%9F%E6%96%87%E9%93%BE%E6%8E%A5%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BB%BB%E4%BD%95%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%23%20%E2%9A%99%EF%B8%8F%20%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD%0D%0A%0D%0A%E4%B8%80%E7%AB%99%E5%BC%8F%E4%BD%BF%E7%94%A8%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%E3%80%81%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E3%80%81%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%92%8C%E5%AE%9A%E6%97%B6%E9%85%8D%E7%BD%AE%E3%80%82%0D%0A%0D%0A**%F0%9F%93%8A%20%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%E5%B9%B6%E7%94%9F%E6%88%90%E5%A4%9A%E5%B9%B3%E5%8F%B0%E6%97%A5%E6%8A%A5%EF%BC%9A**%0D%0A-%20%E9%80%89%E6%8B%A9%E7%9B%AE%E6%A0%87%E5%B9%B3%E5%8F%B0%EF%BC%88%E5%85%A8%E9%83%A8%E5%B9%B3%E5%8F%B0%20%2F%20%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%20%2F%20%E5%B0%8F%E7%BA%A2%E4%B9%A6%20%2F%20%E6%8A%96%E9%9F%B3%20%2F%20%E6%92%AD%E5%AE%A2%EF%BC%89%EF%BC%8C%E5%8F%AF%E9%80%89%E3%80%8C%E5%BC%BA%E5%88%B6%E9%87%8D%E6%96%B0%E5%A4%84%E7%90%86%E5%85%A8%E9%83%A8%E6%96%87%E7%AB%A0%E3%80%8D%0D%0A-%20%E7%82%B9%E5%87%BB%E3%80%8C%E5%BC%80%E5%A7%8B%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%E3%80%8D%EF%BC%8C%E5%AE%9E%E6%97%B6%E8%BF%9B%E5%BA%A6%E6%9D%A1%E6%98%BE%E7%A4%BA%E5%A4%84%E7%90%86%E8%BF%9B%E5%BA%A6%0D%0A-%20%E5%AE%8C%E6%88%90%E5%90%8E%E5%B1%95%E7%A4%BA%E6%AF%8F%E7%AF%87%E6%96%87%E7%AB%A0%E7%9A%84%E6%91%98%E8%A6%81%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%90%84%E5%B9%B3%E5%8F%B0%E7%89%88%E6%9C%AC%E7%9A%84%E7%94%9F%E6%88%90%E7%BB%93%E6%9E%9C%0D%0A%0D%0A**%F0%9F%8E%A8%20%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%EF%BC%9A**%0D%0A-%20%E9%80%89%E6%8B%A9%E7%9B%AE%E6%A0%87%E5%B9%B3%E5%8F%B0%EF%BC%8C%E7%B2%98%E8%B4%B4%E6%88%96%E8%BE%93%E5%85%A5%E6%96%87%E6%9C%AC%E5%86%85%E5%AE%B9%0D%0A-%20%E7%82%B9%E5%87%BB%E6%8C%89%E9%92%AE%EF%BC%8CAI%20%E8%87%AA%E5%8A%A8%E5%B0%86%E5%86%85%E5%AE%B9%E6%94%B9%E5%86%99%E4%B8%BA%E9%80%82%E9%85%8D%E8%AF%A5%E5%B9%B3%E5%8F%B0%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%96%87%E6%A1%88%0D%0A-%20%E7%94%9F%E6%88%90%E7%BB%93%E6%9E%9C%E5%8F%AF%E7%9B%B4%E6%8E%A5%E9%A2%84%E8%A7%88%EF%BC%8C%E5%B9%B6%E4%B8%80%E9%94%AE%E5%A4%8D%E5%88%B6%E5%88%B0%E5%89%AA%E8%B4%B4%E6%9D%BF%0D%0A%0D%0A**%F0%9F%93%8B%20%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%B7%A5%E5%85%B7%EF%BC%9A**%0D%0A-%20%E6%8C%89%E5%B9%B3%E5%8F%B0%E5%92%8C%E6%97%A5%E6%9C%9F%E8%8E%B7%E5%8F%96%E6%9C%80%E6%96%B0%E6%97%A5%E6%8A%A5%E5%B9%B6%E5%A4%8D%E5%88%B6%E5%88%B0%E5%89%AA%E8%B4%B4%E6%9D%BF%0D%0A-%20%E6%88%96%E7%9B%B4%E6%8E%A5%E5%9C%A8%E6%96%87%E6%9C%AC%E6%A1%86%E5%86%85%E7%B2%98%E8%B4%B4%2F%E7%BC%96%E8%BE%91%E5%86%85%E5%AE%B9%EF%BC%8C%E7%82%B9%E5%87%BB%E6%8C%89%E9%92%AE%E5%A4%8D%E5%88%B6%0D%0A%0D%0A**%E2%8F%B0%20%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E9%85%8D%E7%BD%AE%EF%BC%9A**%0D%0A-%20%E5%BC%80%E5%85%B3%E6%8C%89%E9%92%AE%E5%90%AF%E7%94%A8%2F%E7%A6%81%E7%94%A8%E6%AF%8F%E6%97%A5%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%0D%0A-%20%E8%AE%BE%E5%AE%9A%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4%EF%BC%88%E5%B0%8F%E6%97%B6%20%2B%20%E5%88%86%E9%92%9F%EF%BC%89%EF%BC%8C%E9%85%8D%E7%BD%AE%E8%87%AA%E5%8A%A8%E4%BF%9D%E5%AD%98%E5%88%B0%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9C%AC%E5%9C%B0%0D%0A-%20%E9%85%8D%E5%90%88%E5%90%8E%E5%8F%B0%20%60python%20scheduler.py%60%20%E5%AE%9E%E7%8E%B0%E6%AF%8F%E5%A4%A9%E5%AE%9A%E6%97%B6%E6%8A%93%E5%8F%96%20%2B%20%E5%88%86%E6%9E%90%20%2B%20%E7%94%9F%E6%88%90%E6%97%A5%E6%8A%A5%0D%0A%0D%0A**%F0%9F%93%8B%20%E8%BF%90%E8%A1%8C%E6%97%A5%E5%BF%97%EF%BC%88%E9%A1%B5%E9%9D%A2%E5%BA%95%E9%83%A8%EF%BC%89%EF%BC%9A**%0D%0A-%20%E5%8F%AF%E6%8A%98%E5%8F%A0%E7%9A%84%E6%97%A5%E5%BF%97%E9%9D%A2%E6%9D%BF%EF%BC%8C%E8%AE%B0%E5%BD%95%E6%89%80%E6%9C%89%E6%93%8D%E4%BD%9C%E5%92%8C%20API%20%E8%B0%83%E7%94%A8%E7%9A%84%E8%AF%A6%E7%BB%86%E6%97%A5%E5%BF%97%0D%0A-%20%E6%AF%8F%E6%9D%A1%E6%97%A5%E5%BF%97%E5%B8%A6%E6%9C%89%E6%97%B6%E9%97%B4%E6%88%B3%E5%92%8C%E7%B1%BB%E5%9E%8B%E6%A0%87%E8%AF%86%EF%BC%88%E4%BF%A1%E6%81%AF%20%2F%20%E6%88%90%E5%8A%9F%20%2F%20%E8%AD%A6%E5%91%8A%20%2F%20%E9%94%99%E8%AF%AF%EF%BC%89%0D%0A-%20%E6%94%AF%E6%8C%81%E4%B8%80%E9%94%AE%E6%B8%85%E7%A9%BA%EF%BC%8C%E6%9C%80%E5%A4%9A%E4%BF%9D%E7%95%99%20500%20%E6%9D%A1%E8%AE%B0%E5%BD%95%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%EF%BC%88%E8%BF%9B%E9%98%B6%E5%8A%9F%E8%83%BD%EF%BC%89%0D%0A%0D%0A%E9%99%A4%E4%BA%86%20Web%20%E7%95%8C%E9%9D%A2%EF%BC%8CEduDaily%20%E8%BF%98%E6%8F%90%E4%BE%9B%E4%BA%86%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%EF%BC%8C%E9%80%82%E5%90%88%E6%AF%8F%E5%A4%A9%E5%9B%BA%E5%AE%9A%E6%97%B6%E9%97%B4%E8%AE%A9%E7%94%B5%E8%84%91%E8%87%AA%E5%8A%A8%E5%B8%AE%E4%BD%A0%E8%B7%91%E3%80%82**%E4%BB%A5%E4%B8%8B%E5%8A%9F%E8%83%BD%E5%A4%A7%E9%83%A8%E5%88%86%E4%B9%9F%E5%B7%B2%E5%9C%A8%20Web%20%E7%95%8C%E9%9D%A2%E7%9A%84%E3%80%8C%E2%9A%99%EF%B8%8F%20%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD%E3%80%8D%E6%A0%87%E7%AD%BE%E9%A1%B5%E4%B8%AD%E6%8F%90%E4%BE%9B**%EF%BC%8C%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%9B%B4%E5%96%9C%E6%AC%A2%E7%82%B9%E6%8C%89%E9%92%AE%E8%80%8C%E4%B8%8D%E6%98%AF%E6%95%B2%E5%91%BD%E4%BB%A4%EF%BC%8C%E7%9B%B4%E6%8E%A5%E6%89%93%E5%BC%80%E7%BD%91%E9%A1%B5%E5%8D%B3%E5%8F%AF%E4%BD%BF%E7%94%A8%E3%80%82%0D%0A%0D%0A%23%23%23%20%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%20(%60batch_processor%60)%0D%0A%0D%0A%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%9C%89%E5%BE%88%E5%A4%9A%E7%AF%87%E5%B7%B2%E6%8A%93%E5%8F%96%E4%BD%86%E8%BF%98%E6%B2%A1%E7%94%9F%E6%88%90%E6%91%98%E8%A6%81%E7%9A%84%E6%96%87%E7%AB%A0%EF%BC%8C%E5%8F%AF%E4%BB%A5%E4%B8%80%E9%94%AE%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%EF%BC%9A%0D%0A%0D%0A%60%60%60bash%0D%0A%23%20%E6%89%AB%E6%8F%8F%E6%89%80%E6%9C%89%E6%9C%AA%E5%A4%84%E7%90%86%E7%9A%84%E6%96%87%E7%AB%A0%EF%BC%8C%E9%80%90%E7%AF%87%E7%94%9F%E6%88%90%20AI%20%E6%91%98%E8%A6%81%EF%BC%8C%E8%BE%93%E5%87%BA%E6%97%A5%E6%8A%A5%0D%0Apython%20batch_processor.py%0D%0A%0D%0A%23%20%E6%8A%8A%E4%B9%8B%E5%89%8D%E5%B7%B2%E7%BB%8F%E5%A4%84%E7%90%86%E8%BF%87%E7%9A%84%E4%B9%9F%E9%87%8D%E6%96%B0%E6%9D%A5%E4%B8%80%E9%81%8D%0D%0Apython%20batch_processor.py%20--force-all%0D%0A%0D%0A%23%20%E5%90%8C%E6%97%B6%E7%94%9F%E6%88%90%E5%A4%9A%E5%B9%B3%E5%8F%B0%E7%89%88%E6%9C%AC%EF%BC%88%E5%90%AB%E5%85%AC%E4%BC%97%E5%8F%B7%E3%80%81%E5%B0%8F%E7%BA%A2%E4%B9%A6%E3%80%81%E6%8A%96%E9%9F%B3%E3%80%81%E6%92%AD%E5%AE%A2%EF%BC%89%0D%0Apython%20batch_processor.py%20--platform%20all%0D%0A%0D%0A%23%20%E5%8F%AA%E7%94%9F%E6%88%90%E5%B0%8F%E7%BA%A2%E4%B9%A6%E7%89%88%E6%9C%AC%0D%0Apython%20batch_processor.py%20--platform%20xhs%0D%0A%0D%0A%23%20%E7%94%9F%E6%88%90%E6%97%A5%E6%8A%A5%E5%90%8E%E8%87%AA%E5%8A%A8%E5%A4%8D%E5%88%B6%E5%88%B0%E5%89%AA%E8%B4%B4%E6%9D%BF%0D%0Apython%20batch_processor.py%20--copy%0D%0A%0D%0A%23%20%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8%EF%BC%9A%E5%85%A8%E5%B9%B3%E5%8F%B0%20%2B%20%E8%87%AA%E5%8A%A8%E5%A4%8D%E5%88%B6%0D%0Apython%20batch_processor.py%20--platform%20all%20--copy%0D%0A%60%60%60%0D%0A%0D%0A%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BC%9A%E6%98%BE%E7%A4%BA%E5%AE%9E%E6%97%B6%E8%BF%9B%E5%BA%A6%EF%BC%9A%0D%0A%60%60%60%0D%0A%E6%89%BE%E5%88%B0%2010%20%E4%B8%AA%E6%9C%AA%E5%A4%84%E7%90%86%E7%9A%84%E6%96%87%E4%BB%B6%EF%BC%8C%E5%BC%80%E5%A7%8B%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90...%0D%0A%0D%0A%20%20%5B1%2F10%5D%20%E6%95%99%E8%82%B2%E9%83%A8_%E6%96%B0%E6%94%BF%E7%AD%96.txt%20%E2%80%94%20%E6%AD%A3%E5%9C%A8%E7%94%9F%E6%88%90%E6%91%98%E8%A6%81...%20%E2%9C%93%20(1234ms)%0D%0A%20%20%5B2%2F10%5D%20%E5%8C%97%E4%BA%AC%E5%A4%A7%E5%AD%A6_%E7%A7%91%E7%A0%94%E7%AA%81%E7%A0%B4.txt%20%E2%80%94%20%E6%AD%A3%E5%9C%A8%E7%94%9F%E6%88%90%E6%91%98%E8%A6%81...%20%E2%9C%93%20(987ms)%0D%0A%20%20...%0D%0A%0D%0A%E6%97%A5%E6%8A%A5%E5%B7%B2%E7%94%9F%E6%88%90%E4%BA%8E%3A%20output%5Cdaily_summary_2026-06-02.md%0D%0A%60%60%60%0D%0A%0D%0A%23%23%23%20%E5%AE%9A%E6%97%B6%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%20(%60scheduler%60)%0D%0A%0D%0A%E8%AE%A9%E7%94%B5%E8%84%91%E5%83%8F%E9%97%B9%E9%92%9F%E4%B8%80%E6%A0%B7%EF%BC%8C%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%9B%BA%E5%AE%9A%E6%97%B6%E9%97%B4%E8%87%AA%E5%8A%A8%E5%AE%8C%E6%88%90%E3%80%8C%E6%8A%93%E5%8F%96%20%E2%86%92%20%E5%88%86%E6%9E%90%20%E2%86%92%20%E7%94%9F%E6%88%90%E6%97%A5%E6%8A%A5%E3%80%8D%E5%85%A8%E6%B5%81%E7%A8%8B%E3%80%82%0D%0A%0D%0A%60%60%60bash%0D%0A%23%20%E5%AE%89%E8%A3%85%E5%AE%9A%E6%97%B6%E4%BE%9D%E8%B5%96%0D%0Apip%20install%20schedule%0D%0A%0D%0A%23%20%E6%AF%8F%E5%A4%A9%2007%3A00%20%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%EF%BC%88%E9%BB%98%E8%AE%A4%E6%97%B6%E9%97%B4%EF%BC%89%0D%0Apython%20scheduler.py%0D%0A%0D%0A%23%20%E4%BF%AE%E6%94%B9%E6%97%B6%E9%97%B4%EF%BC%9A%E5%9C%A8%20.env%20%E4%B8%AD%E6%B7%BB%E5%8A%A0%0D%0A%23%20%20%20SCHEDULE_TIME%20%3D%20%2208%3A30%22%0D%0A%23%20%E7%84%B6%E5%90%8E%E5%90%AF%E5%8A%A8%0D%0Apython%20scheduler.py%0D%0A%0D%0A%23%20%E4%B8%8D%E7%AD%89%E5%AE%9A%E6%97%B6%EF%BC%8C%E7%AB%8B%E5%88%BB%E8%BF%90%E8%A1%8C%E4%B8%80%E6%AC%A1%E7%9C%8B%E7%9C%8B%E6%95%88%E6%9E%9C%0D%0Apython%20scheduler.py%20--once%0D%0A%60%60%60%0D%0A%0D%0A%E5%90%AF%E5%8A%A8%E5%90%8E%E7%BB%88%E7%AB%AF%E4%BC%9A%E6%98%BE%E7%A4%BA%E4%B8%8B%E4%B8%80%E6%AC%A1%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4%EF%BC%8C%E6%8C%89%20%60Ctrl%2BC%60%20%E5%81%9C%E6%AD%A2%E3%80%82%0D%0A%0D%0A%3E%20%E8%BF%9B%E9%98%B6%E7%8E%A9%E6%B3%95%EF%BC%9A%E6%8A%8A%20%60python%20scheduler.py%60%20%E8%AE%BE%E4%B8%BA%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8%EF%BC%8C%E6%AF%8F%E5%A4%A9%E6%97%A9%E6%99%A8%E6%97%A5%E6%8A%A5%E8%87%AA%E5%8A%A8%E5%87%BA%E7%8E%B0%E5%9C%A8%20%60output%2F%60%20%E6%96%87%E4%BB%B6%E5%A4%B9%E9%87%8C%E3%80%82%0D%0A%0D%0A%23%23%23%20%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E9%80%82%E9%85%8D%20(%60template_engine%60)%0D%0A%0D%0A%E5%90%8C%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%EF%BC%8C%E4%B8%8D%E5%90%8C%E5%B9%B3%E5%8F%B0%E7%9A%84%E5%86%99%E6%B3%95%E5%AE%8C%E5%85%A8%E4%B8%8D%E5%90%8C%E3%80%82EduDaily%20%E4%BC%9A%E8%87%AA%E5%8A%A8%E7%BB%99%E4%BD%A0%E7%94%9F%E6%88%90%E5%9B%9B%E7%A7%8D%E7%89%88%E6%9C%AC%EF%BC%9A%0D%0A%0D%0A%7C%20%E5%B9%B3%E5%8F%B0%20%7C%20%E9%A3%8E%E6%A0%BC%20%7C%20%E9%80%82%E5%90%88%E5%9C%BA%E6%99%AF%20%7C%0D%0A%7C------%7C------%7C---------%7C%0D%0A%7C%20%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%20%7C%20%E4%B8%93%E4%B8%9A%E6%B7%B1%E5%BA%A6%E5%88%86%E6%9E%90%EF%BC%8C800-1200%20%E5%AD%97%EF%BC%8CMarkdown%20%E6%A0%BC%E5%BC%8F%20%7C%20%E6%95%99%E8%82%B2%E7%B1%BB%E5%85%AC%E4%BC%97%E5%8F%B7%E6%8E%A8%E6%96%87%20%7C%0D%0A%7C%20%E5%B0%8F%E7%BA%A2%E4%B9%A6%20%7C%20%E6%B4%BB%E6%B3%BC%E7%AC%94%E8%AE%B0%EF%BC%8Cemoji%20%E4%B8%B0%E5%AF%8C%EF%BC%8C%E8%AF%9D%E9%A2%98%E6%A0%87%E7%AD%BE%EF%BC%8C300-500%20%E5%AD%97%20%7C%20%E7%A2%8E%E7%89%87%E5%8C%96%E9%98%85%E8%AF%BB%EF%BC%8C%E5%90%B8%E5%BC%95%E4%BA%92%E5%8A%A8%20%7C%0D%0A%7C%20%E6%8A%96%E9%9F%B3%E8%84%9A%E6%9C%AC%20%7C%2060%20%E7%A7%92%E5%8F%A3%E6%92%AD%E8%84%9A%E6%9C%AC%EF%BC%8C%E9%BB%84%E9%87%91%203%20%E7%A7%92%E5%BC%80%E5%A4%B4%EF%BC%8C%E7%94%BB%E9%9D%A2%E6%8F%90%E7%A4%BA%20%7C%20%E7%9F%AD%E8%A7%86%E9%A2%91%E5%BD%95%E5%88%B6%E5%8F%82%E8%80%83%20%7C%0D%0A%7C%20%E6%92%AD%E5%AE%A2%E5%8F%A3%E6%92%AD%E7%A8%BF%20%7C%203-5%20%E5%88%86%E9%92%9F%E5%8F%A3%E6%92%AD%EF%BC%8C%E5%8F%A3%E8%AF%AD%E5%8C%96%EF%BC%8C%E5%B8%A6%E8%BD%AC%E5%9C%BA%E8%BF%87%E6%B8%A1%20%7C%20%E9%9F%B3%E9%A2%91%E8%8A%82%E7%9B%AE%E5%BD%95%E5%88%B6%20%7C%0D%0A%0D%0A%E4%BD%A0%E5%8F%AF%E4%BB%A5%E5%9C%A8%20%60templates%2F%60%20%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E6%89%BE%E5%88%B0%E6%AF%8F%E4%B8%AA%E5%B9%B3%E5%8F%B0%E7%9A%84%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%EF%BC%8C%E7%94%A8%E8%AE%B0%E4%BA%8B%E6%9C%AC%E6%89%93%E5%BC%80%E5%8D%B3%E5%8F%AF%E4%BF%AE%E6%94%B9%E9%A3%8E%E6%A0%BC%E3%80%82%E4%B8%8D%E9%9C%80%E8%A6%81%E6%87%82%E7%BC%96%E7%A8%8B%E3%80%82%0D%0A%0D%0A%E8%BE%93%E5%87%BA%E6%96%87%E4%BB%B6%E5%90%8D%E7%A4%BA%E4%BE%8B%EF%BC%9A%0D%0A%60%60%60%0D%0Aoutput%2Fdaily_2026-06-02_wechat.md%20%20%20%20%20%20%E2%86%90%20%E5%85%AC%E4%BC%97%E5%8F%B7%E7%89%88%0D%0Aoutput%2Fdaily_2026-06-02_xhs.txt%20%20%20%20%20%20%20%20%E2%86%90%20%E5%B0%8F%E7%BA%A2%E4%B9%A6%E7%89%88%0D%0Aoutput%2Fdaily_2026-06-02_douyin.txt%20%20%20%20%20%E2%86%90%20%E6%8A%96%E9%9F%B3%E8%84%9A%E6%9C%AC%E7%89%88%0D%0Aoutput%2Fdaily_2026-06-02_podcast.md%20%20%20%20%20%E2%86%90%20%E6%92%AD%E5%AE%A2%E7%89%88%0D%0Aoutput%2Fdaily_summary_2026-06-02.md%20%20%20%20%20%E2%86%90%20%E9%BB%98%E8%AE%A4%E6%97%A5%E6%8A%A5%EF%BC%88%E6%B1%87%E6%80%BB%E7%89%88%EF%BC%89%0D%0A%60%60%60%0D%0A%0D%0A%23%23%23%20%E4%B8%80%E9%94%AE%E5%A4%8D%E5%88%B6%E5%88%B0%E5%89%AA%E8%B4%B4%E6%9D%BF%20(%60clipboard%60)%0D%0A%0D%0A%E6%97%A5%E6%8A%A5%E7%94%9F%E6%88%90%E5%A5%BD%E4%BA%86%EF%BC%8C%E4%B8%8D%E9%9C%80%E8%A6%81%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E6%89%8B%E5%8A%A8%E5%85%A8%E9%80%89%E5%A4%8D%E5%88%B6%E3%80%82%0D%0A%0D%0A%60%60%60bash%0D%0A%23%20%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%0D%0Apip%20install%20pyperclip%0D%0A%0D%0A%23%20%E5%A4%8D%E5%88%B6%E4%BB%8A%E5%A4%A9%E7%9A%84%E9%BB%98%E8%AE%A4%E6%97%A5%E6%8A%A5%0D%0Apython%20clipboard.py%0D%0A%0D%0A%23%20%E5%A4%8D%E5%88%B6%E4%BB%8A%E5%A4%A9%E7%9A%84%E5%B0%8F%E7%BA%A2%E4%B9%A6%E7%89%88%E6%9C%AC%0D%0Apython%20clipboard.py%20--platform%20xhs%0D%0A%0D%0A%23%20%E5%A4%8D%E5%88%B6%E6%8C%87%E5%AE%9A%E6%97%A5%E6%9C%9F%E7%9A%84%E5%85%AC%E4%BC%97%E5%8F%B7%E7%89%88%E6%9C%AC%0D%0Apython%20clipboard.py%20--platform%20wechat%20--date%202026-06-02%0D%0A%0D%0A%23%20%E5%A4%8D%E5%88%B6%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%0D%0Apython%20clipboard.py%20--file%20%22output%2F%E6%9F%90%E7%AF%87%E6%96%87%E7%AB%A0.md%22%0D%0A%0D%0A%23%20%E8%B7%9F%E5%9C%A8%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%E5%90%8E%E9%9D%A2%EF%BC%9A%E5%88%86%E6%9E%90%E5%AE%8C%E8%87%AA%E5%8A%A8%E5%A4%8D%E5%88%B6%0D%0Apython%20batch_processor.py%20--platform%20xhs%20--copy%0D%0A%60%60%60%0D%0A%0D%0A%3E%20Mac%20%E7%94%A8%E6%88%B7%E6%97%A0%E9%9C%80%E9%A2%9D%E5%A4%96%E9%85%8D%E7%BD%AE%E3%80%82Windows%20%E7%94%A8%E6%88%B7%E5%BC%80%E7%AE%B1%E5%8D%B3%E7%94%A8%E3%80%82Linux%20%E7%94%A8%E6%88%B7%E5%A6%82%E6%9E%9C%E5%A4%8D%E5%88%B6%E5%A4%B1%E8%B4%A5%EF%BC%8C%E8%BF%90%E8%A1%8C%20%60sudo%20apt%20install%20xclip%60%20%E5%8D%B3%E5%8F%AF%E3%80%82%0D%0A%0D%0A%23%23%23%20%E5%8F%91%E9%80%81%E8%8D%89%E7%A8%BF%E5%88%B0%E5%B9%B3%E5%8F%B0%20(%60publisher%60)%0D%0A%0D%0A%E5%AF%B9%E4%BA%8E%E5%BC%80%E6%94%BE%20API%20%E7%9A%84%E5%B9%B3%E5%8F%B0%EF%BC%88%E5%A6%82%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%EF%BC%89%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E5%B0%86%E6%97%A5%E6%8A%A5%E5%8F%91%E9%80%81%E5%88%B0%E8%8D%89%E7%A8%BF%E7%AE%B1%E3%80%82%0D%0A%0D%0A%60%60%60bash%0D%0A%23%201.%20%E5%A4%8D%E5%88%B6%E5%87%AD%E6%8D%AE%E6%A8%A1%E6%9D%BF%0D%0Acp%20credentials.example.json%20credentials.json%0D%0A%0D%0A%23%202.%20%E7%BC%96%E8%BE%91%20credentials.json%EF%BC%8C%E5%A1%AB%E5%85%A5%E4%BD%A0%E7%9A%84%E5%B9%B3%E5%8F%B0%E5%87%AD%E6%8D%AE%0D%0A%23%20%20%20%20%EF%BC%88%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E5%87%AD%E6%8D%AE%EF%BC%8C%E8%A7%81%E4%B8%8B%E6%96%87%22%E5%B9%B3%E5%8F%B0%E6%8E%A5%E5%85%A5%E8%AF%B4%E6%98%8E%22%EF%BC%89%0D%0A%0D%0A%23%203.%20%E5%8F%91%E9%80%81%E8%8D%89%E7%A8%BF%E5%88%B0%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E8%8D%89%E7%A8%BF%E7%AE%B1%0D%0Apython%20publisher.py%20--platform%20wechat%20--file%20%22output%2Fdaily_2026-06-02_wechat.md%22%20--title%20%22%E6%95%99%E8%82%B2%E6%97%A5%E6%8A%A5%202026-06-02%22%0D%0A%0D%0A%23%204.%20%E6%88%96%E5%9C%A8%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E5%90%8E%E7%9B%B4%E6%8E%A5%E5%8F%91%E5%B8%83%0D%0Apython%20batch_processor.py%20--platform%20wechat%20--publish-draft%20wechat%0D%0A%60%60%60%0D%0A%0D%0A%23%23%23%23%20%E5%B9%B3%E5%8F%B0%E6%8E%A5%E5%85%A5%E8%AF%B4%E6%98%8E%0D%0A%0D%0A**%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%EF%BC%88%E5%8F%AF%E8%BF%90%E8%A1%8C%EF%BC%89%EF%BC%9A**%0D%0A%0D%0A%3E%20%E5%85%B7%E4%BD%93%E8%8E%B7%E5%8F%96%E6%96%B9%E6%B3%95%E5%9C%A8%E6%AF%8F%E4%B8%AA%20publisher%20%E7%B1%BB%E7%9A%84%E6%96%87%E6%A1%A3%E4%B8%AD%E6%9C%89%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E%EF%BC%8C%E8%BF%90%E8%A1%8C%20%60python%20-c%20%22from%20publisher%20import%20WeChatPublisher%3B%20help(WeChatPublisher)%22%60%20%E5%8D%B3%E5%8F%AF%E6%9F%A5%E7%9C%8B%E3%80%82%0D%0A%0D%0A1.%20%E7%99%BB%E5%BD%95%20https%3A%2F%2Fmp.weixin.qq.com%2F%20%E2%86%92%E3%80%8C%E5%BC%80%E5%8F%91%20%E2%86%92%20%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE%E3%80%8D%E8%8E%B7%E5%8F%96%20AppID%20%E5%92%8C%20AppSecret%0D%0A2.%20%E9%85%8D%E7%BD%AE%20IP%20%E7%99%BD%E5%90%8D%E5%8D%95%EF%BC%88%E6%B7%BB%E5%8A%A0%E4%BD%A0%E7%94%B5%E8%84%91%E7%9A%84%E5%85%AC%E7%BD%91%20IP%EF%BC%89%0D%0A3.%20%E8%B0%83%E7%94%A8%E6%8E%A5%E5%8F%A3%E8%8E%B7%E5%8F%96%20access_token%EF%BC%88%E7%BB%88%E7%AB%AF%E8%BF%90%E8%A1%8C%E4%BB%A5%E4%B8%8B%E5%91%BD%E4%BB%A4%EF%BC%89%EF%BC%9A%0D%0A%20%20%20%60%60%60bash%0D%0A%20%20%20curl%20%22https%3A%2F%2Fapi.weixin.qq.com%2Fcgi-bin%2Ftoken%3Fgrant_type%3Dclient_credential%26appid%3D%E4%BD%A0%E7%9A%84AppID%26secret%3D%E4%BD%A0%E7%9A%84AppSecret%22%0D%0A%20%20%20%60%60%60%0D%0A4.%20%E6%8A%8A%E8%BF%94%E5%9B%9E%E7%9A%84%20access_token%20%E5%A1%AB%E5%85%A5%20%60credentials.json%60%20%E7%9A%84%20wechat%20%E9%83%A8%E5%88%86%0D%0A%0D%0A**%E7%9F%A5%E4%B9%8E%20%26%20%E5%BE%AE%E5%8D%9A%EF%BC%88%E9%A2%84%E7%95%99%E6%8E%A5%E5%8F%A3%EF%BC%89%EF%BC%9A**%0D%0A%E7%94%B1%E4%BA%8E%E8%BF%99%E4%B8%A4%E4%B8%AA%E5%B9%B3%E5%8F%B0%E6%B2%A1%E6%9C%89%E5%85%AC%E5%BC%80%E7%9A%84%E8%8D%89%E7%A8%BF%20API%EF%BC%8C%E5%BD%93%E5%89%8D%E6%8F%90%E4%BE%9B%E6%A1%86%E6%9E%B6%E6%8E%A5%E5%8F%A3%E3%80%82%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%9C%89%E7%9B%B8%E5%85%B3%20API%20%E6%9D%83%E9%99%90%EF%BC%8C%E5%8F%AF%E5%9C%A8%20%60publisher.py%60%20%E4%B8%AD%E5%A1%AB%E5%85%A5%E5%AF%B9%E5%BA%94%E5%AE%9E%E7%8E%B0%E3%80%82%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E6%A0%BC%E5%BC%8F%E8%AF%B4%E6%98%8E%0D%0A%0D%0A%E6%AF%8F%E4%B8%AA%E5%B9%B3%E5%8F%B0%E7%89%88%E6%9C%AC%E7%94%9F%E6%88%90%E7%9A%84%E5%86%85%E5%AE%B9%E5%85%B7%E6%9C%89%E4%B8%8D%E5%90%8C%E7%89%B9%E7%82%B9%E3%80%82%E4%BB%A5%E4%B8%8B%E6%98%AF%E5%90%84%E5%B9%B3%E5%8F%B0%E8%BE%93%E5%87%BA%E7%A4%BA%E4%BE%8B%E7%89%87%E6%AE%B5%E7%9A%84%E5%AF%B9%E6%AF%94%EF%BC%9A%0D%0A%0D%0A**%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E7%89%88%EF%BC%88Markdown%EF%BC%89%E2%80%94%E2%80%94%20%E6%B7%B1%E5%BA%A6%E4%B8%93%E4%B8%9A**%0D%0A%60%60%60markdown%0D%0A%3E%20%E6%95%99%E8%82%B2%E9%83%A8%E5%8F%91%E5%B8%83AI%E8%B5%8B%E8%83%BD%E6%95%99%E8%82%B2%E8%A1%8C%E5%8A%A8%E6%8C%87%E5%AF%BC%E6%84%8F%E8%A7%81%EF%BC%8C%E8%AE%A1%E5%88%92%E5%88%B02027%E5%B9%B4%E5%BB%BA%E8%AE%BE100%E4%B8%AAAI%E6%95%99%E8%82%B2%E7%A4%BA%E8%8C%83%E5%8C%BA%E3%80%82%0D%0A%0D%0A%23%23%20%E4%B8%80%E3%80%81%E6%94%BF%E7%AD%96%E6%A0%B8%E5%BF%83%EF%BC%9AAI%E5%A6%82%E4%BD%95%E8%BF%9B%E5%85%A5%E8%AF%BE%E5%A0%82%EF%BC%9F%0D%0A%0D%0A%E6%95%99%E8%82%B2%E9%83%A8%E6%AD%A4%E6%AC%A1%E5%8F%91%E5%B8%83%E7%9A%84%E6%84%8F%E8%A7%81%E6%98%8E%E7%A1%AE%E4%BA%86%E4%B8%89%E4%B8%AA%E9%87%8D%E7%82%B9%E6%96%B9%E5%90%91...%0D%0A%60%60%60%0D%0A%0D%0A**%E5%B0%8F%E7%BA%A2%E4%B9%A6%E7%89%88%20%E2%80%94%E2%80%94%20%E6%B4%BB%E6%B3%BC%E4%BA%B2%E5%88%87**%0D%0A%60%60%60%0D%0A%F0%9F%93%9A%20%E6%95%99%E8%82%B2%E9%83%A8%E6%94%BE%E5%A4%A7%E6%8B%9B%EF%BC%81AI%E8%A6%81%E8%BF%9B%E5%85%A5%E5%85%A8%E5%9B%BD%E8%AF%BE%E5%A0%82%E5%95%A6%E2%80%BC%EF%B8%8F%0D%0A%0D%0A%E2%9C%A8%20%E6%A0%B8%E5%BF%83%E6%B6%88%E6%81%AF%EF%BC%9A%E6%95%99%E8%82%B2%E9%83%A8%E8%A6%81%E5%9C%A82027%E5%B9%B4%E5%89%8D%E5%BB%BA%E6%88%90100%E4%B8%AAAI%E6%95%99%E8%82%B2%E7%A4%BA%E8%8C%83%E5%8C%BA%0D%0A%0D%0A%E2%94%81%E2%94%81%E2%94%81%E2%94%81%E2%94%81%E2%94%81%E2%94%81%E2%94%81%E2%94%81%E2%94%81%E2%94%81%E2%94%81%E2%94%81%0D%0A%0D%0A%F0%9F%93%8C%20%E5%88%92%E9%87%8D%E7%82%B9%0D%0A1%EF%B8%8F%E2%83%A3%20%E8%A6%86%E7%9B%96%E4%BB%8E%E5%B0%8F%E5%AD%A6%E5%88%B0%E5%A4%A7%E5%AD%A6%E6%89%80%E6%9C%89%E5%AD%A6%E6%AE%B5%0D%0A2%EF%B8%8F%E2%83%A3%20%E4%B8%AD%E8%A5%BF%E9%83%A8%E5%9C%B0%E5%8C%BA%E6%98%AF%E9%87%8D%E7%82%B9%E6%94%AF%E6%8C%81%E5%AF%B9%E8%B1%A1%0D%0A3%EF%B8%8F%E2%83%A3%20AI%E5%B0%86%E7%94%A8%E5%9C%A8%E6%95%99%E5%AD%A6%E3%80%81%E8%AF%84%E4%BB%B7%E3%80%81%E7%AE%A1%E7%90%86%E5%85%A8%E6%B5%81%E7%A8%8B%0D%0A%0D%0A%23%E6%95%99%E8%82%B2%E7%83%AD%E7%82%B9%20%23AI%E6%95%99%E8%82%B2%20%23%E6%95%99%E8%82%B2%E6%94%BF%E7%AD%96%20%23%E5%AE%B6%E9%95%BF%E5%BF%85%E7%9C%8B%0D%0A%60%60%60%0D%0A%0D%0A**%E6%8A%96%E9%9F%B3%E8%84%9A%E6%9C%AC%E7%89%88%20%E2%80%94%E2%80%94%20%E5%BF%AB%E8%8A%82%E5%A5%8F%E5%8F%A3%E6%92%AD**%0D%0A%60%60%60%0D%0A%5B%E7%94%BB%E9%9D%A2%EF%BC%9A%E4%B8%BB%E6%92%AD%E5%87%BA%E9%95%9C%EF%BC%8C%E8%A1%A8%E6%83%85%E6%83%8A%E8%AE%B6%5D%0D%0A%EF%BC%88%E8%AF%AD%E9%80%9F%EF%BC%9A%E5%BF%AB%EF%BC%89%E6%95%99%E8%82%B2%E9%83%A8%E5%88%9A%E5%88%9A%E5%AE%A3%E5%B8%83%EF%BC%81%E5%88%B02027%E5%B9%B4%EF%BC%8C%E5%85%A8%E5%9B%BD%E5%B0%86%E6%9C%89100%E4%B8%AAAI%E6%95%99%E8%82%B2%E7%A4%BA%E8%8C%83%E5%8C%BA%EF%BC%81%0D%0A%0D%0A%5B%E7%94%BB%E9%9D%A2%EF%BC%9A%E5%88%87%E6%8D%A2%E8%AF%BE%E5%A0%82%E5%9C%BA%E6%99%AF%2FAI%E6%A6%82%E5%BF%B5%E5%9B%BE%5D%0D%0A%EF%BC%88%E6%AD%A3%E5%B8%B8%EF%BC%89%E8%BF%99%E6%AC%A1%E7%9A%84%E6%94%BF%E7%AD%96%E8%A6%86%E7%9B%96%E4%BB%8E%E5%B0%8F%E5%AD%A6%E5%88%B0%E5%A4%A7%E5%AD%A6...%0D%0A%60%60%60%0D%0A%0D%0A**%E6%92%AD%E5%AE%A2%E5%8F%A3%E6%92%AD%E7%A8%BF%E7%89%88%20%E2%80%94%E2%80%94%20%E5%A8%93%E5%A8%93%E9%81%93%E6%9D%A5**%0D%0A%60%60%60%0D%0A%E5%90%84%E4%BD%8D%E6%97%A9%E4%B8%8A%E5%A5%BD%EF%BC%8C%E6%AC%A2%E8%BF%8E%E6%94%B6%E5%90%AC%20EduDaily%20%E6%95%99%E8%82%B2%E6%97%A9%E6%8A%A5%E3%80%82%0D%0A%0D%0A%E4%BB%8A%E5%A4%A9%E6%98%AF%202026%20%E5%B9%B4%206%20%E6%9C%88%202%20%E6%97%A5%EF%BC%8C%E6%9C%AC%E6%9C%9F%E7%9A%84%E6%95%99%E8%82%B2%E5%85%B3%E9%94%AE%E8%AF%8D%E6%98%AF%EF%BC%9AAI%20%E8%B5%8B%E8%83%BD%E6%95%99%E8%82%B2%E3%80%82%0D%0A%0D%0A%E5%85%88%E6%9D%A5%E7%9C%8B%E7%9C%8B%E4%BB%8A%E5%A4%A9%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E6%95%99%E8%82%B2%E5%8A%A8%E6%80%81%E2%80%94%E2%80%94%0D%0A%0D%0A%F0%9F%93%8C%20%E6%95%99%E8%82%B2%E9%83%A8%E5%8F%91%E5%B8%83%20AI%20%E8%B5%8B%E8%83%BD%E6%95%99%E8%82%B2%E8%A1%8C%E5%8A%A8%E6%8C%87%E5%AF%BC%E6%84%8F%E8%A7%81%0D%0A%E5%B0%B1%E5%9C%A8%E6%98%A8%E5%A4%A9%EF%BC%8C%E6%95%99%E8%82%B2%E9%83%A8%E6%AD%A3%E5%BC%8F%E5%8D%B0%E5%8F%91%E4%BA%86...%0D%0A%60%60%60%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%E7%BC%96%E5%86%99%E6%8C%87%E5%8D%97%0D%0A%0D%0A%23%23%23%20%E5%9F%BA%E6%9C%AC%E8%A6%81%E6%B1%82%0D%0A-%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%EF%BC%9A%60.txt%60%20%E7%BA%AF%E6%96%87%E6%9C%AC%0D%0A-%20%E7%BC%96%E7%A0%81%EF%BC%9A%60UTF-8%60%0D%0A-%20**%E6%96%87%E4%BB%B6%E7%AC%AC%E4%B8%80%E8%A1%8C%E4%BC%9A%E8%87%AA%E5%8A%A8%E6%88%90%E4%B8%BA%E6%96%87%E6%A1%A3%E6%A0%87%E9%A2%98**%0D%0A%0D%0A%23%23%23%20%E6%AE%B5%E8%90%BD%E8%A7%84%E5%88%99%0D%0A-%20%E2%9C%85%20**%E4%B8%8D%E5%90%8C%E4%B8%BB%E9%A2%98%E4%B9%8B%E9%97%B4%E7%94%A8%E7%A9%BA%E8%A1%8C%E9%9A%94%E5%BC%80**%0D%0A-%20%E2%9C%85%20%E6%AF%8F%E4%B8%AA%E6%AE%B5%E8%90%BD%E4%BF%9D%E6%8C%81%E5%9C%A8%20**100-800%20%E5%AD%97**%E4%B9%8B%E9%97%B4%0D%0A-%20%E2%9C%85%20%E6%AE%B5%E8%90%BD%E5%86%85%E4%BF%A1%E6%81%AF%E5%B0%BD%E9%87%8F%E7%8B%AC%E7%AB%8B%E5%AE%8C%E6%95%B4%0D%0A-%20%E2%9D%8C%20%E4%B8%8D%E8%A6%81%E5%87%A0%E5%8D%83%E5%AD%97%E4%B8%8D%E5%88%86%E6%AE%B5%EF%BC%8C%E4%B8%8D%E8%A6%81%E8%B6%85%E7%9F%AD%E6%AE%B5%E8%90%BD%EF%BC%88%E5%B0%91%E4%BA%8E%2050%20%E5%AD%97%E4%BC%9A%E8%A2%AB%E8%B7%B3%E8%BF%87%EF%BC%89%0D%0A%0D%0A%23%23%23%20%E6%8E%A8%E8%8D%90%E6%A0%BC%E5%BC%8F%0D%0A%0D%0A%60%60%60%0D%0A2025%E5%B9%B4%E9%AB%98%E8%80%83%E7%BB%BC%E5%90%88%E6%94%B9%E9%9D%A9%E6%94%BF%E7%AD%96%E8%A7%A3%E8%AF%BB%0D%0A%0D%0A%E4%B8%80%E3%80%81%E6%94%B9%E9%9D%A9%E8%83%8C%E6%99%AF%0D%0A2025%E5%B9%B4%E9%AB%98%E8%80%83%E7%BB%BC%E5%90%88%E6%94%B9%E9%9D%A9%E6%98%AF%E5%9C%A8%E6%96%B0%E8%AF%BE%E7%A8%8B%E6%94%B9%E9%9D%A9%E5%92%8C%E9%AB%98%E8%80%83%E8%AF%84%E4%BB%B7%E4%BD%93%E7%B3%BB%E6%94%B9%E9%9D%A9%E7%9A%84%E5%9F%BA%E7%A1%80%E4%B8%8A...%0D%0A%0D%0A%E4%BA%8C%E3%80%81%E4%B8%BB%E8%A6%81%E5%8F%98%E5%8C%96%0D%0A1.%20%E8%80%83%E8%AF%95%E7%A7%91%E7%9B%AE%E8%B0%83%E6%95%B4%EF%BC%9A%E5%AE%9E%E8%A1%8C%223%2B1%2B2%22%E6%A8%A1%E5%BC%8F...%0D%0A2.%20%E6%8B%9B%E7%94%9F%E5%BD%95%E5%8F%96%E6%96%B9%E5%BC%8F%EF%BC%9A%E7%BB%BC%E5%90%88%E8%AF%84%E4%BB%B7%E3%80%81%E5%A4%9A%E5%85%83%E5%BD%95%E5%8F%96...%0D%0A%0D%0A%E4%B8%89%E3%80%81%E5%AF%B9%E5%AD%A6%E6%A0%A1%E7%9A%84%E5%BD%B1%E5%93%8D%0D%0A%E9%AB%98%E4%B8%AD%E5%AD%A6%E6%A0%A1%E9%9C%80%E8%A6%81%E5%9C%A8%E8%AF%BE%E7%A8%8B%E8%AE%BE%E7%BD%AE%E3%80%81%E5%B8%88%E8%B5%84%E9%85%8D%E7%BD%AE%E3%80%81%E6%95%99%E5%AD%A6%E7%AE%A1%E7%90%86%E7%AD%89%E6%96%B9%E9%9D%A2%E5%81%9A%E5%87%BA%E8%B0%83%E6%95%B4...%0D%0A%0D%0A%E5%9B%9B%E3%80%81%E5%AF%B9%E6%95%99%E5%B8%88%E5%92%8C%E5%AD%A6%E7%94%9F%E7%9A%84%E5%BB%BA%E8%AE%AE%0D%0A%E6%95%99%E5%B8%88%E5%BA%94%E5%85%B3%E6%B3%A8%E6%96%B0%E8%AF%BE%E6%A0%87%E7%9A%84%E6%A0%B8%E5%BF%83%E7%B4%A0%E5%85%BB%E8%A6%81%E6%B1%82%EF%BC%8C%E8%B0%83%E6%95%B4%E6%95%99%E5%AD%A6%E7%AD%96%E7%95%A5...%0D%0A%60%60%60%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E7%BD%91%E5%9D%80%E6%8F%90%E7%82%BC%E5%8A%9F%E8%83%BD%0D%0A%0D%0A%E4%B8%8D%E6%83%B3%E6%89%8B%E5%8A%A8%E5%86%99%E6%96%87%E6%A1%A3%EF%BC%9F%E7%9B%B4%E6%8E%A5%E6%8A%8A%E7%BD%91%E5%9D%80%E8%B4%B4%E8%BF%9B%E6%9D%A5%EF%BC%8CAI%20%E5%B8%AE%E4%BD%A0%E6%90%9E%E5%AE%9A%E3%80%82%0D%0A%0D%0A%23%23%23%20%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%0D%0A1.%20%E5%B1%95%E5%BC%80%E3%80%8C**%F0%9F%AA%84%20%E6%83%B3%E5%81%B7%E6%87%92%EF%BC%9F%E8%AF%95%E8%AF%95%E8%BE%93%E5%85%A5%E7%BD%91%E5%9D%80%E5%B8%AE%E4%BD%A0%E5%BF%AB%E9%80%9F%E6%9E%84%E6%88%90%E7%9F%A5%E8%AF%86%E5%BA%93**%E3%80%8D%E9%9D%A2%E6%9D%BF%0D%0A2.%20%E7%B2%98%E8%B4%B4%E7%BD%91%E5%9D%80%EF%BC%8C%E6%AF%8F%E8%A1%8C%E4%B8%80%E4%B8%AA%EF%BC%88%E6%94%AF%E6%8C%81%E6%96%B0%E9%97%BB%E3%80%81%E7%99%BE%E7%A7%91%E3%80%81%E5%8D%9A%E5%AE%A2%E7%AD%89%E7%BD%91%E9%A1%B5%EF%BC%89%0D%0A3.%20%E7%82%B9%E5%87%BB%E3%80%8C**%E6%8A%93%E5%8F%96%E5%B9%B6%E6%8F%90%E7%82%BC**%E3%80%8D%EF%BC%8C%E7%B3%BB%E7%BB%9F%E8%87%AA%E5%8A%A8%E6%8A%93%E5%8F%96%20%2B%20AI%20%E6%8F%90%E7%82%BC%0D%0A4.%20%E6%8F%90%E7%82%BC%E5%AE%8C%E6%88%90%E5%90%8E%E7%82%B9%E5%87%BB%E3%80%8C**%E5%AF%BC%E5%85%A5%E5%B7%B2%E6%8F%90%E7%82%BC%E7%9A%84%E6%96%87%E6%A1%A3**%E3%80%8D%E5%8A%A0%E8%BD%BD%E5%88%B0%E7%9F%A5%E8%AF%86%E5%BA%93%0D%0A%0D%0A%23%23%23%20%E4%B8%8E%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5%E7%9A%84%E5%8C%BA%E5%88%AB%0D%0A%0D%0A%7C%20%E5%8A%9F%E8%83%BD%20%7C%20%E7%BD%91%E5%9D%80%E6%8F%90%E7%82%BC%20%7C%20%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5%20%7C%0D%0A%7C------%7C---------%7C---------%7C%0D%0A%7C%20%E8%A7%A6%E5%8F%91%E6%96%B9%E5%BC%8F%20%7C%20%E6%89%8B%E5%8A%A8%E7%B2%98%E8%B4%B4%E7%BD%91%E5%9D%80%20%7C%20%E4%B8%80%E9%94%AE%E8%87%AA%E5%8A%A8%E6%8A%93%E5%8F%96%20%7C%0D%0A%7C%20%E5%A4%84%E7%90%86%E8%8C%83%E5%9B%B4%20%7C%20%E4%BB%85%E5%A4%84%E7%90%86%E4%BD%A0%E7%B2%98%E8%B4%B4%E7%9A%84%E7%BD%91%E5%9D%80%20%7C%20%E5%A4%84%E7%90%86%E6%89%80%E6%9C%89%E5%B7%B2%E9%85%8D%E7%BD%AE%E7%9A%84%E4%BF%A1%E6%81%AF%E6%BA%90%20%7C%0D%0A%7C%20%E6%97%A5%E6%9C%9F%E7%AD%9B%E9%80%89%20%7C%20%E4%B8%8D%E7%AD%9B%E9%80%89%EF%BC%8C%E5%85%A8%E9%83%A8%E6%8F%90%E7%82%BC%20%7C%20%E5%8F%AA%E6%8A%93%E5%8F%96%E5%BD%93%E6%97%A5%E5%8F%91%E5%B8%83%E7%9A%84%E6%96%87%E7%AB%A0%20%7C%0D%0A%7C%20%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF%20%7C%20%E4%B8%B4%E6%97%B6%E8%A1%A5%E5%85%85%E7%89%B9%E5%AE%9A%E8%B5%84%E6%96%99%20%7C%20%E6%AF%8F%E6%97%A5%E4%BE%8B%E8%A1%8C%E8%B5%84%E8%AE%AF%E6%94%B6%E9%9B%86%20%7C%0D%0A%7C%20%E6%BA%AF%E6%BA%90%E6%A0%87%E6%B3%A8%20%7C%20%E6%97%A0%E7%89%B9%E6%AE%8A%E6%A0%87%E6%B3%A8%20%7C%20%E8%87%AA%E5%8A%A8%E6%A0%87%E6%B3%A8%E6%9D%A5%E6%BA%90%E5%92%8C%E6%97%A5%E6%9C%9F%20%7C%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E4%BF%A1%E6%81%AF%E6%BA%90%E7%AE%A1%E7%90%86%20%26%20%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5%0D%0A%0D%0A%23%23%23%20%E6%B7%BB%E5%8A%A0%E4%BF%A1%E6%81%AF%E6%BA%90%0D%0A%0D%0A1.%20%E5%B1%95%E5%BC%80%E3%80%8C**%F0%9F%93%A1%20%E4%BF%A1%E6%81%AF%E6%BA%90%E7%AE%A1%E7%90%86%20%26%20%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5**%E3%80%8D%E9%9D%A2%E6%9D%BF%0D%0A2.%20%E5%9C%A8%E8%BE%93%E5%85%A5%E6%A1%86%E4%B8%AD%E5%A1%AB%E5%86%99%E4%BF%A1%E6%81%AF%E6%BA%90%E5%90%8D%E7%A7%B0%E5%92%8C%E7%BD%91%E5%9D%80%EF%BC%8C%E4%BE%8B%E5%A6%82%EF%BC%9A%0D%0A%20%20%20-%20%E5%90%8D%E7%A7%B0%EF%BC%9A%60%E6%95%99%E8%82%B2%E9%83%A8%E5%AE%98%E7%BD%91%60%0D%0A%20%20%20-%20%E7%BD%91%E5%9D%80%EF%BC%9A%60https%3A%2F%2Fwww.moe.gov.cn%2F%60%0D%0A3.%20%E7%82%B9%E5%87%BB%E3%80%8C%E6%B7%BB%E5%8A%A0%E3%80%8D%0D%0A%0D%0A%23%23%23%20%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96%E6%97%A5%E6%8A%A5%0D%0A%0D%0A%E7%82%B9%E5%87%BB%E3%80%8C**%F0%9F%93%B0%20%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96%E4%BB%8A%E6%97%A5%E6%97%A5%E6%8A%A5**%E3%80%8D%E6%8C%89%E9%92%AE%EF%BC%8C%E7%B3%BB%E7%BB%9F%E4%BC%9A%E8%87%AA%E5%8A%A8%EF%BC%9A%0D%0A%0D%0A%60%60%60%0D%0A%E5%AF%B9%E6%AF%8F%E4%B8%AA%E4%BF%A1%E6%81%AF%E6%BA%90%EF%BC%9A%0D%0A%20%201.%20%E6%8A%93%E5%8F%96%E9%A6%96%E9%A1%B5%20%E2%86%92%20%E6%8F%90%E5%8F%96%E6%96%87%E6%9C%AC%E5%86%85%E5%AE%B9%0D%0A%20%202.%20AI%20%E8%AF%86%E5%88%AB%E5%BD%93%E6%97%A5%E5%8F%91%E5%B8%83%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%EF%BC%88%E6%A0%87%E9%A2%98%E3%80%81%E9%93%BE%E6%8E%A5%E3%80%81%E6%97%A5%E6%9C%9F%EF%BC%89%0D%0A%20%203.%20%E9%80%90%E7%AF%87%E6%8A%93%E5%8F%96%E5%85%A8%E6%96%87%20%E2%86%92%20AI%20%E6%8F%90%E7%82%BC%E4%B8%BA%E7%BB%93%E6%9E%84%E5%8C%96%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%0D%0A%20%204.%20%E4%BF%9D%E5%AD%98%E8%87%B3%E6%9C%AC%E5%9C%B0%20data%2Fsample_docs%2F%20%E5%B9%B6%E8%87%AA%E5%8A%A8%E7%B4%A2%E5%BC%95%E5%88%B0%E7%9F%A5%E8%AF%86%E5%BA%93%0D%0A%20%205.%20%E6%96%87%E4%BB%B6%E5%90%8D%E6%A0%87%E6%B3%A8%20%5B%E6%9D%A5%E6%BA%90%E7%BD%91%E7%AB%99%5D%20%E6%97%A5%E6%9C%9F%EF%BC%8C%E7%A1%AE%E4%BF%9D%E5%8F%AF%E6%BA%AF%E6%BA%90%0D%0A%60%60%60%0D%0A%0D%0A%23%23%23%20%E6%BA%AF%E6%BA%90%E6%9C%BA%E5%88%B6%0D%0A%0D%0A%E6%AF%8F%E6%9D%A1%E5%85%A5%E5%BA%93%E6%96%87%E6%A1%A3%E7%9A%84%E6%96%87%E4%BB%B6%E5%90%8D%E6%A0%BC%E5%BC%8F%E4%B8%BA%EF%BC%9A%0D%0A%60%60%60%0D%0A%5B%E6%95%99%E8%82%B2%E9%83%A8%E5%AE%98%E7%BD%91%5D%202026-05-29%20%7C%20%E5%85%B3%E4%BA%8E%E6%B7%B1%E5%8C%96%E9%AB%98%E4%B8%AD%E8%AF%BE%E7%A8%8B%E6%94%B9%E9%9D%A9%E7%9A%84%E6%8C%87%E5%AF%BC%E6%84%8F%E8%A7%81%0D%0A%60%60%60%0D%0A%0D%0A%E4%BB%8E%E7%9F%A5%E8%AF%86%E5%BA%93%E4%B8%AD%E6%A3%80%E7%B4%A2%E5%88%B0%E7%9A%84%E6%AF%8F%E6%AE%B5%E5%86%85%E5%AE%B9%EF%BC%8C%E5%9D%87%E5%8F%AF%E8%BF%BD%E6%BA%AF%E5%88%B0%EF%BC%9A%0D%0A-%20**%E6%9D%A5%E6%BA%90%E7%BD%91%E7%AB%99**%E5%90%8D%E7%A7%B0%0D%0A-%20**%E5%8F%91%E5%B8%83%E6%97%A5%E6%9C%9F**%0D%0A-%20**%E5%8E%9F%E6%96%87%E9%93%BE%E6%8E%A5**%EF%BC%88%E5%9C%A8%E8%8E%B7%E5%8F%96%E7%BB%93%E6%9E%9C%E4%B8%AD%E5%B1%95%E7%A4%BA%EF%BC%89%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%0D%0A%0D%0A%60%60%60%0D%0AEduDaily%2F%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20server.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20Web%20%E6%9C%8D%E5%8A%A1%E5%85%A5%E5%8F%A3%EF%BC%88FastAPI%EF%BC%89%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20main.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%AE%A1%E9%81%93%EF%BC%88%E6%89%B9%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F%EF%BC%89%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20batch_processor.py%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%EF%BC%9A%E4%B8%80%E9%94%AE%E7%94%9F%E6%88%90%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E6%91%98%E8%A6%81%20%2B%20%E6%97%A5%E6%8A%A5%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20scheduler.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E5%AE%9A%E6%97%B6%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%EF%BC%9A%E6%AF%8F%E5%A4%A9%E5%9B%BA%E5%AE%9A%E6%97%B6%E9%97%B4%E8%B7%91%E5%85%A8%E6%B5%81%E7%A8%8B%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20template_engine.py%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E5%A4%9A%E5%B9%B3%E5%8F%B0%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E%EF%BC%9A%E5%85%AC%E4%BC%97%E5%8F%B7%2F%E5%B0%8F%E7%BA%A2%E4%B9%A6%2F%E6%8A%96%E9%9F%B3%2F%E6%92%AD%E5%AE%A2%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20clipboard.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E4%B8%80%E9%94%AE%E5%A4%8D%E5%88%B6%E6%97%A5%E6%8A%A5%E5%88%B0%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20publisher.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E8%8D%89%E7%A8%BF%E7%AE%B1%E5%8F%91%E5%B8%83%E6%A1%86%E6%9E%B6%EF%BC%88%E5%BE%AE%E4%BF%A1%2F%E7%9F%A5%E4%B9%8E%2F%E5%BE%AE%E5%8D%9A%EF%BC%89%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20config.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%89%80%E6%9C%89%E5%8F%82%E6%95%B0%E9%9B%86%E4%B8%AD%E7%AE%A1%E7%90%86%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20requirements.txt%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20Python%20%E4%BE%9D%E8%B5%96%E5%8C%85%E6%B8%85%E5%8D%95%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20.env.example%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20API%20Key%20%E9%85%8D%E7%BD%AE%E6%A8%A1%E6%9D%BF%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20credentials.example.json%20%20%20%20%20%20%23%20%E5%B9%B3%E5%8F%B0%E5%8F%91%E5%B8%83%E5%87%AD%E6%8D%AE%E6%A8%A1%E6%9D%BF%0D%0A%E2%94%82%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20frontend%2F%0D%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20index.html%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20Vue3%20%E5%8D%95%E9%A1%B5%E5%BA%94%E7%94%A8%EF%BC%884%20%E6%A0%87%E7%AD%BE%E9%A1%B5%E5%B8%83%E5%B1%80%EF%BC%8CCDN%20%E5%BC%95%E5%85%A5%EF%BC%8C%E9%9B%B6%E6%9E%84%E5%BB%BA%EF%BC%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8D%B3%E7%94%A8%EF%BC%89%0D%0A%E2%94%82%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20templates%2F%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20wechat.j2%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E5%85%AC%E4%BC%97%E5%8F%B7%E6%A8%A1%E6%9D%BF%EF%BC%88%E4%B8%93%E4%B8%9A%E6%B7%B1%E5%BA%A6%E5%88%86%E6%9E%90%EF%BC%89%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20xiaohongshu.j2%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E5%B0%8F%E7%BA%A2%E4%B9%A6%E6%A8%A1%E6%9D%BF%EF%BC%88%E6%B4%BB%E6%B3%BC%20emoji%20%E9%A3%8E%EF%BC%89%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20douyin.j2%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%8A%96%E9%9F%B3%E8%84%9A%E6%9C%AC%E6%A8%A1%E6%9D%BF%EF%BC%88%E9%BB%84%E9%87%91%203%20%E7%A7%92%E5%8F%A3%E6%92%AD%EF%BC%89%0D%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20podcast.j2%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%92%AD%E5%AE%A2%E5%8F%A3%E6%92%AD%E7%A8%BF%E6%A8%A1%E6%9D%BF%EF%BC%88%E5%8F%A3%E8%AF%AD%E5%8C%96%20%2B%20%E8%BD%AC%E5%9C%BA%EF%BC%89%0D%0A%E2%94%82%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20modules%2F%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20data_loader.py%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E8%AF%BB%E5%8F%96%20.txt%20%E6%96%87%E6%A1%A3%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20chunker.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%AE%B5%E8%90%BD%E6%84%9F%E7%9F%A5%E5%88%86%E5%9D%97%EF%BC%88%E9%87%8D%E5%8F%A0%E7%AD%96%E7%95%A5%EF%BC%89%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20extractor.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20LLM%20%E6%95%99%E8%82%B2%E8%B5%84%E8%AE%AF%E7%BB%93%E6%9E%84%E5%8C%96%E6%8A%BD%E5%8F%96%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20embedder.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%9C%AC%E5%9C%B0%20Embedding%20%2B%20ChromaDB%20%E5%AD%98%E5%82%A8%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20retriever.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%9F%A5%E8%AF%A2%E5%90%91%E9%87%8F%E5%8C%96%20%2B%20%E8%AF%AD%E4%B9%89%E6%A3%80%E7%B4%A2%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20generator.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20RAG%20%E6%8A%A5%E5%91%8A%E7%94%9F%E6%88%90%EF%BC%88%E5%90%AB%E9%9A%90%E7%A7%81%E8%84%B1%E6%95%8F%EF%BC%89%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20evaluator.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%8A%BD%E5%8F%96%2F%E6%A3%80%E7%B4%A2%2F%E7%94%9F%E6%88%90%E8%B4%A8%E9%87%8F%E8%AF%84%E4%BC%B0%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20privacy.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%A3%80%E6%B5%8B%E4%B8%8E%E8%84%B1%E6%95%8F%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20domain_classifier.py%20%20%20%20%20%20%23%20%E5%86%85%E5%AE%B9%E9%A2%86%E5%9F%9F%E8%87%AA%E5%8A%A8%E8%AF%86%E5%88%AB%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20url_ingester.py%20%20%20%20%20%20%20%20%20%20%20%23%20%E7%BD%91%E5%9D%80%E6%8A%93%E5%8F%96%20%2B%20AI%20%E6%8F%90%E7%82%BC%0D%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20daily_fetcher.py%20%20%20%20%20%20%20%20%20%20%23%20%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5%E5%BC%95%E6%93%8E%EF%BC%88%E4%BF%A1%E6%81%AF%E6%BA%90%E6%8A%93%E5%8F%96%2B%E5%BD%93%E6%97%A5%E7%AD%9B%E9%80%89%2B%E5%85%A5%E5%BA%93%EF%BC%89%0D%0A%E2%94%82%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20prompts%2F%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20personas.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E9%A2%86%E5%9F%9F-%E4%BA%BA%E6%A0%BC%E6%B3%A8%E5%86%8C%E8%A1%A8%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20extraction.py%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%95%99%E8%82%B2%E8%B5%84%E8%AE%AF%E6%8A%BD%E5%8F%96%20Prompt%20%E6%A8%A1%E6%9D%BF%0D%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20generation.py%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%8A%A5%E5%91%8A%E7%94%9F%E6%88%90%20Prompt%20%E6%A8%A1%E6%9D%BF%EF%BC%88%E5%8A%A8%E6%80%81%E8%A7%92%E8%89%B2%EF%BC%89%0D%0A%E2%94%82%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20db%2F%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20schema.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BB%BA%E8%A1%A8%EF%BC%88%E5%90%AB%E4%BF%A1%E6%81%AF%E6%BA%90%E5%92%8C%E6%96%87%E7%AB%A0%E8%A1%A8%EF%BC%89%0D%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20repository.py%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AF%BB%E5%86%99%E6%93%8D%E4%BD%9C%0D%0A%E2%94%82%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20data%2F%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20sample_docs%2F%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%E5%AD%98%E6%94%BE%E7%9B%AE%E5%BD%95%0D%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20processed.json%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E5%B7%B2%E5%A4%84%E7%90%86%E6%96%87%E4%BB%B6%E8%B7%9F%E8%B8%AA%EF%BC%88%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%EF%BC%89%0D%0A%E2%94%82%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20utils%2F%0D%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20helpers.py%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%97%A5%E5%BF%97%E3%80%81%E8%AE%A1%E6%97%B6%E7%AD%89%E5%B7%A5%E5%85%B7%E5%87%BD%E6%95%B0%0D%0A%E2%94%82%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20tests%2F%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20test_batch_processor.py%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20test_scheduler.py%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20test_template_engine.py%0D%0A%E2%94%82%20%20%20%E2%94%9C%E2%94%80%E2%94%80%20test_clipboard.py%0D%0A%E2%94%82%20%20%20%E2%94%94%E2%94%80%E2%94%80%20test_publisher.py%0D%0A%E2%94%82%0D%0A%E2%94%9C%E2%94%80%E2%94%80%20chroma_store%2F%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6%EF%BC%88%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%EF%BC%89%0D%0A%E2%94%94%E2%94%80%E2%94%80%20output%2F%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20%E7%94%9F%E6%88%90%E7%9A%84%E6%8A%A5%E5%91%8A%E6%96%87%E4%BB%B6%EF%BC%88%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%EF%BC%89%0D%0A%60%60%60%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20API%20%E6%8E%A5%E5%8F%A3%0D%0A%0D%0A%E6%89%80%E6%9C%89%E6%8E%A5%E5%8F%A3%E5%9D%87%E5%9C%A8%20%60http%3A%2F%2Flocalhost%3A8765%60%20%E4%B8%8B%EF%BC%9A%0D%0A%0D%0A%23%23%23%20%E6%9F%A5%E8%AF%A2%E4%B8%8E%E7%9F%A5%E8%AF%86%E5%BA%93%E7%AE%A1%E7%90%86%0D%0A%0D%0A%7C%20%E6%96%B9%E6%B3%95%20%7C%20%E8%B7%AF%E5%BE%84%20%7C%20%E8%AF%B4%E6%98%8E%20%7C%0D%0A%7C------%7C------%7C------%7C%0D%0A%7C%20%60GET%60%20%7C%20%60%2F%60%20%7C%20Web%20%E4%BA%A4%E4%BA%92%E7%95%8C%E9%9D%A2%20%7C%0D%0A%7C%20%60GET%60%20%7C%20%60%2Fapi%2Fhealth%60%20%7C%20%E7%B3%BB%E7%BB%9F%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%20%7C%0D%0A%7C%20%60POST%60%20%7C%20%60%2Fapi%2Fquery%60%20%7C%20%E6%8F%90%E4%BA%A4%E6%9F%A5%E8%AF%A2%EF%BC%8C%E8%BF%94%E5%9B%9E%E6%A3%80%E7%B4%A2%E7%BB%93%E6%9E%9C%20%2B%20AI%20%E6%8A%A5%E5%91%8A%20%7C%0D%0A%7C%20%60POST%60%20%7C%20%60%2Fapi%2Fextract%60%20%7C%20%E8%A7%A6%E5%8F%91%20LLM%20%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96%20%7C%0D%0A%7C%20%60GET%60%20%7C%20%60%2Fapi%2Fknowledge%60%20%7C%20%E6%9F%A5%E7%9C%8B%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%E5%88%97%E8%A1%A8%20%7C%0D%0A%7C%20%60POST%60%20%7C%20%60%2Fapi%2Fknowledge%2Fupload%60%20%7C%20%E4%B8%8A%E4%BC%A0%20.txt%20%E6%96%87%E4%BB%B6%E5%88%B0%E7%9F%A5%E8%AF%86%E5%BA%93%20%7C%0D%0A%7C%20%60DELETE%60%20%7C%20%60%2Fapi%2Fknowledge%2F%7Bdoc_id%7D%60%20%7C%20%E5%88%A0%E9%99%A4%E6%8C%87%E5%AE%9A%E6%96%87%E6%A1%A3%20%7C%0D%0A%7C%20%60POST%60%20%7C%20%60%2Fapi%2Fknowledge%2Fingest-url%60%20%7C%20%E6%8F%90%E4%BA%A4%E7%BD%91%E5%9D%80%E5%88%97%E8%A1%A8%EF%BC%8CAI%20%E6%8F%90%E7%82%BC%E4%B8%BA%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%20%7C%0D%0A%7C%20%60POST%60%20%7C%20%60%2Fapi%2Fknowledge%2Fimport-saved%60%20%7C%20%E5%B0%86%E5%B7%B2%E6%8F%90%E7%82%BC%E7%9A%84%E6%96%87%E6%A1%A3%E5%AF%BC%E5%85%A5%E7%9F%A5%E8%AF%86%E5%BA%93%20%7C%0D%0A%0D%0A%23%23%23%20%E4%BF%A1%E6%81%AF%E6%BA%90%20%26%20%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5%0D%0A%0D%0A%7C%20%E6%96%B9%E6%B3%95%20%7C%20%E8%B7%AF%E5%BE%84%20%7C%20%E8%AF%B4%E6%98%8E%20%7C%0D%0A%7C------%7C------%7C------%7C%0D%0A%7C%20%60GET%60%20%7C%20%60%2Fapi%2Fsources%60%20%7C%20%E5%88%97%E5%87%BA%E6%89%80%E6%9C%89%E4%BF%A1%E6%81%AF%E6%BA%90%20%7C%0D%0A%7C%20%60POST%60%20%7C%20%60%2Fapi%2Fsources%60%20%7C%20%E6%B7%BB%E5%8A%A0%E4%BF%A1%E6%81%AF%E6%BA%90%20%7C%0D%0A%7C%20%60DELETE%60%20%7C%20%60%2Fapi%2Fsources%2F%7Bsource_id%7D%60%20%7C%20%E5%88%A0%E9%99%A4%E4%BF%A1%E6%81%AF%E6%BA%90%E5%8F%8A%E5%85%B6%E5%85%B3%E8%81%94%E6%96%87%E7%AB%A0%20%7C%0D%0A%7C%20%60POST%60%20%7C%20%60%2Fapi%2Fdaily-fetch%60%20%7C%20%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89%E4%BF%A1%E6%81%AF%E6%BA%90%E4%BB%8A%E6%97%A5%E5%8F%91%E5%B8%83%E7%9A%84%E6%96%87%E7%AB%A0%20%7C%0D%0A%0D%0A%23%23%23%20%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%20%26%20%E5%A4%9A%E5%B9%B3%E5%8F%B0%0D%0A%0D%0A%7C%20%E6%96%B9%E6%B3%95%20%7C%20%E8%B7%AF%E5%BE%84%20%7C%20%E8%AF%B4%E6%98%8E%20%7C%0D%0A%7C------%7C------%7C------%7C%0D%0A%7C%20%60POST%60%20%7C%20%60%2Fapi%2Fbatch-analyze%60%20%7C%20%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%E6%9C%AA%E5%A4%84%E7%90%86%E7%9A%84%E6%96%87%E7%AB%A0%EF%BC%8C%E7%94%9F%E6%88%90%E6%97%A5%E6%8A%A5%20%7C%0D%0A%7C%20%60POST%60%20%7C%20%60%2Fapi%2Fbatch-analyze%3Fplatform%3Dxhs%60%20%7C%20%E5%90%8C%E6%97%B6%E7%94%9F%E6%88%90%E6%8C%87%E5%AE%9A%E5%B9%B3%E5%8F%B0%E7%89%88%E6%9C%AC%20%7C%0D%0A%7C%20%60POST%60%20%7C%20%60%2Fapi%2Fbatch-analyze%3Fplatform%3Dall%60%20%7C%20%E7%94%9F%E6%88%90%E5%85%A8%E9%83%A8%E5%9B%9B%E7%A7%8D%E5%B9%B3%E5%8F%B0%E7%89%88%E6%9C%AC%20%7C%0D%0A%7C%20%60POST%60%20%7C%20%60%2Fapi%2Fbatch-analyze%3Fforce_all%3Dtrue%60%20%7C%20%E5%BC%BA%E5%88%B6%E9%87%8D%E6%96%B0%E5%88%86%E6%9E%90%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%20%7C%0D%0A%0D%0A%23%23%23%20%E6%9F%A5%E8%AF%A2%E7%A4%BA%E4%BE%8B%0D%0A%0D%0A%60%60%60bash%0D%0Acurl%20-X%20POST%20http%3A%2F%2Flocalhost%3A8765%2Fapi%2Fquery%20%5C%0D%0A%20%20-H%20%22Content-Type%3A%20application%2Fjson%22%20%5C%0D%0A%20%20-d%20&#039;%7B%22query%22%3A%20%22%E6%9C%80%E6%96%B0%E9%AB%98%E8%80%83%E6%94%B9%E9%9D%A9%E5%AF%B9%E9%AB%98%E4%B8%AD%E6%95%99%E5%AD%A6%E6%9C%89%E4%BB%80%E4%B9%88%E5%BD%B1%E5%93%8D%EF%BC%9F%22%2C%20%22top_k%22%3A%205%7D&#039;%0D%0A%60%60%60%0D%0A%0D%0A%E8%BF%94%E5%9B%9E%E5%86%85%E5%AE%B9%E5%8C%85%E5%90%AB%EF%BC%9AAI%20%E7%94%9F%E6%88%90%E7%9A%84%20Markdown%20%E6%8A%A5%E5%91%8A%E3%80%81%E6%A3%80%E7%B4%A2%E5%88%B0%E7%9A%84%E6%96%87%E6%A1%A3%E7%89%87%E6%AE%B5%EF%BC%88%E5%90%AB%E7%9B%B8%E5%85%B3%E5%BA%A6%EF%BC%89%E3%80%81PII%20%E8%84%B1%E6%95%8F%E6%95%B0%E9%87%8F%E3%80%81%E4%BD%BF%E7%94%A8%E7%9A%84%E5%88%86%E6%9E%90%E8%A7%86%E8%A7%92%E3%80%82%0D%0A%0D%0A%23%23%23%20%E6%B7%BB%E5%8A%A0%E4%BF%A1%E6%81%AF%E6%BA%90%E7%A4%BA%E4%BE%8B%0D%0A%0D%0A%60%60%60bash%0D%0Acurl%20-X%20POST%20http%3A%2F%2Flocalhost%3A8765%2Fapi%2Fsources%20%5C%0D%0A%20%20-H%20%22Content-Type%3A%20application%2Fjson%22%20%5C%0D%0A%20%20-d%20&#039;%7B%22name%22%3A%20%22%E4%B8%AD%E5%9B%BD%E6%95%99%E8%82%B2%E6%8A%A5%22%2C%20%22url%22%3A%20%22https%3A%2F%2Fwww.jyb.cn%2F%22%7D&#039;%0D%0A%60%60%60%0D%0A%0D%0A%23%23%23%20%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%E7%A4%BA%E4%BE%8B%0D%0A%0D%0A%60%60%60bash%0D%0A%23%20%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%20%2B%20%E7%94%9F%E6%88%90%E5%B0%8F%E7%BA%A2%E4%B9%A6%E7%89%88%E6%9C%AC%0D%0Acurl%20-X%20POST%20%22http%3A%2F%2Flocalhost%3A8765%2Fapi%2Fbatch-analyze%3Fplatform%3Dxhs%22%0D%0A%0D%0A%23%20%E5%85%A8%E5%B9%B3%E5%8F%B0%20%2B%20%E5%BC%BA%E5%88%B6%E9%87%8D%E6%96%B0%E5%A4%84%E7%90%86%0D%0Acurl%20-X%20POST%20%22http%3A%2F%2Flocalhost%3A8765%2Fapi%2Fbatch-analyze%3Fplatform%3Dall%26force_all%3Dtrue%22%0D%0A%60%60%60%0D%0A%0D%0A%23%23%23%20%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5%E7%A4%BA%E4%BE%8B%0D%0A%0D%0A%60%60%60bash%0D%0Acurl%20-X%20POST%20http%3A%2F%2Flocalhost%3A8765%2Fapi%2Fdaily-fetch%0D%0A%60%60%60%0D%0A%0D%0A%E8%BF%94%E5%9B%9E%EF%BC%9A%E6%89%B9%E6%AC%A1%E5%8F%B7%E3%80%81%E6%97%A5%E6%9C%9F%E3%80%81%E6%94%B6%E5%BD%95%E6%96%87%E7%AB%A0%E5%88%97%E8%A1%A8%EF%BC%88%E5%90%AB%E6%A0%87%E9%A2%98%E3%80%81%E6%9D%A5%E6%BA%90%E3%80%81%E5%8E%9F%E6%96%87%E9%93%BE%E6%8E%A5%E3%80%81%E5%88%86%E5%9D%97%E6%95%B0%EF%BC%89%E3%80%81%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF%E3%80%82%0D%0A%0D%0A%23%23%23%20%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%0D%0A%0D%0A%60%60%60bash%0D%0A%23%20%E8%BF%90%E8%A1%8C%E5%AE%8C%E6%95%B4%E7%AE%A1%E9%81%93%EF%BC%88%E4%B8%80%E6%AC%A1%E6%80%A7%E6%89%B9%E5%A4%84%E7%90%86%EF%BC%89%0D%0Apython%20main.py%0D%0A%0D%0A%23%20%E8%B7%B3%E8%BF%87%20LLM%20%E8%B0%83%E7%94%A8%EF%BC%8C%E4%BB%85%E6%B5%8B%E8%AF%95%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%9D%97%0D%0Apython%20main.py%20--skip-extraction%20--skip-generation%0D%0A%0D%0A%23%20%E8%BF%BD%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E6%9F%A5%E8%AF%A2%0D%0Apython%20main.py%20-q%20%22%E5%88%86%E6%9E%90%E8%BF%91%E6%9C%9F%E8%81%8C%E4%B8%9A%E6%95%99%E8%82%B2%E6%94%BF%E7%AD%96%E8%B6%8B%E5%8A%BF%22%0D%0A%60%60%60%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6%0D%0A%0D%0A%E7%B3%BB%E7%BB%9F%E5%9C%A8%E5%B0%86%E6%A3%80%E7%B4%A2%E5%88%B0%E7%9A%84%E6%96%87%E6%9C%AC%E5%8F%91%E9%80%81%E7%BB%99%20DeepSeek%20API%20%E4%B9%8B%E5%89%8D%EF%BC%8C**%E8%87%AA%E5%8A%A8%E6%A3%80%E6%B5%8B%E5%B9%B6%E6%9B%BF%E6%8D%A2**%E4%BB%A5%E4%B8%8B%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%EF%BC%9A%0D%0A%0D%0A%7C%20%E7%B1%BB%E5%9E%8B%20%7C%20%E6%A3%80%E6%B5%8B%E6%96%B9%E5%BC%8F%20%7C%20%E6%9B%BF%E6%8D%A2%E4%B8%BA%20%7C%0D%0A%7C------%7C---------%7C--------%7C%0D%0A%7C%20%E6%89%8B%E6%9C%BA%E5%8F%B7%20%7C%20%E6%AD%A3%E5%88%99%E7%B2%BE%E7%A1%AE%E5%8C%B9%E9%85%8D%20%7C%20%60%5B%E6%89%8B%E6%9C%BA%E5%8F%B7%E5%B7%B2%E9%9A%90%E8%97%8F%5D%60%20%7C%0D%0A%7C%20%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%20%7C%2018%E4%BD%8D%20%2B%20%E6%A0%A1%E9%AA%8C%E4%BD%8D%E9%AA%8C%E8%AF%81%20%7C%20%60%5B%E8%BA%AB%E4%BB%BD%E8%AF%81%E5%8F%B7%E5%B7%B2%E9%9A%90%E8%97%8F%5D%60%20%7C%0D%0A%7C%20%E9%93%B6%E8%A1%8C%E5%8D%A1%E5%8F%B7%20%7C%2016-19%E4%BD%8D%E8%BF%9E%E7%BB%AD%E6%95%B0%E5%AD%97%20%7C%20%60%5B%E9%93%B6%E8%A1%8C%E5%8D%A1%E5%8F%B7%E5%B7%B2%E9%9A%90%E8%97%8F%5D%60%20%7C%0D%0A%7C%20%E7%94%B5%E5%AD%90%E9%82%AE%E7%AE%B1%20%7C%20%E6%A0%87%E5%87%86%E9%82%AE%E7%AE%B1%E6%AD%A3%E5%88%99%20%7C%20%60%5B%E9%82%AE%E7%AE%B1%E5%B7%B2%E9%9A%90%E8%97%8F%5D%60%20%7C%0D%0A%7C%20%E4%BA%BA%E5%91%98%E5%A7%93%E5%90%8D%20%7C%20%E4%B8%8A%E4%B8%8B%E6%96%87%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D%20%7C%20%60%5B%E5%A7%93%E5%90%8D%E5%B7%B2%E9%9A%90%E8%97%8F%5D%60%20%7C%0D%0A%7C%20%E8%A1%A8%E6%A0%BC%E6%95%B0%E6%8D%AE%20%7C%20Markdown%20%E8%A1%A8%E6%A0%BC%20%2F%20TSV%20%E8%A1%8C%20%7C%20%60%5B%E8%A1%A8%E6%A0%BC%E8%A1%8C%E5%B7%B2%E9%9A%90%E8%97%8F%5D%60%20%7C%0D%0A%0D%0A%E8%84%B1%E6%95%8F%E5%90%8E%E7%9A%84%E5%AE%9E%E9%99%85%20Prompt%20%E5%8F%AF%E5%9C%A8%20Web%20%E7%95%8C%E9%9D%A2%E7%9A%84%E3%80%8CPrompt%20%E5%B7%A5%E7%A8%8B%E3%80%8D%E6%A0%87%E7%AD%BE%E9%A1%B5%E6%9F%A5%E7%9C%8B%E9%AA%8C%E8%AF%81%E3%80%82%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84%0D%0A%0D%0A%60%60%60%0D%0A%E4%BF%A1%E6%81%AF%E6%BA%90%E8%AE%A2%E9%98%85%20%2F%20%E4%B8%8A%E4%BC%A0%20.txt%20%2F%20%E8%BE%93%E5%85%A5%E7%BD%91%E5%9D%80%20%E2%86%92%20%E6%AE%B5%E8%90%BD%E5%88%86%E5%9D%97%20%E2%86%92%20LLM%20%E6%8A%BD%E5%8F%96%E6%95%99%E8%82%B2%E5%AE%9E%E4%BD%93%20%E2%86%92%20SQLite%20%E5%AD%98%E5%82%A8%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E2%86%98%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%E6%9C%AC%E5%9C%B0%20Embedding%20%E2%86%92%20ChromaDB%20%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95%0D%0A%0D%0AWeb%20%E7%95%8C%E9%9D%A2%EF%BC%884%20%E6%A0%87%E7%AD%BE%E9%A1%B5%E5%B8%83%E5%B1%80%EF%BC%89%EF%BC%9A%0D%0A%20%20%F0%9F%94%8D%20%E9%97%AE%E7%AD%94%E5%88%86%E6%9E%90%20%E2%86%92%20%E5%90%91%E9%87%8F%E6%A3%80%E7%B4%A2%20%E2%86%92%20%E7%BB%84%E8%A3%85%20Prompt%20%E2%86%92%20LLM%20%E7%94%9F%E6%88%90%E6%8A%A5%E5%91%8A%EF%BC%88%E5%90%AB%20PII%20%E8%87%AA%E5%8A%A8%E8%84%B1%E6%95%8F%EF%BC%89%0D%0A%20%20%F0%9F%93%9A%20%E7%9F%A5%E8%AF%86%E5%BA%93%E7%AE%A1%E7%90%86%20%E2%86%92%20%E4%B8%8A%E4%BC%A0%2F%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3%20%2B%20%E7%BD%91%E5%9D%80%E6%8F%90%E7%82%BC%20%2B%20%E5%AF%BC%E5%85%A5%0D%0A%20%20%F0%9F%93%A1%20%E4%BF%A1%E6%81%AF%E6%BA%90%E4%B8%8E%E6%97%A5%E6%8A%A5%20%E2%86%92%20%E6%B7%BB%E5%8A%A0%E4%BF%A1%E6%81%AF%E6%BA%90%20%E2%86%92%20%E4%B8%80%E9%94%AE%E6%8A%93%E5%8F%96%E5%BD%93%E6%97%A5%E6%96%87%E7%AB%A0%20%E2%86%92%20AI%20%E9%80%90%E7%AF%87%E6%8F%90%E7%82%BC%E5%85%A5%E5%BA%93%20%E2%86%92%20%E5%8F%AF%E6%BA%AF%E6%BA%90%E5%BD%92%E6%A1%A3%0D%0A%20%20%E2%9A%99%EF%B8%8F%20%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD%20%E2%86%92%20%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%EF%BC%88%E8%BF%9B%E5%BA%A6%E6%9D%A1%EF%BC%89%2B%20%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%20%2B%20%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%B7%A5%E5%85%B7%20%2B%20%E5%AE%9A%E6%97%B6%E9%85%8D%E7%BD%AE%0D%0A%0D%0A%E5%AE%9A%E6%97%B6%E8%B0%83%E5%BA%A6%20%E2%86%92%20%E6%AF%8F%E5%A4%A9%E5%9B%BA%E5%AE%9A%E6%97%B6%E9%97%B4%20%E2%86%92%20%E6%8A%93%E5%8F%96%20%E2%86%92%20%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90%20%E2%86%92%20%E7%94%9F%E6%88%90%E6%97%A5%E6%8A%A5%20%E2%86%92%20%E5%85%A8%E8%87%AA%E5%8A%A8%0D%0A%60%60%60%0D%0A%0D%0A%7C%20%E7%BB%84%E4%BB%B6%20%7C%20%E9%80%89%E5%9E%8B%20%7C%20%E8%AF%B4%E6%98%8E%20%7C%0D%0A%7C------%7C------%7C------%7C%0D%0A%7C%20%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%20%7C%20DeepSeek%20Chat%20%7C%20%E8%B4%9F%E8%B4%A3%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96%E3%80%81%E6%96%87%E7%AB%A0%E6%8F%90%E7%82%BC%E3%80%81%E6%91%98%E8%A6%81%E7%94%9F%E6%88%90%E5%92%8C%E6%8A%A5%E5%91%8A%E6%92%B0%E5%86%99%20%7C%0D%0A%7C%20Embedding%20%7C%20BAAI%2Fbge-small-zh-v1.5%20%7C%20%E6%9C%AC%E5%9C%B0%E8%BF%90%E8%A1%8C%EF%BC%8C%E6%97%A0%E9%9C%80%20API%EF%BC%8C%E4%B8%AD%E6%96%87%E4%BC%98%E5%8C%96%20%7C%0D%0A%7C%20%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%20%7C%20ChromaDB%20%7C%20%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8%EF%BC%8C%E9%87%8D%E5%90%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%E6%95%B0%E6%8D%AE%20%7C%0D%0A%7C%20%E7%BB%93%E6%9E%84%E5%8C%96%E5%AD%98%E5%82%A8%20%7C%20SQLite%20%7C%20%E6%96%87%E4%BB%B6%E7%BA%A7%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%8C%E6%97%A0%E9%9C%80%E5%AE%89%E8%A3%85%E6%9C%8D%E5%8A%A1%20%7C%0D%0A%7C%20%E5%89%8D%E7%AB%AF%20%7C%20Vue%203%20%2B%20marked.js%20%7C%20CDN%20%E5%BC%95%E5%85%A5%EF%BC%8C%E9%9B%B6%E6%9E%84%E5%BB%BA%EF%BC%8C4%20%E6%A0%87%E7%AD%BE%E9%A1%B5%E5%B8%83%E5%B1%80%EF%BC%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8D%B3%E7%94%A8%20%7C%0D%0A%7C%20%E5%90%8E%E7%AB%AF%20%7C%20FastAPI%20%2B%20uvicorn%20%7C%20Python%20Web%20%E6%A1%86%E6%9E%B6%EF%BC%8C%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%20API%20%E6%96%87%E6%A1%A3%20%7C%0D%0A%7C%20%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E%20%7C%20Jinja2%20%7C%20%E8%BD%BB%E9%87%8F%E7%BA%A7%E6%A8%A1%E6%9D%BF%EF%BC%8C%E7%94%A8%E6%88%B7%E5%8F%AF%E7%9B%B4%E6%8E%A5%E7%BC%96%E8%BE%91%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%20%7C%0D%0A%7C%20%E5%AE%9A%E6%97%B6%E8%B0%83%E5%BA%A6%20%7C%20schedule%20%7C%20%E8%BD%BB%E9%87%8F%E7%BA%A7%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%EF%BC%8C%E6%97%A0%E9%9C%80%E7%B3%BB%E7%BB%9F%20cron%20%E6%9D%83%E9%99%90%20%7C%0D%0A%7C%20%E5%89%AA%E8%B4%B4%E6%9D%BF%20%7C%20pyperclip%20%7C%20%E8%B7%A8%E5%B9%B3%E5%8F%B0%E5%89%AA%E8%B4%B4%E6%9D%BF%E6%94%AF%E6%8C%81%20%7C%0D%0A%0D%0A%3E%20%E4%B8%8D%E4%BD%BF%E7%94%A8%20LangChain%20%E7%AD%89%E9%87%8D%E9%87%8F%E7%BA%A7%E6%A1%86%E6%9E%B6%EF%BC%8C%E6%89%80%E6%9C%89%E4%BB%A3%E7%A0%81%E7%BA%AF%20Python%20%E5%AE%9E%E7%8E%B0%EF%BC%8C%E9%80%BB%E8%BE%91%E6%B8%85%E6%99%B0%E5%8F%AF%E8%AF%BB%E3%80%82%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E5%8F%AF%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0%0D%0A%0D%0A%E5%9C%A8%20%60config.py%60%20%E4%B8%AD%E9%9B%86%E4%B8%AD%E7%AE%A1%E7%90%86%EF%BC%8CAPI%20Key%20%E9%80%9A%E8%BF%87%20%60.env%60%20%E6%96%87%E4%BB%B6%E8%AE%BE%E7%BD%AE%E3%80%82%E5%A4%9A%E5%B9%B3%E5%8F%B0%E6%A8%A1%E6%9D%BF%E5%9C%A8%20%60templates%2F%60%20%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%AD%E7%9B%B4%E6%8E%A5%E7%BC%96%E8%BE%91%E3%80%82%0D%0A%0D%0A%7C%20%E5%8F%82%E6%95%B0%20%7C%20%E9%BB%98%E8%AE%A4%E5%80%BC%20%7C%20%E8%AF%B4%E6%98%8E%20%7C%0D%0A%7C------%7C--------%7C------%7C%0D%0A%7C%20%60DEEPSEEK_API_KEY%60%20%7C%20%EF%BC%88%E7%A9%BA%EF%BC%89%20%7C%20%E5%9C%A8%20%60.env%60%20%E4%B8%AD%E8%AE%BE%E7%BD%AE%20%7C%0D%0A%7C%20%60SCHEDULE_TIME%60%20%7C%20%6007%3A00%60%20%7C%20%E6%AF%8F%E6%97%A5%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4%EF%BC%88%E5%9C%A8%20%60.env%60%20%E4%B8%AD%E8%AE%BE%E7%BD%AE%EF%BC%89%20%7C%0D%0A%7C%20%60CHUNK_MAX_CHARS%60%20%7C%201000%20%7C%20%E5%88%86%E5%9D%97%E6%9C%80%E5%A4%A7%E5%AD%97%E7%AC%A6%E6%95%B0%20%7C%0D%0A%7C%20%60CHUNK_OVERLAP_CHARS%60%20%7C%20200%20%7C%20%E7%9B%B8%E9%82%BB%E5%9D%97%E9%87%8D%E5%8F%A0%E5%AD%97%E7%AC%A6%E6%95%B0%20%7C%0D%0A%7C%20%60CHUNK_MIN_CHARS%60%20%7C%2050%20%7C%20%E4%BD%8E%E4%BA%8E%E6%AD%A4%E9%95%BF%E5%BA%A6%E7%9A%84%E5%86%85%E5%AE%B9%E4%BC%9A%E8%A2%AB%E8%BF%87%E6%BB%A4%20%7C%0D%0A%7C%20%60TOP_K_RETRIEVAL%60%20%7C%205%20%7C%20%E6%AF%8F%E6%AC%A1%E6%A3%80%E7%B4%A2%E8%BF%94%E5%9B%9E%E7%9A%84%E7%89%87%E6%AE%B5%E6%95%B0%20%7C%0D%0A%7C%20%60EXTRACTION_TEMPERATURE%60%20%7C%200.1%20%7C%20%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96%E6%97%B6%E7%9A%84%20LLM%20%E6%B8%A9%E5%BA%A6%EF%BC%88%E8%B6%8A%E4%BD%8E%E8%B6%8A%E7%A8%B3%E5%AE%9A%EF%BC%89%20%7C%0D%0A%7C%20%60GENERATION_TEMPERATURE%60%20%7C%200.3%20%7C%20%E6%8A%A5%E5%91%8A%E7%94%9F%E6%88%90%E6%97%B6%E7%9A%84%20LLM%20%E6%B8%A9%E5%BA%A6%20%7C%0D%0A%7C%20%60API_TIMEOUT_SECONDS%60%20%7C%2060%20%7C%20API%20%E8%AF%B7%E6%B1%82%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4%20%7C%0D%0A%7C%20%60CHROMA_COLLECTION_NAME%60%20%7C%20%60edu_documents%60%20%7C%20%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%9B%86%E5%90%88%E5%90%8D%E7%A7%B0%20%7C%0D%0A%7C%20%60SAMPLE_DOCS_DIR%60%20%7C%20%60data%2Fsample_docs%60%20%7C%20%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E4%BB%B6%E5%AD%98%E6%94%BE%E4%BD%8D%E7%BD%AE%20%7C%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%0D%0A%0D%0A%23%23%23%20Q%3A%20%E5%90%AF%E5%8A%A8%E6%97%B6%E6%8A%A5%E9%94%99%20%22DEEPSEEK_API_KEY%20not%20configured%22%0D%0A**A%3A**%20%E6%A3%80%E6%9F%A5%20%60.env%60%20%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%87%8C%E9%9D%A2%E7%9A%84%20Key%20%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE%EF%BC%88%E4%B8%8D%E8%A6%81%E6%9C%89%E5%A4%9A%E4%BD%99%E7%9A%84%E5%BC%95%E5%8F%B7%E6%88%96%E7%A9%BA%E6%A0%BC%EF%BC%89%E3%80%82%0D%0A%0D%0A%23%23%23%20Q%3A%20%E6%8F%90%E7%A4%BA%20%22No%20module%20named%20&#039;xxx&#039;%22%0D%0A**A%3A**%20%E8%BF%90%E8%A1%8C%20%60pip%20install%20-r%20requirements.txt%60%20%E7%A1%AE%E4%BF%9D%E6%89%80%E6%9C%89%E4%BE%9D%E8%B5%96%E9%83%BD%E5%AE%89%E8%A3%85%E4%BA%86%E3%80%82%0D%0A%0D%0A%23%23%23%20Q%3A%20%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5%E8%8E%B7%E5%8F%96%E4%B8%8D%E5%88%B0%E6%96%87%E7%AB%A0%EF%BC%9F%0D%0A**A%3A**%20%E5%8F%AF%E8%83%BD%E7%9A%84%E5%8E%9F%E5%9B%A0%EF%BC%9A%0D%0A-%20%E7%9B%AE%E6%A0%87%E7%BD%91%E7%AB%99%E5%BD%93%E6%97%A5%E7%A1%AE%E5%AE%9E%E6%B2%A1%E6%9C%89%E6%9B%B4%E6%96%B0%0D%0A-%20%E7%BD%91%E7%AB%99%E9%9C%80%E8%A6%81%E7%89%B9%E6%AE%8A%E8%AE%BF%E9%97%AE%E6%96%B9%E5%BC%8F%EF%BC%88%E5%A6%82%E9%9C%80%E8%A6%81%E7%99%BB%E5%BD%95%E3%80%81%E5%8F%8D%E7%88%AC%E8%99%AB%E7%AD%89%EF%BC%89%0D%0A-%20%E7%BD%91%E7%AB%99%E7%BB%93%E6%9E%84%E5%8F%98%E5%8C%96%E5%AF%BC%E8%87%B4%20AI%20%E6%97%A0%E6%B3%95%E8%AF%86%E5%88%AB%E6%96%87%E7%AB%A0%E5%88%97%E8%A1%A8%0D%0A-%20%E6%9F%A5%E7%9C%8B%E7%BB%88%E7%AB%AF%E6%97%A5%E5%BF%97%E5%92%8C%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%20%60errors%60%20%E5%AD%97%E6%AE%B5%E4%BA%86%E8%A7%A3%E8%AF%A6%E6%83%85%0D%0A%0D%0A%23%23%23%20Q%3A%20%E6%80%8E%E4%B9%88%E8%AE%A9%E7%B3%BB%E7%BB%9F%E6%AF%8F%E5%A4%A9%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C%EF%BC%9F%0D%0A**A%3A**%20%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%20%60python%20scheduler.py%60%20%E5%90%AF%E5%8A%A8%E5%AE%9A%E6%97%B6%E8%B0%83%E5%BA%A6%E5%99%A8%E3%80%82%E6%83%B3%E8%AE%A9%E5%AE%83%E5%9C%A8%E7%94%B5%E8%84%91%E5%BC%80%E6%9C%BA%E5%90%8E%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%8A%8A%E5%AE%83%E8%AE%BE%E4%B8%BA%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E9%A1%B9%E6%88%96%E6%B7%BB%E5%8A%A0%E5%88%B0%E7%B3%BB%E7%BB%9F%E4%BB%BB%E5%8A%A1%E8%AE%A1%E5%88%92%E4%B8%AD%EF%BC%88Windows%EF%BC%9A%E4%BB%BB%E5%8A%A1%E8%AE%A1%E5%88%92%E7%A8%8B%E5%BA%8F%EF%BC%8CMac%EF%BC%9Alaunchd%EF%BC%8CLinux%EF%BC%9Asystemd%20%E6%88%96%20crontab%EF%BC%89%E3%80%82%0D%0A%0D%0A%23%23%23%20Q%3A%20%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9%E5%B9%B3%E5%8F%B0%E6%A8%A1%E6%9D%BF%E7%9A%84%E9%A3%8E%E6%A0%BC%EF%BC%9F%0D%0A**A%3A**%20%E6%89%93%E5%BC%80%20%60templates%2F%60%20%E6%96%87%E4%BB%B6%E5%A4%B9%EF%BC%8C%E7%94%A8%E8%AE%B0%E4%BA%8B%E6%9C%AC%E7%BC%96%E8%BE%91%E5%AF%B9%E5%BA%94%E7%9A%84%20%60.j2%60%20%E6%96%87%E4%BB%B6%E5%8D%B3%E5%8F%AF%E3%80%82%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%E4%B8%AD%E7%94%A8%E4%B8%AD%E6%96%87%E6%A0%87%E6%B3%A8%E4%BA%86%E6%AF%8F%E4%B8%AA%E9%83%A8%E5%88%86%E7%9A%84%E8%AF%B4%E6%98%8E%EF%BC%8C%E4%B8%8D%E9%9C%80%E8%A6%81%E7%BC%96%E7%A8%8B%E7%9F%A5%E8%AF%86%E5%B0%B1%E8%83%BD%E4%BF%AE%E6%94%B9%E3%80%82%E6%94%B9%E5%AE%8C%E5%90%8E%E4%BF%9D%E5%AD%98%EF%BC%8C%E4%B8%8B%E6%AC%A1%E7%94%9F%E6%88%90%E5%B0%B1%E4%BC%9A%E7%94%A8%E6%96%B0%E7%9A%84%E9%A3%8E%E6%A0%BC%E3%80%82%0D%0A%0D%0A%23%23%23%20Q%3A%20%E5%A4%8D%E5%88%B6%E5%88%B0%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%A4%B1%E8%B4%A5%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F%0D%0A**A%3A**%0D%0A-%20Windows%2FMac%EF%BC%9A%E8%BF%90%E8%A1%8C%20%60pip%20install%20pyperclip%60%20%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%0D%0A-%20Linux%EF%BC%9A%E8%BF%90%E8%A1%8C%20%60sudo%20apt%20install%20xclip%60%20%E5%AE%89%E8%A3%85%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E5%B7%A5%E5%85%B7%0D%0A-%20%E5%A6%82%E6%9E%9C%E4%BB%8D%E7%84%B6%E5%A4%B1%E8%B4%A5%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%89%8B%E5%8A%A8%E6%89%93%E5%BC%80%20%60output%2F%60%20%E6%96%87%E4%BB%B6%E5%A4%B9%E5%A4%8D%E5%88%B6%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%0D%0A%0D%0A%23%23%23%20Q%3A%20%E5%A6%82%E4%BD%95%E6%8A%8A%E6%97%A5%E6%8A%A5%E7%9B%B4%E6%8E%A5%E5%8F%91%E5%88%B0%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%EF%BC%9F%0D%0A**A%3A**%0D%0A1.%20%E5%A4%8D%E5%88%B6%20%60credentials.example.json%60%20%E4%B8%BA%20%60credentials.json%60%0D%0A2.%20%E6%8C%89%E7%85%A7%E3%80%8C%5B%E5%8F%91%E9%80%81%E8%8D%89%E7%A8%BF%E5%88%B0%E5%B9%B3%E5%8F%B0%5D(%23%E5%8F%91%E9%80%81%E8%8D%89%E7%A8%BF%E5%88%B0%E5%B9%B3%E5%8F%B0-publisher)%E3%80%8D%E4%B8%AD%E7%9A%84%E6%AD%A5%E9%AA%A4%E8%8E%B7%E5%8F%96%E5%BE%AE%E4%BF%A1%20AppID%E3%80%81Secret%20%E5%92%8C%20access_token%0D%0A3.%20%E5%A1%AB%E5%85%A5%20%60credentials.json%60%EF%BC%8C%E8%BF%90%E8%A1%8C%20%60python%20publisher.py%20--platform%20wechat%20--file%20%22output%2F%E6%97%A5%E6%8A%A5%E6%96%87%E4%BB%B6.md%22%60%0D%0A4.%20%E7%99%BB%E5%BD%95%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E5%90%8E%E5%8F%B0%20%E2%86%92%20%E8%8D%89%E7%A8%BF%E7%AE%B1%E5%8D%B3%E5%8F%AF%E7%9C%8B%E5%88%B0%E5%B7%B2%E4%BF%9D%E5%AD%98%E7%9A%84%E8%8D%89%E7%A8%BF%0D%0A**%E6%B3%A8%E6%84%8F%EF%BC%9A**%20access_token%20%E6%9C%89%E6%95%88%E6%9C%9F%E5%8F%AA%E6%9C%89%202%20%E5%B0%8F%E6%97%B6%EF%BC%8C%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%9C%80%E8%A6%81%E5%AE%9A%E6%9C%9F%E5%88%B7%E6%96%B0%E3%80%82%0D%0A%0D%0A%23%23%23%20Q%3A%20%E6%95%B0%E6%8D%AE%E5%AD%98%E5%9C%A8%E5%93%AA%E9%87%8C%EF%BC%9F%E5%AE%89%E5%85%A8%E5%90%97%EF%BC%9F%0D%0A**A%3A**%20%E6%89%80%E6%9C%89%E6%95%B0%E6%8D%AE%E9%83%BD%E5%9C%A8%E4%BD%A0%E7%94%B5%E8%84%91%E7%9A%84%20%60data%2F%60%20%E5%92%8C%20%60chroma_store%2F%60%20%E7%9B%AE%E5%BD%95%E4%B8%8B%E3%80%82%E5%8F%AA%E6%9C%89%E7%94%9F%E6%88%90%E6%8A%A5%E5%91%8A%E6%97%B6%E4%BC%9A%E6%8A%8A%E8%84%B1%E6%95%8F%E5%90%8E%E7%9A%84%E6%96%87%E6%9C%AC%E7%89%87%E6%AE%B5%E5%8F%91%E9%80%81%E7%BB%99%20DeepSeek%20API%EF%BC%8C%E5%8E%9F%E5%A7%8B%E6%96%87%E6%A1%A3%E4%B8%8D%E4%BC%9A%E7%A6%BB%E5%BC%80%E4%BD%A0%E7%9A%84%E7%94%B5%E8%84%91%E3%80%82%60credentials.json%60%20%E5%B7%B2%E5%8A%A0%E5%85%A5%20%60.gitignore%60%EF%BC%8C%E4%B8%8D%E4%BC%9A%E8%A2%AB%E4%B8%8A%E4%BC%A0%E5%88%B0%20GitHub%E3%80%82%0D%0A%0D%0A%23%23%23%20Q%3A%20%E6%80%8E%E4%B9%88%E5%85%B3%E6%8E%89%E6%9C%8D%E5%8A%A1%EF%BC%9F%0D%0A**A%3A**%20%E5%9C%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E6%8C%89%20%60Ctrl%2BC%60%20%E5%8D%B3%E5%8F%AF%E3%80%82%0D%0A%0D%0A%23%23%23%20Q%3A%20%E6%94%AF%E6%8C%81%20PDF%20%2F%20Word%20%E5%90%97%EF%BC%9F%0D%0A**A%3A**%20%E7%9B%B4%E6%8E%A5%E4%B8%8A%E4%BC%A0%E5%8F%AA%E6%94%AF%E6%8C%81%20%60.txt%60%E3%80%82PDF%2FWord%20%E8%AF%B7%E5%85%88%E5%A4%8D%E5%88%B6%E5%86%85%E5%AE%B9%E5%88%B0%20%60.txt%60%20%E6%96%87%E4%BB%B6%E4%B8%AD%E3%80%82%E7%BD%91%E9%A1%B5%E5%86%85%E5%AE%B9%E5%8F%AF%E9%80%9A%E8%BF%87%E3%80%8C%E7%BD%91%E5%9D%80%E6%8F%90%E7%82%BC%E3%80%8D%E5%8A%9F%E8%83%BD%E7%9B%B4%E6%8E%A5%E6%8A%93%E5%8F%96%E3%80%82%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20%E8%AE%B8%E5%8F%AF%E8%AF%81%0D%0A%0D%0AMIT%20License%0D%0A%0D%0A---%0D%0A%0D%0A%23%23%20Windows%20%E6%A1%8C%E9%9D%A2%E7%89%88%E5%B0%81%E8%A3%85%0A%0A%E6%A1%8C%E9%9D%A2%E7%89%88%E5%85%A5%E5%8F%A3%E6%98%AF%20%60desktop_app.py%60%EF%BC%8C%E4%BD%BF%E7%94%A8%20%60pywebview%60%20%E6%89%BF%E8%BD%BD%E7%8E%B0%E6%9C%89%20HTML%2FVue%20%E5%89%8D%E7%AB%AF%EF%BC%8C%E5%B9%B6%E9%80%9A%E8%BF%87%20Python%20%E6%A1%8C%E9%9D%A2%E6%A1%A5%E6%8E%A5%E7%9B%B4%E6%8E%A5%E8%B0%83%E7%94%A8%E5%90%8E%E7%AB%AF%E9%80%BB%E8%BE%91%E3%80%82%E6%A1%8C%E9%9D%A2%E7%89%88%E4%B8%8D%E4%BC%9A%E5%90%AF%E5%8A%A8%E6%9C%AC%E5%9C%B0%20Web%20%E6%9C%8D%E5%8A%A1%EF%BC%8C%E4%B9%9F%E4%B8%8D%E4%BC%9A%E6%9A%B4%E9%9C%B2%20localhost%20%E7%AB%AF%E5%8F%A3%E3%80%82%0A%0A%E6%9C%AC%E7%89%88%E6%9C%AC%E5%B7%B2%E7%BB%8F%E4%BD%BF%E7%94%A8%20%60assets%2Fbranding%2Fapp-icon.png%60%20%E7%94%9F%E6%88%90%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87%20%60assets%2Fbranding%2Fapp-icon.ico%60%EF%BC%8C%E5%AE%89%E8%A3%85%E5%8C%85%E3%80%81%E6%A1%8C%E9%9D%A2%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F%E5%92%8C%20%60EduDaily.exe%60%20%E9%83%BD%E4%BC%9A%E4%BD%BF%E7%94%A8%E8%BF%99%E4%B8%AA%E5%9B%BE%E6%A0%87%E3%80%82%0A%0A%E7%94%9F%E6%88%90%E4%BE%BF%E6%90%BA%E7%89%88%E7%A8%8B%E5%BA%8F%E7%9B%AE%E5%BD%95%EF%BC%9A%0A%0A%60%60%60powershell%0Apowershell%20-ExecutionPolicy%20Bypass%20-File%20scripts%5Cbuild_windows.ps1%0A%60%60%60%0A%0A%E8%BE%93%E5%87%BA%E4%BD%8D%E7%BD%AE%EF%BC%9A%0A%0A%60%60%60text%0Adist%5CEduDaily%5CEduDaily.exe%0A%60%60%60%0A%0A%E5%AE%89%E8%A3%85%20Inno%20Setup%206%20%E5%90%8E%E7%94%9F%E6%88%90%E5%AE%89%E8%A3%85%E5%8C%85%EF%BC%9A%0A%0A%60%60%60powershell%0Apowershell%20-ExecutionPolicy%20Bypass%20-File%20scripts%5Cbuild_windows_installer.ps1%0A%60%60%60%0A%0A%E8%BE%93%E5%87%BA%E4%BD%8D%E7%BD%AE%EF%BC%9A%0A%0A%60%60%60text%0Adist%5Cinstaller%5CEduDailySetup-0.1.2.exe%0A%60%60%60%0A%0A%E9%A6%96%E6%AC%A1%E5%90%AF%E5%8A%A8%E6%A1%8C%E9%9D%A2%E7%89%88%E6%97%B6%EF%BC%8C%E7%94%A8%E6%88%B7%E5%8F%AF%E4%BB%A5%E9%80%89%E6%8B%A9%E6%95%B0%E6%8D%AE%E7%9B%AE%E5%BD%95%E3%80%82%E8%BF%9B%E5%85%A5%E9%A6%96%E9%A1%B5%E5%90%8E%E7%9A%84%E2%80%9C%E8%AE%BE%E7%BD%AE%E2%80%9D%E9%A1%B5%E9%9D%A2%E5%8F%AF%E4%BB%A5%E7%BB%A7%E7%BB%AD%E7%AE%A1%E7%90%86%20API%20Key%E3%80%81%E6%95%B4%E4%BD%93%E6%95%B0%E6%8D%AE%E7%9B%AE%E5%BD%95%E3%80%81.txt%20%E7%9F%A5%E8%AF%86%E5%BA%93%E7%9B%AE%E5%BD%95%EF%BC%8C%E5%B9%B6%E8%BF%90%E8%A1%8C%20RAG%20%E9%80%9A%E9%81%93%E6%A3%80%E4%BF%AE%E3%80%82DeepSeek%20API%20Key%20%E4%B8%8D%E4%BC%9A%E6%98%8E%E6%96%87%E6%98%BE%E7%A4%BA%E5%9C%A8%E9%A1%B5%E9%9D%A2%E4%B8%8A%EF%BC%8C%E7%9C%9F%E5%AE%9E%E5%86%85%E5%AE%B9%E4%BF%9D%E5%AD%98%E5%9C%A8%E7%B3%BB%E7%BB%9F%E5%87%AD%E6%8D%AE%E7%AE%A1%E7%90%86%E5%99%A8%E4%B8%AD%E3%80%82%0A" style="display: none;"></div>
+                  
+                    <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
+                      <ol>
+                        
+                        
+                          <li class="breadcrumb-item active" aria-current=&quot;page&quot;>
+                            
+                              <span>EduDaily — 每日教育资讯智能检索与分析系统</span>
+                            
+                            
+                          </li>
+                        
+                      </ol>
+                    </nav>
+                  
+
+                  
+                    <div class="docmd-copy-widgets">
+                      
+                        <button class="docmd-copy-btn docmd-copy-raw-btn" data-copied="copiedToClipboard" title="copyMarkdown" aria-label="copyMarkdown">
+                          <span class="docmd-btn-icon">
+<svg class="lucide-icon icon-copy " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-copy"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+</svg>
+</span>
+                        </button>
+                      
+                      
+                        <button class="docmd-copy-btn docmd-copy-context-btn" data-copied="copiedToClipboard" title="copyContext">
+                          <span class="docmd-btn-icon">
+<svg class="lucide-icon icon-message-square " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-message-square"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
+</svg>
+</span>
+                          <span class="docmd-btn-text">copyContext</span>
+                        </button>
+                      
+                    </div>
+                  
+                </div>
+                
+                <h1 id="edudaily-每日教育资讯智能检索与分析系统" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>EduDaily — 每日教育资讯智能检索与分析系统</h1>
+<p><img src="assets/branding/readme-hero.png" alt="EduDaily 教育资讯智能检索与分析"></p>
+<p>一个<strong>面向教育工作者</strong>的本地化每日资讯聚合与智能分析系统。设定关注的信息源，一键获取当日最新教育资讯，AI 自动提炼、索引、生成结构化日报，并<strong>一键适配微信公众号、小红书、抖音、播客等多种平台</strong>。</p>
+<p><strong>你不需要会编程</strong>——只需要跟着下面的步骤做，10 分钟就能跑起来。</p>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-当前版本亮点" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-当前版本亮点" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>当前版本亮点</h2>
+<ul>
+<li><strong>Windows 桌面版</strong>：支持打包为安装包，安装后可从桌面快捷方式启动，不需要用户手动打开终端。</li>
+<li><strong>设置页</strong>：首页可进入独立设置页，统一管理 API Key、数据目录、.txt 知识库目录和 RAG 通道检修。</li>
+<li><strong>多 API Key 管理</strong>：每个 Key 都可以命名；页面只显示脱敏形式，真实 Key 保存在系统凭据管理器中。</li>
+<li><strong>RAG 通道检修</strong>：可检查 API Key、本地嵌入模型、SQLite、Chroma，并支持重新加载知识库和重建向量库。</li>
+<li><strong>使用教程</strong>：第一步会引导用户前往 DeepSeek API Keys 页面创建 Key，并用大白话说明 Key 的用途、保密和余额要求。</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>源项目声明</strong>：本项目是基于 <a href="https://github.com/Vinceli-9527/KnowledgeVault"><strong>KnowledgeVault</strong></a> —— 一个通用 RAG 知识库检索与隐私保护分析系统 —— 衍生而来的<strong>教育领域专用分支</strong>。EduDaily 继承了 KnowledgeVault 的核心 RAG 管道架构（加载→分块→抽取→嵌入→检索→生成→评估），并在此基础上针对<strong>教育工作者每日资讯获取</strong>的需求进行了专项改造，包括：新增信息源管理、一键日报抓取、教育实体抽取、资讯溯源归档、批量分析、多平台内容适配、定时自动化运行等功能。如果你需要一个通用领域的知识库分析系统，请访问源项目 <a href="https://github.com/Vinceli-9527/KnowledgeVault">KnowledgeVault</a>。</p>
+</blockquote>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-目录" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-目录" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>目录</h2>
+<ul>
+<li><a href="#%E4%BD%A0%E8%83%BD%E7%94%A8%E5%AE%83%E5%81%9A%E4%BB%80%E4%B9%88">你能用它做什么</a></li>
+<li><a href="#%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82">环境要求</a></li>
+<li><a href="#5-%E5%88%86%E9%92%9F%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B">5 分钟快速上手</a></li>
+<li><a href="#web-%E7%95%8C%E9%9D%A2%E6%8C%87%E5%8D%97">Web 界面指南</a></li>
+<li><a href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%8A%9F%E8%83%BD">命令行模式（进阶功能）</a>
+<ul>
+<li><a href="#%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90-batch_processor">批量分析</a></li>
+<li><a href="#%E5%AE%9A%E6%97%B6%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C-scheduler">定时自动运行</a></li>
+<li><a href="#%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E9%80%82%E9%85%8D-template_engine">多平台内容适配</a></li>
+<li><a href="#%E4%B8%80%E9%94%AE%E5%A4%8D%E5%88%B6%E5%88%B0%E5%89%AA%E8%B4%B4%E6%9D%BF-clipboard">一键复制到剪贴板</a></li>
+<li><a href="#%E5%8F%91%E9%80%81%E8%8D%89%E7%A8%BF%E5%88%B0%E5%B9%B3%E5%8F%B0-publisher">发送草稿到平台</a></li>
+</ul>
+</li>
+<li><a href="#%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E6%A0%BC%E5%BC%8F%E8%AF%B4%E6%98%8E">多平台内容格式说明</a></li>
+<li><a href="#%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%E7%BC%96%E5%86%99%E6%8C%87%E5%8D%97">知识库文档编写指南</a></li>
+<li><a href="#%E7%BD%91%E5%9D%80%E6%8F%90%E7%82%BC%E5%8A%9F%E8%83%BD">网址提炼功能</a></li>
+<li><a href="#%E4%BF%A1%E6%81%AF%E6%BA%90%E7%AE%A1%E7%90%86--%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5">信息源管理 &amp; 每日日报</a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84">项目结构</a></li>
+<li><a href="#api-%E6%8E%A5%E5%8F%A3">API 接口</a></li>
+<li><a href="#%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6">隐私保护机制</a></li>
+<li><a href="#%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84">技术架构</a></li>
+<li><a href="#%E5%8F%AF%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0">可配置参数</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">常见问题</a></li>
+<li><a href="#%E8%AE%B8%E5%8F%AF%E8%AF%81">许可证</a></li>
+</ul>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-你能用它做什么" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-你能用它做什么" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>你能用它做什么</h2>
+<ul>
+<li><strong>一键获取每日日报</strong> — 设定教育资讯网站为信息源，点一个按钮（或设置定时）自动抓取今日发布的所有文章</li>
+<li><strong>AI 自动提炼归档</strong> — 文章内容经 LLM 提炼为结构化知识库文档，自动分块、向量化、建立索引</li>
+<li><strong>批量分析生成日报</strong> — 在网页上点一个按钮，扫描所有未处理文章，一次性生成当天日报摘要，实时显示处理进度</li>
+<li><strong>多平台一键适配</strong> — 同一份内容自动生成微信公众号、小红书、抖音脚本、播客口播稿四种版本，网页上直接选择和预览</li>
+<li><strong>一键复制</strong> — 网页内置剪贴板工具，选择平台和日期即可复制日报内容，也可自由粘贴文本后复制</li>
+<li><strong>定时自动运行</strong> — 在网页上设定每日运行时间，配置自动保存到浏览器；配合后台 <code>scheduler.py</code> 实现全自动运转</li>
+<li><strong>资讯可溯源</strong> — 每条入库文档标注来源网站和发布日期，随时追溯到原始出处</li>
+<li><strong>自然语言查询</strong> — 像聊天一样提问，系统从知识库中检索相关内容，生成带引用来源的分析报告</li>
+<li><strong>上传文档即用</strong> — 拖拽 <code>.txt</code> 文件到网页（政策文件、教研报告等），自动索引</li>
+<li><strong>隐私保护</strong> — 报告发送到云端 API 前，自动隐藏手机号、身份证等敏感信息</li>
+<li><strong>全过程可视化</strong> — 在网页上查看完整的 Prompt 是如何组装的，底部日志面板记录每一次操作</li>
+</ul>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-环境要求" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-环境要求" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>环境要求</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>你需要有</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>一台电脑</strong></td>
+<td>Windows / Mac / Linux 都可以</td>
+</tr>
+<tr>
+<td><strong>Python 3.10+</strong></td>
+<td><a href="https://www.python.org/downloads/">python.org</a> 下载安装</td>
+</tr>
+<tr>
+<td><strong>DeepSeek API Key</strong></td>
+<td><a href="https://platform.deepseek.com/">platform.deepseek.com</a> 注册获取（新用户有免费额度）</td>
+</tr>
+<tr>
+<td><strong>网络连接</strong></td>
+<td>调用 DeepSeek API 时需要</td>
+</tr>
+</tbody>
+</table>
+</div><blockquote>
+<p>不需要 GPU，不需要 Docker，不需要数据库服务。所有组件都在本地运行。</p>
+</blockquote>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>5 分钟快速上手</h2>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-1-步下载项目" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-1-步下载项目" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>第 1 步：下载项目</h3>
+<pre class="hljs"><code><span class="hljs-keyword">git</span> clone https<span class="hljs-punctuation">://</span>github.<span class="hljs-attr">com</span><span class="hljs-punctuation">/</span>Vinceli<span class="hljs-punctuation">-</span><span class="hljs-number">9527</span><span class="hljs-punctuation">/</span>EduDaily.<span class="hljs-keyword">git</span>
+<span class="hljs-keyword">cd</span> EduDaily
+</code></pre>
+<p>如果你没有 Git，也可以直接在 GitHub 页面点击绿色的「Code」按钮 →「Download ZIP」，解压后进入文件夹。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-2-步安装依赖" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-2-步安装依赖" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>第 2 步：安装依赖</h3>
+<p>打开<strong>终端</strong>（Windows 按 <code>Win+R</code> 输入 <code>cmd</code>，Mac 打开「终端」），进入项目文件夹后运行：</p>
+<pre class="hljs"><code>pip install <span class="hljs-punctuation">-</span>r requirements.<span class="hljs-attr">txt</span>
+</code></pre>
+<blockquote>
+<p>如果提示 <code>pip</code> 找不到，试试 <code>pip3 install -r requirements.txt</code>。</p>
+</blockquote>
+<p>首次运行时会自动下载一个约 100MB 的中文 Embedding 模型，之后就不需要再下载了。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-3-步配置-api-key" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-3-步配置-api-key" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>第 3 步：配置 API Key</h3>
+<pre class="hljs"><code><span class="hljs-comment"># 复制一份配置文件</span>
+<span class="hljs-keyword">cp</span> .<span class="hljs-attr">env</span>.<span class="hljs-attr">example</span> .<span class="hljs-attr">env</span>
+</code></pre>
+<p>然后用<strong>记事本</strong>打开 <code>.env</code> 文件，把里面的内容改成你真实的 API Key：</p>
+<pre class="hljs"><code>DEEPSEEK_API_KEY <span class="hljs-punctuation">=</span> <span class="hljs-string">&quot;sk-你的真实密钥&quot;</span>
+</code></pre>
+<blockquote>
+<p><code>.env</code> 文件已加入 <code>.gitignore</code>，不会被上传到 GitHub，放心。</p>
+</blockquote>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-4-步启动服务" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-4-步启动服务" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>第 4 步：启动服务</h3>
+<pre class="hljs"><code>python server.<span class="hljs-attr">py</span>
+</code></pre>
+<p>看到 <code>EduDaily server ready! Open http://localhost:8765</code> 就说明启动成功了。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-5-步打开浏览器" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-5-步打开浏览器" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>第 5 步：打开浏览器</h3>
+<p>在浏览器地址栏输入 <strong><code>http://localhost:8765</code></strong>，就能看到界面了。</p>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-web-界面指南" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-web-界面指南" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Web 界面指南</h2>
+<p>打开网页后，顶部状态栏显示三个状态指示灯（管道就绪、API Key 配置状态、向量索引数量）。下方是 <strong>四个主导航标签页</strong>，分别对应不同的功能模块：</p>
+<hr>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-web-界面指南-问答分析" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-web-界面指南-问答分析" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>🔍 问答分析</h3>
+<p>输入问题，AI 从知识库中检索相关内容并生成分析报告。</p>
+<ul>
+<li><strong>搜索框</strong>：输入你关心的教育问题（如&quot;最新高考改革政策有哪些变化？&quot;），点击「开始分析」或按回车</li>
+<li><strong>管道进度条</strong>：实时显示 5 个处理阶段（输入 → 检索 → Prompt 构建 → LLM 生成 → 报告输出）</li>
+<li><strong>分析报告</strong>：AI 生成的 Markdown 格式专业报告，顶部标注生成耗时和使用的分析视角</li>
+<li><strong>Prompt 工程</strong>：查看完整的 System Prompt 和 User Prompt，不同颜色标注检索上下文（紫色）、结构化数据（绿色）、用户查询（橙色）</li>
+<li><strong>检索结果</strong>：展示检索到的文档片段，每个片段显示相关度分数和来源文档</li>
+</ul>
+<hr>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-web-界面指南-知识库管理" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-web-界面指南-知识库管理" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>📚 知识库管理</h3>
+<p>管理所有已索引的知识库文档。</p>
+<ul>
+<li><strong>上传文档</strong>：拖拽 <code>.txt</code> 文件到上传区域，或点击按钮选择文件</li>
+<li><strong>文档列表</strong>：查看已上传的文档名称、分块数、字数、创建日期</li>
+<li><strong>删除</strong>：每个文档旁有删除按钮（带确认提示）</li>
+<li><strong>编写指南</strong>：展开「如何编写高质量知识库文档？」查看格式规范和推荐模板</li>
+<li><strong>网址提炼</strong>（🪄 面板）：粘贴网址（每行一个），AI 自动抓取内容并提炼为结构化知识库文档，提炼完成后可一键导入</li>
+</ul>
+<hr>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-web-界面指南-信息源与日报" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-web-界面指南-信息源与日报" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>📡 信息源与日报</h3>
+<p>管理教育资讯订阅源，一键获取每日日报。</p>
+<ul>
+<li><strong>添加信息源</strong>：输入名称和网址（如&quot;教育部官网&quot; + <code>https://www.moe.gov.cn/</code>）</li>
+<li><strong>信息源列表</strong>：查看所有已配置的信息源及其同步状态（已同步/未同步）</li>
+<li><strong>一键获取日报</strong>：点击绿色按钮，自动从所有信息源抓取今日发布的最新资讯，AI 逐篇提炼并索引入库</li>
+<li><strong>获取结果</strong>：展示每篇文章的标题、来源、日期、分块数、原文链接，以及任何错误信息</li>
+</ul>
+<hr>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-web-界面指南-高级功能" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-web-界面指南-高级功能" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>⚙️ 高级功能</h3>
+<p>一站式使用批量分析、多平台内容生成、剪贴板和定时配置。</p>
+<p><strong>📊 批量分析并生成多平台日报：</strong></p>
+<ul>
+<li>选择目标平台（全部平台 / 微信公众号 / 小红书 / 抖音 / 播客），可选「强制重新处理全部文章」</li>
+<li>点击「开始批量分析」，实时进度条显示处理进度</li>
+<li>完成后展示每篇文章的摘要，以及各平台版本的生成结果</li>
+</ul>
+<p><strong>🎨 多平台内容生成：</strong></p>
+<ul>
+<li>选择目标平台，粘贴或输入文本内容</li>
+<li>点击按钮，AI 自动将内容改写为适配该平台风格的文案</li>
+<li>生成结果可直接预览，并一键复制到剪贴板</li>
+</ul>
+<p><strong>📋 剪贴板工具：</strong></p>
+<ul>
+<li>按平台和日期获取最新日报并复制到剪贴板</li>
+<li>或直接在文本框内粘贴/编辑内容，点击按钮复制</li>
+</ul>
+<p><strong>⏰ 定时任务配置：</strong></p>
+<ul>
+<li>开关按钮启用/禁用每日自动运行</li>
+<li>设定运行时间（小时 + 分钟），配置自动保存到浏览器本地</li>
+<li>配合后台 <code>python scheduler.py</code> 实现每天定时抓取 + 分析 + 生成日报</li>
+</ul>
+<p><strong>📋 运行日志（页面底部）：</strong></p>
+<ul>
+<li>可折叠的日志面板，记录所有操作和 API 调用的详细日志</li>
+<li>每条日志带有时间戳和类型标识（信息 / 成功 / 警告 / 错误）</li>
+<li>支持一键清空，最多保留 500 条记录</li>
+</ul>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>命令行模式（进阶功能）</h2>
+<p>除了 Web 界面，EduDaily 还提供了命令行工具，适合每天固定时间让电脑自动帮你跑。<strong>以下功能大部分也已在 Web 界面的「⚙️ 高级功能」标签页中提供</strong>，如果你更喜欢点按钮而不是敲命令，直接打开网页即可使用。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-批量分析-batchprocessor" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-批量分析-batchprocessor" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>批量分析 (<code>batch_processor</code>)</h3>
+<p>如果你有很多篇已抓取但还没生成摘要的文章，可以一键批量处理：</p>
+<pre class="hljs"><code><span class="hljs-comment"># 扫描所有未处理的文章，逐篇生成 AI 摘要，输出日报</span>
+python batch_processor.<span class="hljs-attr">py</span>
+
+<span class="hljs-comment"># 把之前已经处理过的也重新来一遍</span>
+python batch_processor.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>force<span class="hljs-punctuation">-</span>all
+
+<span class="hljs-comment"># 同时生成多平台版本（含公众号、小红书、抖音、播客）</span>
+python batch_processor.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>platform all
+
+<span class="hljs-comment"># 只生成小红书版本</span>
+python batch_processor.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>platform xhs
+
+<span class="hljs-comment"># 生成日报后自动复制到剪贴板</span>
+python batch_processor.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>copy
+
+<span class="hljs-comment"># 组合使用：全平台 + 自动复制</span>
+python batch_processor.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>platform all <span class="hljs-punctuation">--</span>copy
+</code></pre>
+<p>运行时会显示实时进度：</p>
+<pre class="hljs"><code>找到 <span class="hljs-number">10</span> 个未处理的文件，开始批量分析...
+
+  [<span class="hljs-number">1</span><span class="hljs-punctuation">/</span><span class="hljs-number">10</span>] 教育部_新政策.<span class="hljs-attr">txt</span> — 正在生成摘要... ✓ (1234ms)
+  [<span class="hljs-number">2</span><span class="hljs-punctuation">/</span><span class="hljs-number">10</span>] 北京大学_科研突破.<span class="hljs-attr">txt</span> — 正在生成摘要... ✓ (987ms)
+  ...
+
+日报已生成于<span class="hljs-punctuation">:</span> output\daily_summary_2026<span class="hljs-punctuation">-</span><span class="hljs-number">06</span><span class="hljs-punctuation">-</span><span class="hljs-number">02</span>.<span class="hljs-attr">md</span>
+</code></pre>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-定时自动运行-scheduler" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-定时自动运行-scheduler" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>定时自动运行 (<code>scheduler</code>)</h3>
+<p>让电脑像闹钟一样，每天在固定时间自动完成「抓取 → 分析 → 生成日报」全流程。</p>
+<pre class="hljs"><code><span class="hljs-comment"># 安装定时依赖</span>
+pip install schedule
+
+<span class="hljs-comment"># 每天 07:00 自动运行（默认时间）</span>
+python scheduler.<span class="hljs-attr">py</span>
+
+<span class="hljs-comment"># 修改时间：在 .env 中添加</span>
+<span class="hljs-comment">#   SCHEDULE_TIME = &quot;08:30&quot;</span>
+<span class="hljs-comment"># 然后启动</span>
+python scheduler.<span class="hljs-attr">py</span>
+
+<span class="hljs-comment"># 不等定时，立刻运行一次看看效果</span>
+python scheduler.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>once
+</code></pre>
+<p>启动后终端会显示下一次运行时间，按 <code>Ctrl+C</code> 停止。</p>
+<blockquote>
+<p>进阶玩法：把 <code>python scheduler.py</code> 设为开机自启动，每天早晨日报自动出现在 <code>output/</code> 文件夹里。</p>
+</blockquote>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-多平台内容适配-templateengine" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-多平台内容适配-templateengine" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>多平台内容适配 (<code>template_engine</code>)</h3>
+<p>同一篇文章，不同平台的写法完全不同。EduDaily 会自动给你生成四种版本：</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>平台</th>
+<th>风格</th>
+<th>适合场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>微信公众号</td>
+<td>专业深度分析，800-1200 字，Markdown 格式</td>
+<td>教育类公众号推文</td>
+</tr>
+<tr>
+<td>小红书</td>
+<td>活泼笔记，emoji 丰富，话题标签，300-500 字</td>
+<td>碎片化阅读，吸引互动</td>
+</tr>
+<tr>
+<td>抖音脚本</td>
+<td>60 秒口播脚本，黄金 3 秒开头，画面提示</td>
+<td>短视频录制参考</td>
+</tr>
+<tr>
+<td>播客口播稿</td>
+<td>3-5 分钟口播，口语化，带转场过渡</td>
+<td>音频节目录制</td>
+</tr>
+</tbody>
+</table>
+</div><p>你可以在 <code>templates/</code> 文件夹下找到每个平台的模板文件，用记事本打开即可修改风格。不需要懂编程。</p>
+<p>输出文件名示例：</p>
+<pre class="hljs"><code>output<span class="hljs-punctuation">/</span>daily_2026<span class="hljs-punctuation">-</span><span class="hljs-number">06</span><span class="hljs-punctuation">-</span>02_wechat.<span class="hljs-attr">md</span>      ← 公众号版
+output<span class="hljs-punctuation">/</span>daily_2026<span class="hljs-punctuation">-</span><span class="hljs-number">06</span><span class="hljs-punctuation">-</span>02_xhs.<span class="hljs-attr">txt</span>        ← 小红书版
+output<span class="hljs-punctuation">/</span>daily_2026<span class="hljs-punctuation">-</span><span class="hljs-number">06</span><span class="hljs-punctuation">-</span>02_douyin.<span class="hljs-attr">txt</span>     ← 抖音脚本版
+output<span class="hljs-punctuation">/</span>daily_2026<span class="hljs-punctuation">-</span><span class="hljs-number">06</span><span class="hljs-punctuation">-</span>02_podcast.<span class="hljs-attr">md</span>     ← 播客版
+output<span class="hljs-punctuation">/</span>daily_summary_2026<span class="hljs-punctuation">-</span><span class="hljs-number">06</span><span class="hljs-punctuation">-</span><span class="hljs-number">02</span>.<span class="hljs-attr">md</span>     ← 默认日报（汇总版）
+</code></pre>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-一键复制到剪贴板-clipboard" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-一键复制到剪贴板-clipboard" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>一键复制到剪贴板 (<code>clipboard</code>)</h3>
+<p>日报生成好了，不需要打开文件手动全选复制。</p>
+<pre class="hljs"><code><span class="hljs-comment"># 安装依赖</span>
+pip install pyperclip
+
+<span class="hljs-comment"># 复制今天的默认日报</span>
+python clipboard.<span class="hljs-attr">py</span>
+
+<span class="hljs-comment"># 复制今天的小红书版本</span>
+python clipboard.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>platform xhs
+
+<span class="hljs-comment"># 复制指定日期的公众号版本</span>
+python clipboard.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>platform wechat <span class="hljs-punctuation">--</span>date <span class="hljs-number">2026</span><span class="hljs-punctuation">-</span><span class="hljs-number">06</span><span class="hljs-punctuation">-</span><span class="hljs-number">02</span>
+
+<span class="hljs-comment"># 复制任意文件</span>
+python clipboard.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>file <span class="hljs-string">&quot;output/某篇文章.md&quot;</span>
+
+<span class="hljs-comment"># 跟在批量分析后面：分析完自动复制</span>
+python batch_processor.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>platform xhs <span class="hljs-punctuation">--</span>copy
+</code></pre>
+<blockquote>
+<p>Mac 用户无需额外配置。Windows 用户开箱即用。Linux 用户如果复制失败，运行 <code>sudo apt install xclip</code> 即可。</p>
+</blockquote>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-发送草稿到平台-publisher" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-发送草稿到平台-publisher" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>发送草稿到平台 (<code>publisher</code>)</h3>
+<p>对于开放 API 的平台（如微信公众号），可以直接将日报发送到草稿箱。</p>
+<pre class="hljs"><code><span class="hljs-comment"># 1. 复制凭据模板</span>
+<span class="hljs-keyword">cp</span> credentials.<span class="hljs-attr">example</span>.<span class="hljs-attr">json</span> credentials.<span class="hljs-attr">json</span>
+
+<span class="hljs-comment"># 2. 编辑 credentials.json，填入你的平台凭据</span>
+<span class="hljs-comment">#    （如何获取凭据，见下文&quot;平台接入说明&quot;）</span>
+
+<span class="hljs-comment"># 3. 发送草稿到微信公众号草稿箱</span>
+python publisher.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>platform wechat <span class="hljs-punctuation">--</span>file <span class="hljs-string">&quot;output/daily_2026-06-02_wechat.md&quot;</span> <span class="hljs-punctuation">--</span>title <span class="hljs-string">&quot;教育日报 2026-06-02&quot;</span>
+
+<span class="hljs-comment"># 4. 或在批量处理后直接发布</span>
+python batch_processor.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>platform wechat <span class="hljs-punctuation">--</span>publish<span class="hljs-punctuation">-</span>draft wechat
+</code></pre>
+<h4 id="edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-发送草稿到平台-publisher-平台接入说明" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-发送草稿到平台-publisher-平台接入说明" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>平台接入说明</h4>
+<p><strong>微信公众号（可运行）：</strong></p>
+<blockquote>
+<p>具体获取方法在每个 publisher 类的文档中有详细说明，运行 <code>python -c &quot;from publisher import WeChatPublisher; help(WeChatPublisher)&quot;</code> 即可查看。</p>
+</blockquote>
+<ol>
+<li>登录 <a href="https://mp.weixin.qq.com/">https://mp.weixin.qq.com/</a> →「开发 → 基本配置」获取 AppID 和 AppSecret</li>
+<li>配置 IP 白名单（添加你电脑的公网 IP）</li>
+<li>调用接口获取 access_token（终端运行以下命令）：<pre class="hljs"><code><span class="hljs-keyword">curl</span> <span class="hljs-string">&quot;https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&amp;appid=你的AppID&amp;secret=你的AppSecret&quot;</span>
+</code></pre>
+</li>
+<li>把返回的 access_token 填入 <code>credentials.json</code> 的 wechat 部分</li>
+</ol>
+<p><strong>知乎 &amp; 微博（预留接口）：</strong><br>
+由于这两个平台没有公开的草稿 API，当前提供框架接口。如果你有相关 API 权限，可在 <code>publisher.py</code> 中填入对应实现。</p>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-多平台内容格式说明" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-多平台内容格式说明" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>多平台内容格式说明</h2>
+<p>每个平台版本生成的内容具有不同特点。以下是各平台输出示例片段的对比：</p>
+<p><strong>微信公众号版（Markdown）—— 深度专业</strong></p>
+<pre class="hljs"><code><span class="hljs-punctuation">&gt;</span> 教育部发布AI赋能教育行动指导意见，计划到<span class="hljs-number">2027</span>年建设<span class="hljs-number">100</span>个AI教育示范区。
+
+<span class="hljs-comment">## 一、政策核心：AI如何进入课堂？</span>
+
+教育部此次发布的意见明确了三个重点方向...
+</code></pre>
+<p><strong>小红书版 —— 活泼亲切</strong></p>
+<pre class="hljs"><code>📚 教育部放大招！AI要进入全国课堂啦‼️
+
+✨ 核心消息：教育部要在<span class="hljs-number">2027</span>年前建成<span class="hljs-number">100</span>个AI教育示范区
+
+━━━━━━━━━━━━━
+
+📌 划重点
+<span class="hljs-number">1</span>️⃣ 覆盖从小学到大学所有学段
+<span class="hljs-number">2</span>️⃣ 中西部地区是重点支持对象
+<span class="hljs-number">3</span>️⃣ AI将用在教学、评价、管理全流程
+
+<span class="hljs-comment">#教育热点 #AI教育 #教育政策 #家长必看</span>
+</code></pre>
+<p><strong>抖音脚本版 —— 快节奏口播</strong></p>
+<pre class="hljs"><code>[画面：主播出镜，表情惊讶]
+（语速：快）教育部刚刚宣布！到<span class="hljs-number">2027</span>年，全国将有<span class="hljs-number">100</span>个AI教育示范区！
+
+[画面：切换课堂场景<span class="hljs-punctuation">/</span>AI概念图]
+（正常）这次的政策覆盖从小学到大学...
+</code></pre>
+<p><strong>播客口播稿版 —— 娓娓道来</strong></p>
+<pre class="hljs"><code>各位早上好，欢迎收听 EduDaily 教育早报。
+
+今天是 <span class="hljs-number">2026</span> 年 <span class="hljs-number">6</span> 月 <span class="hljs-number">2</span> 日，本期的教育关键词是：AI 赋能教育。
+
+先来看看今天最重要的教育动态——
+
+📌 教育部发布 AI 赋能教育行动指导意见
+就在昨天，教育部正式印发了...
+</code></pre>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>知识库文档编写指南</h2>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南-基本要求" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南-基本要求" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>基本要求</h3>
+<ul>
+<li>文件格式：<code>.txt</code> 纯文本</li>
+<li>编码：<code>UTF-8</code></li>
+<li><strong>文件第一行会自动成为文档标题</strong></li>
+</ul>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南-段落规则" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南-段落规则" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>段落规则</h3>
+<ul>
+<li>✅ <strong>不同主题之间用空行隔开</strong></li>
+<li>✅ 每个段落保持在 <strong>100-800 字</strong>之间</li>
+<li>✅ 段落内信息尽量独立完整</li>
+<li>❌ 不要几千字不分段，不要超短段落（少于 50 字会被跳过）</li>
+</ul>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南-推荐格式" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南-推荐格式" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>推荐格式</h3>
+<pre class="hljs"><code><span class="hljs-number">2025</span>年高考综合改革政策解读
+
+一、改革背景
+<span class="hljs-number">2025</span>年高考综合改革是在新课程改革和高考评价体系改革的基础上...
+
+二、主要变化
+<span class="hljs-number">1</span>. 考试科目调整：实行<span class="hljs-string">&quot;3+1+2&quot;</span>模式...
+<span class="hljs-number">2</span>. 招生录取方式：综合评价、多元录取...
+
+三、对学校的影响
+高中学校需要在课程设置、师资配置、教学管理等方面做出调整...
+
+四、对教师和学生的建议
+教师应关注新课标的核心素养要求，调整教学策略...
+</code></pre>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-网址提炼功能" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-网址提炼功能" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>网址提炼功能</h2>
+<p>不想手动写文档？直接把网址贴进来，AI 帮你搞定。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-网址提炼功能-使用方法" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-网址提炼功能-使用方法" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>使用方法</h3>
+<ol>
+<li>展开「<strong>🪄 想偷懒？试试输入网址帮你快速构成知识库</strong>」面板</li>
+<li>粘贴网址，每行一个（支持新闻、百科、博客等网页）</li>
+<li>点击「<strong>抓取并提炼</strong>」，系统自动抓取 + AI 提炼</li>
+<li>提炼完成后点击「<strong>导入已提炼的文档</strong>」加载到知识库</li>
+</ol>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-网址提炼功能-与每日日报的区别" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-网址提炼功能-与每日日报的区别" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>与每日日报的区别</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>网址提炼</th>
+<th>每日日报</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>触发方式</td>
+<td>手动粘贴网址</td>
+<td>一键自动抓取</td>
+</tr>
+<tr>
+<td>处理范围</td>
+<td>仅处理你粘贴的网址</td>
+<td>处理所有已配置的信息源</td>
+</tr>
+<tr>
+<td>日期筛选</td>
+<td>不筛选，全部提炼</td>
+<td>只抓取当日发布的文章</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>临时补充特定资料</td>
+<td>每日例行资讯收集</td>
+</tr>
+<tr>
+<td>溯源标注</td>
+<td>无特殊标注</td>
+<td>自动标注来源和日期</td>
+</tr>
+</tbody>
+</table>
+</div><hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>信息源管理 &amp; 每日日报</h2>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报-添加信息源" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报-添加信息源" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>添加信息源</h3>
+<ol>
+<li>展开「<strong>📡 信息源管理 &amp; 每日日报</strong>」面板</li>
+<li>在输入框中填写信息源名称和网址，例如：
+<ul>
+<li>名称：<code>教育部官网</code></li>
+<li>网址：<code>https://www.moe.gov.cn/</code></li>
+</ul>
+</li>
+<li>点击「添加」</li>
+</ol>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报-一键获取日报" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报-一键获取日报" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>一键获取日报</h3>
+<p>点击「<strong>📰 一键获取今日日报</strong>」按钮，系统会自动：</p>
+<pre class="hljs"><code>对每个信息源：
+  <span class="hljs-number">1</span>. 抓取首页 → 提取文本内容
+  <span class="hljs-number">2</span>. AI 识别当日发布的所有文章（标题、链接、日期）
+  <span class="hljs-number">3</span>. 逐篇抓取全文 → AI 提炼为结构化知识库文档
+  <span class="hljs-number">4</span>. 保存至本地 data<span class="hljs-punctuation">/</span>sample_docs<span class="hljs-punctuation">/</span> 并自动索引到知识库
+  <span class="hljs-number">5</span>. 文件名标注 [来源网站] 日期，确保可溯源
+</code></pre>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报-溯源机制" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报-溯源机制" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>溯源机制</h3>
+<p>每条入库文档的文件名格式为：</p>
+<pre class="hljs"><code>[教育部官网] <span class="hljs-number">2026</span><span class="hljs-punctuation">-</span><span class="hljs-number">05</span><span class="hljs-punctuation">-</span><span class="hljs-number">29</span> <span class="hljs-punctuation">|</span> 关于深化高中课程改革的指导意见
+</code></pre>
+<p>从知识库中检索到的每段内容，均可追溯到：</p>
+<ul>
+<li><strong>来源网站</strong>名称</li>
+<li><strong>发布日期</strong></li>
+<li><strong>原文链接</strong>（在获取结果中展示）</li>
+</ul>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-项目结构" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-项目结构" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>项目结构</h2>
+<pre class="hljs"><code>EduDaily<span class="hljs-punctuation">/</span>
+├── server.<span class="hljs-attr">py</span>                     <span class="hljs-comment"># Web 服务入口（FastAPI）</span>
+├── main.<span class="hljs-attr">py</span>                       <span class="hljs-comment"># 命令行管道（批处理模式）</span>
+├── batch_processor.<span class="hljs-attr">py</span>            <span class="hljs-comment"># 批量分析：一键生成所有文章摘要 + 日报</span>
+├── scheduler.<span class="hljs-attr">py</span>                  <span class="hljs-comment"># 定时自动运行：每天固定时间跑全流程</span>
+├── template_engine.<span class="hljs-attr">py</span>            <span class="hljs-comment"># 多平台模板引擎：公众号/小红书/抖音/播客</span>
+├── clipboard.<span class="hljs-attr">py</span>                  <span class="hljs-comment"># 一键复制日报到系统剪贴板</span>
+├── publisher.<span class="hljs-attr">py</span>                  <span class="hljs-comment"># 草稿箱发布框架（微信/知乎/微博）</span>
+├── config.<span class="hljs-attr">py</span>                     <span class="hljs-comment"># 所有参数集中管理</span>
+├── requirements.<span class="hljs-attr">txt</span>              <span class="hljs-comment"># Python 依赖包清单</span>
+├── .<span class="hljs-attr">env</span>.<span class="hljs-attr">example</span>                  <span class="hljs-comment"># API Key 配置模板</span>
+├── credentials.<span class="hljs-attr">example</span>.<span class="hljs-attr">json</span>      <span class="hljs-comment"># 平台发布凭据模板</span>
+│
+├── frontend<span class="hljs-punctuation">/</span>
+│   └── index.<span class="hljs-attr">html</span>                <span class="hljs-comment"># Vue3 单页应用（4 标签页布局，CDN 引入，零构建，浏览器即用）</span>
+│
+├── templates<span class="hljs-punctuation">/</span>
+│   ├── wechat.<span class="hljs-attr">j2</span>                 <span class="hljs-comment"># 公众号模板（专业深度分析）</span>
+│   ├── xiaohongshu.<span class="hljs-attr">j2</span>            <span class="hljs-comment"># 小红书模板（活泼 emoji 风）</span>
+│   ├── douyin.<span class="hljs-attr">j2</span>                 <span class="hljs-comment"># 抖音脚本模板（黄金 3 秒口播）</span>
+│   └── podcast.<span class="hljs-attr">j2</span>                <span class="hljs-comment"># 播客口播稿模板（口语化 + 转场）</span>
+│
+├── modules<span class="hljs-punctuation">/</span>
+│   ├── data_loader.<span class="hljs-attr">py</span>            <span class="hljs-comment"># 读取 .txt 文档</span>
+│   ├── chunker.<span class="hljs-attr">py</span>                <span class="hljs-comment"># 段落感知分块（重叠策略）</span>
+│   ├── extractor.<span class="hljs-attr">py</span>              <span class="hljs-comment"># LLM 教育资讯结构化抽取</span>
+│   ├── embedder.<span class="hljs-attr">py</span>               <span class="hljs-comment"># 本地 Embedding + ChromaDB 存储</span>
+│   ├── retriever.<span class="hljs-attr">py</span>              <span class="hljs-comment"># 查询向量化 + 语义检索</span>
+│   ├── generator.<span class="hljs-attr">py</span>              <span class="hljs-comment"># RAG 报告生成（含隐私脱敏）</span>
+│   ├── evaluator.<span class="hljs-attr">py</span>              <span class="hljs-comment"># 抽取/检索/生成质量评估</span>
+│   ├── privacy.<span class="hljs-attr">py</span>                <span class="hljs-comment"># 敏感信息检测与脱敏</span>
+│   ├── domain_classifier.<span class="hljs-attr">py</span>      <span class="hljs-comment"># 内容领域自动识别</span>
+│   ├── url_ingester.<span class="hljs-attr">py</span>           <span class="hljs-comment"># 网址抓取 + AI 提炼</span>
+│   └── daily_fetcher.<span class="hljs-attr">py</span>          <span class="hljs-comment"># 每日日报引擎（信息源抓取+当日筛选+入库）</span>
+│
+├── prompts<span class="hljs-punctuation">/</span>
+│   ├── personas.<span class="hljs-attr">py</span>               <span class="hljs-comment"># 领域-人格注册表</span>
+│   ├── extraction.<span class="hljs-attr">py</span>             <span class="hljs-comment"># 教育资讯抽取 Prompt 模板</span>
+│   └── generation.<span class="hljs-attr">py</span>             <span class="hljs-comment"># 报告生成 Prompt 模板（动态角色）</span>
+│
+├── db<span class="hljs-punctuation">/</span>
+│   ├── schema.<span class="hljs-attr">py</span>                 <span class="hljs-comment"># 数据库建表（含信息源和文章表）</span>
+│   └── repository.<span class="hljs-attr">py</span>             <span class="hljs-comment"># 数据库读写操作</span>
+│
+├── data<span class="hljs-punctuation">/</span>
+│   ├── sample_docs<span class="hljs-punctuation">/</span>              <span class="hljs-comment"># 知识库文档存放目录</span>
+│   └── processed.<span class="hljs-attr">json</span>            <span class="hljs-comment"># 已处理文件跟踪（自动生成）</span>
+│
+├── utils<span class="hljs-punctuation">/</span>
+│   └── helpers.<span class="hljs-attr">py</span>                <span class="hljs-comment"># 日志、计时等工具函数</span>
+│
+├── tests<span class="hljs-punctuation">/</span>                        <span class="hljs-comment"># 测试文件</span>
+│   ├── test_batch_processor.<span class="hljs-attr">py</span>
+│   ├── test_scheduler.<span class="hljs-attr">py</span>
+│   ├── test_template_engine.<span class="hljs-attr">py</span>
+│   ├── test_clipboard.<span class="hljs-attr">py</span>
+│   └── test_publisher.<span class="hljs-attr">py</span>
+│
+├── chroma_store<span class="hljs-punctuation">/</span>                 <span class="hljs-comment"># 向量数据库文件（自动生成）</span>
+└── output<span class="hljs-punctuation">/</span>                       <span class="hljs-comment"># 生成的报告文件（自动生成）</span>
+</code></pre>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-api-接口" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>API 接口</h2>
+<p>所有接口均在 <code>http://localhost:8765</code> 下：</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-api-接口-查询与知识库管理" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-查询与知识库管理" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>查询与知识库管理</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/</code></td>
+<td>Web 交互界面</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/health</code></td>
+<td>系统健康检查</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/query</code></td>
+<td>提交查询，返回检索结果 + AI 报告</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/extract</code></td>
+<td>触发 LLM 信息抽取</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/knowledge</code></td>
+<td>查看知识库文档列表</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/knowledge/upload</code></td>
+<td>上传 .txt 文件到知识库</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/api/knowledge/{doc_id}</code></td>
+<td>删除指定文档</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/knowledge/ingest-url</code></td>
+<td>提交网址列表，AI 提炼为知识库文档</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/knowledge/import-saved</code></td>
+<td>将已提炼的文档导入知识库</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="edudaily-每日教育资讯智能检索与分析系统-api-接口-信息源-每日日报" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-信息源-每日日报" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>信息源 &amp; 每日日报</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/sources</code></td>
+<td>列出所有信息源</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/sources</code></td>
+<td>添加信息源</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/api/sources/{source_id}</code></td>
+<td>删除信息源及其关联文章</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/daily-fetch</code></td>
+<td>一键获取所有信息源今日发布的文章</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="edudaily-每日教育资讯智能检索与分析系统-api-接口-批量分析-多平台" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-批量分析-多平台" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>批量分析 &amp; 多平台</h3>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/batch-analyze</code></td>
+<td>批量分析未处理的文章，生成日报</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/batch-analyze?platform=xhs</code></td>
+<td>同时生成指定平台版本</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/batch-analyze?platform=all</code></td>
+<td>生成全部四种平台版本</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/batch-analyze?force_all=true</code></td>
+<td>强制重新分析所有文章</td>
+</tr>
+</tbody>
+</table>
+</div><h3 id="edudaily-每日教育资讯智能检索与分析系统-api-接口-查询示例" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-查询示例" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>查询示例</h3>
+<pre class="hljs"><code><span class="hljs-keyword">curl</span> <span class="hljs-punctuation">-</span>X POST http<span class="hljs-punctuation">://</span>localhost<span class="hljs-punctuation">:</span><span class="hljs-number">8765</span><span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>query \
+  <span class="hljs-punctuation">-</span>H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+  <span class="hljs-punctuation">-</span>d <span class="hljs-string">&#039;{&quot;query&quot;: &quot;最新高考改革对高中教学有什么影响？&quot;, &quot;top_k&quot;: 5}&#039;</span>
+</code></pre>
+<p>返回内容包含：AI 生成的 Markdown 报告、检索到的文档片段（含相关度）、PII 脱敏数量、使用的分析视角。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-api-接口-添加信息源示例" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-添加信息源示例" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>添加信息源示例</h3>
+<pre class="hljs"><code><span class="hljs-keyword">curl</span> <span class="hljs-punctuation">-</span>X POST http<span class="hljs-punctuation">://</span>localhost<span class="hljs-punctuation">:</span><span class="hljs-number">8765</span><span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>sources \
+  <span class="hljs-punctuation">-</span>H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+  <span class="hljs-punctuation">-</span>d <span class="hljs-string">&#039;{&quot;name&quot;: &quot;中国教育报&quot;, &quot;url&quot;: &quot;https://www.jyb.cn/&quot;}&#039;</span>
+</code></pre>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-api-接口-批量分析示例" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-批量分析示例" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>批量分析示例</h3>
+<pre class="hljs"><code><span class="hljs-comment"># 批量分析 + 生成小红书版本</span>
+<span class="hljs-keyword">curl</span> <span class="hljs-punctuation">-</span>X POST <span class="hljs-string">&quot;http://localhost:8765/api/batch-analyze?platform=xhs&quot;</span>
+
+<span class="hljs-comment"># 全平台 + 强制重新处理</span>
+<span class="hljs-keyword">curl</span> <span class="hljs-punctuation">-</span>X POST <span class="hljs-string">&quot;http://localhost:8765/api/batch-analyze?platform=all&amp;force_all=true&quot;</span>
+</code></pre>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-api-接口-每日日报示例" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-每日日报示例" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>每日日报示例</h3>
+<pre class="hljs"><code><span class="hljs-keyword">curl</span> <span class="hljs-punctuation">-</span>X POST http<span class="hljs-punctuation">://</span>localhost<span class="hljs-punctuation">:</span><span class="hljs-number">8765</span><span class="hljs-punctuation">/</span>api<span class="hljs-punctuation">/</span>daily<span class="hljs-punctuation">-</span>fetch
+</code></pre>
+<p>返回：批次号、日期、收录文章列表（含标题、来源、原文链接、分块数）、错误信息。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-api-接口-命令行模式" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-命令行模式" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>命令行模式</h3>
+<pre class="hljs"><code><span class="hljs-comment"># 运行完整管道（一次性批处理）</span>
+python main.<span class="hljs-attr">py</span>
+
+<span class="hljs-comment"># 跳过 LLM 调用，仅测试本地模块</span>
+python main.<span class="hljs-attr">py</span> <span class="hljs-punctuation">--</span>skip<span class="hljs-punctuation">-</span>extraction <span class="hljs-punctuation">--</span>skip<span class="hljs-punctuation">-</span>generation
+
+<span class="hljs-comment"># 追加自定义查询</span>
+python main.<span class="hljs-attr">py</span> <span class="hljs-punctuation">-</span>q <span class="hljs-string">&quot;分析近期职业教育政策趋势&quot;</span>
+</code></pre>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-隐私保护机制" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-隐私保护机制" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>隐私保护机制</h2>
+<p>系统在将检索到的文本发送给 DeepSeek API 之前，<strong>自动检测并替换</strong>以下敏感信息：</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>检测方式</th>
+<th>替换为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>手机号</td>
+<td>正则精确匹配</td>
+<td><code>[手机号已隐藏]</code></td>
+</tr>
+<tr>
+<td>身份证号</td>
+<td>18位 + 校验位验证</td>
+<td><code>[身份证号已隐藏]</code></td>
+</tr>
+<tr>
+<td>银行卡号</td>
+<td>16-19位连续数字</td>
+<td><code>[银行卡号已隐藏]</code></td>
+</tr>
+<tr>
+<td>电子邮箱</td>
+<td>标准邮箱正则</td>
+<td><code>[邮箱已隐藏]</code></td>
+</tr>
+<tr>
+<td>人员姓名</td>
+<td>上下文模式匹配</td>
+<td><code>[姓名已隐藏]</code></td>
+</tr>
+<tr>
+<td>表格数据</td>
+<td>Markdown 表格 / TSV 行</td>
+<td><code>[表格行已隐藏]</code></td>
+</tr>
+</tbody>
+</table>
+</div><p>脱敏后的实际 Prompt 可在 Web 界面的「Prompt 工程」标签页查看验证。</p>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-技术架构" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-技术架构" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>技术架构</h2>
+<pre class="hljs"><code>信息源订阅 <span class="hljs-punctuation">/</span> 上传 .<span class="hljs-attr">txt</span> <span class="hljs-punctuation">/</span> 输入网址 → 段落分块 → LLM 抽取教育实体 → SQLite 存储
+                                            ↘
+                                      本地 Embedding → ChromaDB 向量索引
+
+Web 界面（<span class="hljs-number">4</span> 标签页布局）：
+  🔍 问答分析 → 向量检索 → 组装 Prompt → LLM 生成报告（含 PII 自动脱敏）
+  📚 知识库管理 → 上传<span class="hljs-punctuation">/</span>删除文档 <span class="hljs-punctuation">+</span> 网址提炼 <span class="hljs-punctuation">+</span> 导入
+  📡 信息源与日报 → 添加信息源 → 一键抓取当日文章 → AI 逐篇提炼入库 → 可溯源归档
+  ⚙️ 高级功能 → 批量分析（进度条）<span class="hljs-punctuation">+</span> 多平台内容生成 <span class="hljs-punctuation">+</span> 剪贴板工具 <span class="hljs-punctuation">+</span> 定时配置
+
+定时调度 → 每天固定时间 → 抓取 → 批量分析 → 生成日报 → 全自动
+</code></pre>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>选型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大语言模型</td>
+<td>DeepSeek Chat</td>
+<td>负责信息抽取、文章提炼、摘要生成和报告撰写</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td>BAAI/bge-small-zh-v1.5</td>
+<td>本地运行，无需 API，中文优化</td>
+</tr>
+<tr>
+<td>向量数据库</td>
+<td>ChromaDB</td>
+<td>持久化存储，重启不丢失数据</td>
+</tr>
+<tr>
+<td>结构化存储</td>
+<td>SQLite</td>
+<td>文件级数据库，无需安装服务</td>
+</tr>
+<tr>
+<td>前端</td>
+<td>Vue 3 + marked.js</td>
+<td>CDN 引入，零构建，4 标签页布局，浏览器即用</td>
+</tr>
+<tr>
+<td>后端</td>
+<td>FastAPI + uvicorn</td>
+<td>Python Web 框架，自动生成 API 文档</td>
+</tr>
+<tr>
+<td>模板引擎</td>
+<td>Jinja2</td>
+<td>轻量级模板，用户可直接编辑模板文件</td>
+</tr>
+<tr>
+<td>定时调度</td>
+<td>schedule</td>
+<td>轻量级定时任务，无需系统 cron 权限</td>
+</tr>
+<tr>
+<td>剪贴板</td>
+<td>pyperclip</td>
+<td>跨平台剪贴板支持</td>
+</tr>
+</tbody>
+</table>
+</div><blockquote>
+<p>不使用 LangChain 等重量级框架，所有代码纯 Python 实现，逻辑清晰可读。</p>
+</blockquote>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-可配置参数" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-可配置参数" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>可配置参数</h2>
+<p>在 <code>config.py</code> 中集中管理，API Key 通过 <code>.env</code> 文件设置。多平台模板在 <code>templates/</code> 文件夹中直接编辑。</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEEPSEEK_API_KEY</code></td>
+<td>（空）</td>
+<td>在 <code>.env</code> 中设置</td>
+</tr>
+<tr>
+<td><code>SCHEDULE_TIME</code></td>
+<td><code>07:00</code></td>
+<td>每日自动运行时间（在 <code>.env</code> 中设置）</td>
+</tr>
+<tr>
+<td><code>CHUNK_MAX_CHARS</code></td>
+<td>1000</td>
+<td>分块最大字符数</td>
+</tr>
+<tr>
+<td><code>CHUNK_OVERLAP_CHARS</code></td>
+<td>200</td>
+<td>相邻块重叠字符数</td>
+</tr>
+<tr>
+<td><code>CHUNK_MIN_CHARS</code></td>
+<td>50</td>
+<td>低于此长度的内容会被过滤</td>
+</tr>
+<tr>
+<td><code>TOP_K_RETRIEVAL</code></td>
+<td>5</td>
+<td>每次检索返回的片段数</td>
+</tr>
+<tr>
+<td><code>EXTRACTION_TEMPERATURE</code></td>
+<td>0.1</td>
+<td>信息抽取时的 LLM 温度（越低越稳定）</td>
+</tr>
+<tr>
+<td><code>GENERATION_TEMPERATURE</code></td>
+<td>0.3</td>
+<td>报告生成时的 LLM 温度</td>
+</tr>
+<tr>
+<td><code>API_TIMEOUT_SECONDS</code></td>
+<td>60</td>
+<td>API 请求超时时间</td>
+</tr>
+<tr>
+<td><code>CHROMA_COLLECTION_NAME</code></td>
+<td><code>edu_documents</code></td>
+<td>向量数据库集合名称</td>
+</tr>
+<tr>
+<td><code>SAMPLE_DOCS_DIR</code></td>
+<td><code>data/sample_docs</code></td>
+<td>知识库文件存放位置</td>
+</tr>
+</tbody>
+</table>
+</div><hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-常见问题" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>常见问题</h2>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-常见问题-q-启动时报错-deepseekapikey-not-configured" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-启动时报错-deepseekapikey-not-configured" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Q: 启动时报错 “DEEPSEEK_API_KEY not configured”</h3>
+<p><strong>A:</strong> 检查 <code>.env</code> 文件是否存在，以及里面的 Key 是否正确（不要有多余的引号或空格）。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-常见问题-q-提示-no-module-named-xxx" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-提示-no-module-named-xxx" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Q: 提示 “No module named ‘xxx’”</h3>
+<p><strong>A:</strong> 运行 <code>pip install -r requirements.txt</code> 确保所有依赖都安装了。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-常见问题-q-每日日报获取不到文章" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-每日日报获取不到文章" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Q: 每日日报获取不到文章？</h3>
+<p><strong>A:</strong> 可能的原因：</p>
+<ul>
+<li>目标网站当日确实没有更新</li>
+<li>网站需要特殊访问方式（如需要登录、反爬虫等）</li>
+<li>网站结构变化导致 AI 无法识别文章列表</li>
+<li>查看终端日志和返回结果中的 <code>errors</code> 字段了解详情</li>
+</ul>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-常见问题-q-怎么让系统每天自动运行" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-怎么让系统每天自动运行" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Q: 怎么让系统每天自动运行？</h3>
+<p><strong>A:</strong> 使用命令 <code>python scheduler.py</code> 启动定时调度器。想让它在电脑开机后自动启动，可以把它设为开机启动项或添加到系统任务计划中（Windows：任务计划程序，Mac：launchd，Linux：systemd 或 crontab）。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-常见问题-q-如何修改平台模板的风格" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-如何修改平台模板的风格" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Q: 如何修改平台模板的风格？</h3>
+<p><strong>A:</strong> 打开 <code>templates/</code> 文件夹，用记事本编辑对应的 <code>.j2</code> 文件即可。模板文件中用中文标注了每个部分的说明，不需要编程知识就能修改。改完后保存，下次生成就会用新的风格。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-常见问题-q-复制到剪贴板失败了怎么办" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-复制到剪贴板失败了怎么办" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Q: 复制到剪贴板失败了怎么办？</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li>Windows/Mac：运行 <code>pip install pyperclip</code> 安装依赖</li>
+<li>Linux：运行 <code>sudo apt install xclip</code> 安装系统剪贴板工具</li>
+<li>如果仍然失败，可以手动打开 <code>output/</code> 文件夹复制文件内容</li>
+</ul>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-常见问题-q-如何把日报直接发到微信公众号" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-如何把日报直接发到微信公众号" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Q: 如何把日报直接发到微信公众号？</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>复制 <code>credentials.example.json</code> 为 <code>credentials.json</code></li>
+<li>按照「<a href="#%E5%8F%91%E9%80%81%E8%8D%89%E7%A8%BF%E5%88%B0%E5%B9%B3%E5%8F%B0-publisher">发送草稿到平台</a>」中的步骤获取微信 AppID、Secret 和 access_token</li>
+<li>填入 <code>credentials.json</code>，运行 <code>python publisher.py --platform wechat --file &quot;output/日报文件.md&quot;</code></li>
+<li>登录微信公众号后台 → 草稿箱即可看到已保存的草稿<br>
+<strong>注意：</strong> access_token 有效期只有 2 小时，生产环境需要定期刷新。</li>
+</ol>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-常见问题-q-数据存在哪里安全吗" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-数据存在哪里安全吗" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Q: 数据存在哪里？安全吗？</h3>
+<p><strong>A:</strong> 所有数据都在你电脑的 <code>data/</code> 和 <code>chroma_store/</code> 目录下。只有生成报告时会把脱敏后的文本片段发送给 DeepSeek API，原始文档不会离开你的电脑。<code>credentials.json</code> 已加入 <code>.gitignore</code>，不会被上传到 GitHub。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-常见问题-q-怎么关掉服务" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-怎么关掉服务" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Q: 怎么关掉服务？</h3>
+<p><strong>A:</strong> 在终端里按 <code>Ctrl+C</code> 即可。</p>
+<h3 id="edudaily-每日教育资讯智能检索与分析系统-常见问题-q-支持-pdf-word-吗" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-支持-pdf-word-吗" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Q: 支持 PDF / Word 吗？</h3>
+<p><strong>A:</strong> 直接上传只支持 <code>.txt</code>。PDF/Word 请先复制内容到 <code>.txt</code> 文件中。网页内容可通过「网址提炼」功能直接抓取。</p>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-许可证" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-许可证" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>许可证</h2>
+<p>MIT License</p>
+<hr>
+<h2 id="edudaily-每日教育资讯智能检索与分析系统-windows-桌面版封装" class="docmd-heading"><a href="#edudaily-每日教育资讯智能检索与分析系统-windows-桌面版封装" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Windows 桌面版封装</h2>
+<p>桌面版入口是 <code>desktop_app.py</code>，使用 <code>pywebview</code> 承载现有 HTML/Vue 前端，并通过 Python 桌面桥接直接调用后端逻辑。桌面版不会启动本地 Web 服务，也不会暴露 localhost 端口。</p>
+<p>本版本已经使用 <code>assets/branding/app-icon.png</code> 生成应用图标 <code>assets/branding/app-icon.ico</code>，安装包、桌面快捷方式和 <code>EduDaily.exe</code> 都会使用这个图标。</p>
+<p>生成便携版程序目录：</p>
+<pre class="hljs"><code>powershell <span class="hljs-punctuation">-</span>ExecutionPolicy Bypass <span class="hljs-punctuation">-</span>File scripts\build_windows.<span class="hljs-attr">ps1</span>
+</code></pre>
+<p>输出位置：</p>
+<pre class="hljs"><code>dist\EduDaily\EduDaily.<span class="hljs-attr">exe</span>
+</code></pre>
+<p>安装 Inno Setup 6 后生成安装包：</p>
+<pre class="hljs"><code>powershell <span class="hljs-punctuation">-</span>ExecutionPolicy Bypass <span class="hljs-punctuation">-</span>File scripts\build_windows_installer.<span class="hljs-attr">ps1</span>
+</code></pre>
+<p>输出位置：</p>
+<pre class="hljs"><code>dist\installer\EduDailySetup<span class="hljs-punctuation">-</span><span class="hljs-number">0.1</span>.<span class="hljs-number">2</span>.<span class="hljs-attr">exe</span>
+</code></pre>
+<p>首次启动桌面版时，用户可以选择数据目录。进入首页后的“设置”页面可以继续管理 API Key、整体数据目录、.txt 知识库目录，并运行 RAG 通道检修。DeepSeek API Key 不会明文显示在页面上，真实内容保存在系统凭据管理器中。</p>
+
+                
+              </div>
+              <div class="toc-sidebar">
+                
+
+
+  <div class="toc-container">
+    <h2 class="toc-title">onThisPage<span class="mobile-view toc-menu-button float-right">
+<svg class="lucide-icon icon-chevron-down " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-down"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m6 9 6 6 6-6" />
+</svg>
+</span></h2>
+    <ul class="toc-list">
+      
+        <li class="toc-item toc-level-1">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统" class="toc-link">EduDaily — 每日教育资讯智能检索与分析系统</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-当前版本亮点" class="toc-link">当前版本亮点</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-目录" class="toc-link">目录</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-你能用它做什么" class="toc-link">你能用它做什么</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-环境要求" class="toc-link">环境要求</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手" class="toc-link">5 分钟快速上手</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-1-步下载项目" class="toc-link">第 1 步：下载项目</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-2-步安装依赖" class="toc-link">第 2 步：安装依赖</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-3-步配置-api-key" class="toc-link">第 3 步：配置 API Key</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-4-步启动服务" class="toc-link">第 4 步：启动服务</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-5-分钟快速上手-第-5-步打开浏览器" class="toc-link">第 5 步：打开浏览器</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-web-界面指南" class="toc-link">Web 界面指南</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-web-界面指南-问答分析" class="toc-link">🔍 问答分析</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-web-界面指南-知识库管理" class="toc-link">📚 知识库管理</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-web-界面指南-信息源与日报" class="toc-link">📡 信息源与日报</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-web-界面指南-高级功能" class="toc-link">⚙️ 高级功能</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能" class="toc-link">命令行模式（进阶功能）</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-批量分析-batchprocessor" class="toc-link">批量分析 (batch_processor)</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-定时自动运行-scheduler" class="toc-link">定时自动运行 (scheduler)</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-多平台内容适配-templateengine" class="toc-link">多平台内容适配 (template_engine)</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-一键复制到剪贴板-clipboard" class="toc-link">一键复制到剪贴板 (clipboard)</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-发送草稿到平台-publisher" class="toc-link">发送草稿到平台 (publisher)</a>
+        </li>
+      
+        <li class="toc-item toc-level-4">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-命令行模式进阶功能-发送草稿到平台-publisher-平台接入说明" class="toc-link">平台接入说明</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-多平台内容格式说明" class="toc-link">多平台内容格式说明</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南" class="toc-link">知识库文档编写指南</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南-基本要求" class="toc-link">基本要求</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南-段落规则" class="toc-link">段落规则</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-知识库文档编写指南-推荐格式" class="toc-link">推荐格式</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-网址提炼功能" class="toc-link">网址提炼功能</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-网址提炼功能-使用方法" class="toc-link">使用方法</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-网址提炼功能-与每日日报的区别" class="toc-link">与每日日报的区别</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报" class="toc-link">信息源管理 &amp; 每日日报</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报-添加信息源" class="toc-link">添加信息源</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报-一键获取日报" class="toc-link">一键获取日报</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-信息源管理-每日日报-溯源机制" class="toc-link">溯源机制</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-项目结构" class="toc-link">项目结构</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口" class="toc-link">API 接口</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-查询与知识库管理" class="toc-link">查询与知识库管理</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-信息源-每日日报" class="toc-link">信息源 &amp; 每日日报</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-批量分析-多平台" class="toc-link">批量分析 &amp; 多平台</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-查询示例" class="toc-link">查询示例</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-添加信息源示例" class="toc-link">添加信息源示例</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-批量分析示例" class="toc-link">批量分析示例</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-每日日报示例" class="toc-link">每日日报示例</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-api-接口-命令行模式" class="toc-link">命令行模式</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-隐私保护机制" class="toc-link">隐私保护机制</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-技术架构" class="toc-link">技术架构</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-可配置参数" class="toc-link">可配置参数</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题" class="toc-link">常见问题</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-启动时报错-deepseekapikey-not-configured" class="toc-link">Q: 启动时报错 “DEEPSEEK_API_KEY not configured”</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-提示-no-module-named-xxx" class="toc-link">Q: 提示 “No module named ‘xxx’”</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-每日日报获取不到文章" class="toc-link">Q: 每日日报获取不到文章？</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-怎么让系统每天自动运行" class="toc-link">Q: 怎么让系统每天自动运行？</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-如何修改平台模板的风格" class="toc-link">Q: 如何修改平台模板的风格？</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-复制到剪贴板失败了怎么办" class="toc-link">Q: 复制到剪贴板失败了怎么办？</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-如何把日报直接发到微信公众号" class="toc-link">Q: 如何把日报直接发到微信公众号？</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-数据存在哪里安全吗" class="toc-link">Q: 数据存在哪里？安全吗？</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-怎么关掉服务" class="toc-link">Q: 怎么关掉服务？</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-常见问题-q-支持-pdf-word-吗" class="toc-link">Q: 支持 PDF / Word 吗？</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-许可证" class="toc-link">许可证</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#edudaily-每日教育资讯智能检索与分析系统-windows-桌面版封装" class="toc-link">Windows 桌面版封装</a>
+        </li>
+      
+    </ul>
+  </div>
+
+              </div>
+            </div>
+            <div class="page-footer-actions">
+              
+              
+              <span class="git-spacer"></span>
+              
+            </div>
+          </main>
+          
+
+
+<footer class="page-footer">
+  <div class="footer-content">
+    <div class="user-footer"></div>
+    
+      <div class="branding-footer">
+        builtWith <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path><path d="M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.79 0l2.96 2.66"></path><path d="m18 15-2-2"></path><path d="m15 18-2-2"></path></svg> <a href="https://docmd.io" target="_blank" rel="noopener">docmd.</a>
+      </div>
+    
+  </div>
+</footer>
+
+        </div>
+      </div>
+      
+      <script src="./assets/js/docmd-main.js?v=mqazjik5"></script>
+      
+      <script src="./assets/js/docmd-git.js?v=mqazjik5"></script>
+      <script src="./assets/js/docmd-image-lightbox.js?v=mqazjik5" ></script>
+<script src="https://cdn.jsdelivr.net/npm/minisearch@7.2.0/dist/umd/index.min.js" ></script>
+<script src="./assets/js/docmd-search.js?v=mqazjik5" ></script>
+<script src="./assets/js/init-mermaid.js?v=mqazjik5" type="module"></script>
+<script src="./assets/js/docmd-git.js?v=mqazjik5" type="module"></script>
+
+  <!-- Search Modal (Injected by @docmd/plugin-search) -->
+  <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"
+       data-search-placeholder="Search documentation..."
+       data-search-no-results="No results found."
+       data-search-error="Failed to load search index."
+       data-search-initial="Type to start searching..."
+       data-search-navigate="to navigate"
+       data-search-escape="to close">
+      <div class="docmd-search-box">
+          <div class="docmd-search-header">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon icon-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+              <input type="text" id="docmd-search-input" placeholder="Search documentation..." autocomplete="off" spellcheck="false">
+              <button onclick="window.closeDocmdSearch()" class="docmd-search-close" aria-label="Close search">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon icon-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+              </button>
+          </div>
+          <div id="docmd-search-results" class="docmd-search-results"></div>
+          <div class="docmd-search-footer">
+              <span><kbd class="docmd-kbd">↑</kbd> <kbd class="docmd-kbd">↓</kbd> to navigate</span>
+              <span><kbd class="docmd-kbd">ESC</kbd> to close</span>
+          </div>
+      </div>
+  </div>
+
+    <script>
+      (function() {
+        var searchDebounceTimer;
+
+        document.addEventListener('click', function(e) {
+          var link = e.target.closest('a');
+          if (!link || !window.gtag) return;
+          
+          var url = link.href;
+          var hostname = window.location.hostname;
+          var isExternal = link.hostname && link.hostname !== hostname;
+          var isDownload = link.hasAttribute('download') || url.match(/\.(pdf|zip|tar|gz|exe|pkg)$/i);
+          
+          if (isExternal) {
+            gtag('event', 'click_external', { 'url': url, 'link_text': link.innerText.trim() });
+          } else if (isDownload) {
+            gtag('event', 'download', { 'file_name': url.split('/').pop(), 'url': url });
+          }
+
+          // TOC tracking
+          if (link.classList.contains('toc-link')) {
+            gtag('event', 'toc_click', { 'target_id': link.getAttribute('href'), 'title': link.innerText.trim() });
+          }
+
+          // Permalink tracking
+          if (link.classList.contains('heading-anchor')) {
+            gtag('event', 'permalink_click', { 'url': url });
+          }
+        });
+
+        
+        // Search Keyword Tracking
+        document.addEventListener('input', function(e) {
+          if (e.target.id === 'docmd-search-input' && window.gtag) {
+            var query = e.target.value.trim();
+            if (query.length < 3) return;
+            
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(function() {
+              gtag('event', 'search', { 'search_term': query });
+            }, 1000);
+          }
+        });
+        
+      })();
+    </script>
+
+<script>window.__git_config={"repo":null,"branch":"main","editLink":false,"lastUpdated":true,"commitHistory":true,"maxCommits":5,"dateFormat":"relative"};window.__git_i18n={"lastUpdated":"Last updated","recentCommits":"Recent commits","viewCommitHistory":"View commit history","editOnGitHub":"Edit on GitHub","editOnGitLab":"Edit on GitLab","editOnBitbucket":"Edit on Bitbucket","editThisPage":"Edit this page","justNow":"just now","minutesAgo":"{n}m ago","hoursAgo":"{n}h ago","daysAgo":"{n}d ago"}</script>
+      
+  </body>
+</html>

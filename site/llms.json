@@ -1,0 +1,12 @@
+{
+  "title": "EduDaily",
+  "description": "",
+  "pages": [
+    {
+      "title": "EduDaily — 每日教育资讯智能检索与分析系统",
+      "url": "/",
+      "description": "",
+      "priority": "high"
+    }
+  ]
+}

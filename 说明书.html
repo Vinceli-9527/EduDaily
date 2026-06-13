@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PageSkill Output</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+        line-height: 1.8;
+        color: #2c3e50;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 40px 20px;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 60px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      }
+      h1 {
+        font-size: 2.5em;
+        color: #667eea;
+        margin-bottom: 0.5em;
+        text-align: center;
+        font-weight: 700;
+      }
+      h2 {
+        font-size: 1.8em;
+        color: #764ba2;
+        margin-top: 1.5em;
+        margin-bottom: 0.8em;
+        padding-bottom: 0.3em;
+        border-bottom: 3px solid #667eea;
+        font-weight: 600;
+      }
+      h3 {
+        font-size: 1.4em;
+        color: #5a67d8;
+        margin-top: 1.2em;
+        margin-bottom: 0.6em;
+        font-weight: 600;
+      }
+      p {
+        margin-bottom: 1em;
+        font-size: 1.1em;
+        color: #4a5568;
+      }
+      ul, ol {
+        margin-left: 2em;
+        margin-bottom: 1.5em;
+      }
+      li {
+        margin-bottom: 0.8em;
+        font-size: 1.05em;
+        color: #4a5568;
+      }
+      strong {
+        color: #667eea;
+        font-weight: 600;
+      }
+      hr {
+        border: none;
+        border-top: 2px dashed #e2e8f0;
+        margin: 2em 0;
+      }
+      code {
+        background: #f7fafc;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 0.9em;
+        color: #e53e3e;
+      }
+      pre {
+        background: #2d3748;
+        color: #e2e8f0;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-x: auto;
+        margin: 1.5em 0;
+      }
+      pre code {
+        background: none;
+        color: inherit;
+        padding: 0;
+      }
+      blockquote {
+        border-left: 4px solid #667eea;
+        padding-left: 20px;
+        margin: 1.5em 0;
+        color: #718096;
+        font-style: italic;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1.5em auto;
+        border-radius: 8px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5em 0;
+        font-size: 1em;
+      }
+      th, td {
+        border: 1px solid #e2e8f0;
+        padding: 10px 14px;
+        text-align: left;
+      }
+      th {
+        background: #f7fafc;
+        color: #667eea;
+        font-weight: 600;
+      }
+      td {
+        color: #4a5568;
+      }
+      a {
+        color: #667eea;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>EduDaily — 每日教育资讯智能检索与分析系统</h1>
+<p><img src="assets/branding/readme-hero.png" alt="EduDaily 教育资讯智能检索与分析"></p>
+<p>一个<strong>面向教育工作者</strong>的本地化每日资讯聚合与智能分析系统。设定关注的信息源，一键获取当日最新教育资讯，AI 自动提炼、索引、生成结构化日报，并<strong>一键适配微信公众号、小红书、抖音、播客等多种平台</strong>。</p>
+<p><strong>你不需要会编程</strong>——只需要跟着下面的步骤做，10 分钟就能跑起来。</p>
+<hr>
+<h2>当前版本亮点</h2>
+<ul>
+<li><strong>Windows 桌面版</strong>：支持打包为安装包，安装后可从桌面快捷方式启动，不需要用户手动打开终端。</li>
+<li><strong>设置页</strong>：首页可进入独立设置页，统一管理 API Key、数据目录、.txt 知识库目录和 RAG 通道检修。</li>
+<li><strong>多 API Key 管理</strong>：每个 Key 都可以命名；页面只显示脱敏形式，真实 Key 保存在系统凭据管理器中。</li>
+<li><strong>RAG 通道检修</strong>：可检查 API Key、本地嵌入模型、SQLite、Chroma，并支持重新加载知识库和重建向量库。</li>
+<li><strong>使用教程</strong>：第一步会引导用户前往 DeepSeek API Keys 页面创建 Key，并用大白话说明 Key 的用途、保密和余额要求。</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>源项目声明</strong>：本项目是基于 <a href="https://github.com/Vinceli-9527/KnowledgeVault"><strong>KnowledgeVault</strong></a> —— 一个通用 RAG 知识库检索与隐私保护分析系统 —— 衍生而来的<strong>教育领域专用分支</strong>。EduDaily 继承了 KnowledgeVault 的核心 RAG 管道架构（加载→分块→抽取→嵌入→检索→生成→评估），并在此基础上针对<strong>教育工作者每日资讯获取</strong>的需求进行了专项改造，包括：新增信息源管理、一键日报抓取、教育实体抽取、资讯溯源归档、批量分析、多平台内容适配、定时自动化运行等功能。如果你需要一个通用领域的知识库分析系统，请访问源项目 <a href="https://github.com/Vinceli-9527/KnowledgeVault">KnowledgeVault</a>。</p>
+</blockquote>
+<hr>
+<h2>目录</h2>
+<ul>
+<li><a href="#%E4%BD%A0%E8%83%BD%E7%94%A8%E5%AE%83%E5%81%9A%E4%BB%80%E4%B9%88">你能用它做什么</a></li>
+<li><a href="#%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82">环境要求</a></li>
+<li><a href="#5-%E5%88%86%E9%92%9F%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B">5 分钟快速上手</a></li>
+<li><a href="#web-%E7%95%8C%E9%9D%A2%E6%8C%87%E5%8D%97">Web 界面指南</a></li>
+<li><a href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6%E5%8A%9F%E8%83%BD">命令行模式（进阶功能）</a><ul>
+<li><a href="#%E6%89%B9%E9%87%8F%E5%88%86%E6%9E%90-batch_processor">批量分析</a></li>
+<li><a href="#%E5%AE%9A%E6%97%B6%E8%87%AA%E5%8A%A8%E8%BF%90%E8%A1%8C-scheduler">定时自动运行</a></li>
+<li><a href="#%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E9%80%82%E9%85%8D-template_engine">多平台内容适配</a></li>
+<li><a href="#%E4%B8%80%E9%94%AE%E5%A4%8D%E5%88%B6%E5%88%B0%E5%89%AA%E8%B4%B4%E6%9D%BF-clipboard">一键复制到剪贴板</a></li>
+<li><a href="#%E5%8F%91%E9%80%81%E8%8D%89%E7%A8%BF%E5%88%B0%E5%B9%B3%E5%8F%B0-publisher">发送草稿到平台</a></li>
+</ul>
+</li>
+<li><a href="#%E5%A4%9A%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AE%B9%E6%A0%BC%E5%BC%8F%E8%AF%B4%E6%98%8E">多平台内容格式说明</a></li>
+<li><a href="#%E7%9F%A5%E8%AF%86%E5%BA%93%E6%96%87%E6%A1%A3%E7%BC%96%E5%86%99%E6%8C%87%E5%8D%97">知识库文档编写指南</a></li>
+<li><a href="#%E7%BD%91%E5%9D%80%E6%8F%90%E7%82%BC%E5%8A%9F%E8%83%BD">网址提炼功能</a></li>
+<li><a href="#%E4%BF%A1%E6%81%AF%E6%BA%90%E7%AE%A1%E7%90%86--%E6%AF%8F%E6%97%A5%E6%97%A5%E6%8A%A5">信息源管理 &amp; 每日日报</a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84">项目结构</a></li>
+<li><a href="#api-%E6%8E%A5%E5%8F%A3">API 接口</a></li>
+<li><a href="#%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6">隐私保护机制</a></li>
+<li><a href="#%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84">技术架构</a></li>
+<li><a href="#%E5%8F%AF%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0">可配置参数</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">常见问题</a></li>
+<li><a href="#%E8%AE%B8%E5%8F%AF%E8%AF%81">许可证</a></li>
+</ul>
+<hr>
+<h2>你能用它做什么</h2>
+<ul>
+<li><strong>一键获取每日日报</strong> — 设定教育资讯网站为信息源，点一个按钮（或设置定时）自动抓取今日发布的所有文章</li>
+<li><strong>AI 自动提炼归档</strong> — 文章内容经 LLM 提炼为结构化知识库文档，自动分块、向量化、建立索引</li>
+<li><strong>批量分析生成日报</strong> — 在网页上点一个按钮，扫描所有未处理文章，一次性生成当天日报摘要，实时显示处理进度</li>
+<li><strong>多平台一键适配</strong> — 同一份内容自动生成微信公众号、小红书、抖音脚本、播客口播稿四种版本，网页上直接选择和预览</li>
+<li><strong>一键复制</strong> — 网页内置剪贴板工具，选择平台和日期即可复制日报内容，也可自由粘贴文本后复制</li>
+<li><strong>定时自动运行</strong> — 在网页上设定每日运行时间，配置自动保存到浏览器；配合后台 <code>scheduler.py</code> 实现全自动运转</li>
+<li><strong>资讯可溯源</strong> — 每条入库文档标注来源网站和发布日期，随时追溯到原始出处</li>
+<li><strong>自然语言查询</strong> — 像聊天一样提问，系统从知识库中检索相关内容，生成带引用来源的分析报告</li>
+<li><strong>上传文档即用</strong> — 拖拽 <code>.txt</code> 文件到网页（政策文件、教研报告等），自动索引</li>
+<li><strong>隐私保护</strong> — 报告发送到云端 API 前，自动隐藏手机号、身份证等敏感信息</li>
+<li><strong>全过程可视化</strong> — 在网页上查看完整的 Prompt 是如何组装的，底部日志面板记录每一次操作</li>
+</ul>
+<hr>
+<h2>环境要求</h2>
+<table>
+<thead>
+<tr>
+<th>你需要有</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>一台电脑</strong></td>
+<td>Windows / Mac / Linux 都可以</td>
+</tr>
+<tr>
+<td><strong>Python 3.10+</strong></td>
+<td><a href="https://www.python.org/downloads/">python.org</a> 下载安装</td>
+</tr>
+<tr>
+<td><strong>DeepSeek API Key</strong></td>
+<td><a href="https://platform.deepseek.com/">platform.deepseek.com</a> 注册获取（新用户有免费额度）</td>
+</tr>
+<tr>
+<td><strong>网络连接</strong></td>
+<td>调用 DeepSeek API 时需要</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>不需要 GPU，不需要 Docker，不需要数据库服务。所有组件都在本地运行。</p>
+</blockquote>
+<hr>
+<h2>5 分钟快速上手</h2>
+<h3>第 1 步：下载项目</h3>
+<pre><code class="language-bash">git clone https://github.com/Vinceli-9527/EduDaily.git
+cd EduDaily
+</code></pre>
+<p>如果你没有 Git，也可以直接在 GitHub 页面点击绿色的「Code」按钮 →「Download ZIP」，解压后进入文件夹。</p>
+<h3>第 2 步：安装依赖</h3>
+<p>打开<strong>终端</strong>（Windows 按 <code>Win+R</code> 输入 <code>cmd</code>，Mac 打开「终端」），进入项目文件夹后运行：</p>
+<pre><code class="language-bash">pip install -r requirements.txt
+</code></pre>
+<blockquote>
+<p>如果提示 <code>pip</code> 找不到，试试 <code>pip3 install -r requirements.txt</code>。</p>
+</blockquote>
+<p>首次运行时会自动下载一个约 100MB 的中文 Embedding 模型，之后就不需要再下载了。</p>
+<h3>第 3 步：配置 API Key</h3>
+<pre><code class="language-bash"># 复制一份配置文件
+cp .env.example .env
+</code></pre>
+<p>然后用<strong>记事本</strong>打开 <code>.env</code> 文件，把里面的内容改成你真实的 API Key：</p>
+<pre><code>DEEPSEEK_API_KEY = &quot;sk-你的真实密钥&quot;
+</code></pre>
+<blockquote>
+<p><code>.env</code> 文件已加入 <code>.gitignore</code>，不会被上传到 GitHub，放心。</p>
+</blockquote>
+<h3>第 4 步：启动服务</h3>
+<pre><code class="language-bash">python server.py
+</code></pre>
+<p>看到 <code>EduDaily server ready! Open http://localhost:8765</code> 就说明启动成功了。</p>
+<h3>第 5 步：打开浏览器</h3>
+<p>在浏览器地址栏输入 <strong><code>http://localhost:8765</code></strong>，就能看到界面了。</p>
+<hr>
+<h2>Web 界面指南</h2>
+<p>打开网页后，顶部状态栏显示三个状态指示灯（管道就绪、API Key 配置状态、向量索引数量）。下方是 <strong>四个主导航标签页</strong>，分别对应不同的功能模块：</p>
+<hr>
+<h3>🔍 问答分析</h3>
+<p>输入问题，AI 从知识库中检索相关内容并生成分析报告。</p>
+<ul>
+<li><strong>搜索框</strong>：输入你关心的教育问题（如&quot;最新高考改革政策有哪些变化？&quot;），点击「开始分析」或按回车</li>
+<li><strong>管道进度条</strong>：实时显示 5 个处理阶段（输入 → 检索 → Prompt 构建 → LLM 生成 → 报告输出）</li>
+<li><strong>分析报告</strong>：AI 生成的 Markdown 格式专业报告，顶部标注生成耗时和使用的分析视角</li>
+<li><strong>Prompt 工程</strong>：查看完整的 System Prompt 和 User Prompt，不同颜色标注检索上下文（紫色）、结构化数据（绿色）、用户查询（橙色）</li>
+<li><strong>检索结果</strong>：展示检索到的文档片段，每个片段显示相关度分数和来源文档</li>
+</ul>
+<hr>
+<h3>📚 知识库管理</h3>
+<p>管理所有已索引的知识库文档。</p>
+<ul>
+<li><strong>上传文档</strong>：拖拽 <code>.txt</code> 文件到上传区域，或点击按钮选择文件</li>
+<li><strong>文档列表</strong>：查看已上传的文档名称、分块数、字数、创建日期</li>
+<li><strong>删除</strong>：每个文档旁有删除按钮（带确认提示）</li>
+<li><strong>编写指南</strong>：展开「如何编写高质量知识库文档？」查看格式规范和推荐模板</li>
+<li><strong>网址提炼</strong>（🪄 面板）：粘贴网址（每行一个），AI 自动抓取内容并提炼为结构化知识库文档，提炼完成后可一键导入</li>
+</ul>
+<hr>
+<h3>📡 信息源与日报</h3>
+<p>管理教育资讯订阅源，一键获取每日日报。</p>
+<ul>
+<li><strong>添加信息源</strong>：输入名称和网址（如&quot;教育部官网&quot; + <code>https://www.moe.gov.cn/</code>）</li>
+<li><strong>信息源列表</strong>：查看所有已配置的信息源及其同步状态（已同步/未同步）</li>
+<li><strong>一键获取日报</strong>：点击绿色按钮，自动从所有信息源抓取今日发布的最新资讯，AI 逐篇提炼并索引入库</li>
+<li><strong>获取结果</strong>：展示每篇文章的标题、来源、日期、分块数、原文链接，以及任何错误信息</li>
+</ul>
+<hr>
+<h3>⚙️ 高级功能</h3>
+<p>一站式使用批量分析、多平台内容生成、剪贴板和定时配置。</p>
+<p><strong>📊 批量分析并生成多平台日报：</strong></p>
+<ul>
+<li>选择目标平台（全部平台 / 微信公众号 / 小红书 / 抖音 / 播客），可选「强制重新处理全部文章」</li>
+<li>点击「开始批量分析」，实时进度条显示处理进度</li>
+<li>完成后展示每篇文章的摘要，以及各平台版本的生成结果</li>
+</ul>
+<p><strong>🎨 多平台内容生成：</strong></p>
+<ul>
+<li>选择目标平台，粘贴或输入文本内容</li>
+<li>点击按钮，AI 自动将内容改写为适配该平台风格的文案</li>
+<li>生成结果可直接预览，并一键复制到剪贴板</li>
+</ul>
+<p><strong>📋 剪贴板工具：</strong></p>
+<ul>
+<li>按平台和日期获取最新日报并复制到剪贴板</li>
+<li>或直接在文本框内粘贴/编辑内容，点击按钮复制</li>
+</ul>
+<p><strong>⏰ 定时任务配置：</strong></p>
+<ul>
+<li>开关按钮启用/禁用每日自动运行</li>
+<li>设定运行时间（小时 + 分钟），配置自动保存到浏览器本地</li>
+<li>配合后台 <code>python scheduler.py</code> 实现每天定时抓取 + 分析 + 生成日报</li>
+</ul>
+<p><strong>📋 运行日志（页面底部）：</strong></p>
+<ul>
+<li>可折叠的日志面板，记录所有操作和 API 调用的详细日志</li>
+<li>每条日志带有时间戳和类型标识（信息 / 成功 / 警告 / 错误）</li>
+<li>支持一键清空，最多保留 500 条记录</li>
+</ul>
+<hr>
+<h2>命令行模式（进阶功能）</h2>
+<p>除了 Web 界面，EduDaily 还提供了命令行工具，适合每天固定时间让电脑自动帮你跑。<strong>以下功能大部分也已在 Web 界面的「⚙️ 高级功能」标签页中提供</strong>，如果你更喜欢点按钮而不是敲命令，直接打开网页即可使用。</p>
+<h3>批量分析 (<code>batch_processor</code>)</h3>
+<p>如果你有很多篇已抓取但还没生成摘要的文章，可以一键批量处理：</p>
+<pre><code class="language-bash"># 扫描所有未处理的文章，逐篇生成 AI 摘要，输出日报
+python batch_processor.py
+
+# 把之前已经处理过的也重新来一遍
+python batch_processor.py --force-all
+
+# 同时生成多平台版本（含公众号、小红书、抖音、播客）
+python batch_processor.py --platform all
+
+# 只生成小红书版本
+python batch_processor.py --platform xhs
+
+# 生成日报后自动复制到剪贴板
+python batch_processor.py --copy
+
+# 组合使用：全平台 + 自动复制
+python batch_processor.py --platform all --copy
+</code></pre>
+<p>运行时会显示实时进度：</p>
+<pre><code>找到 10 个未处理的文件，开始批量分析...
+
+  [1/10] 教育部_新政策.txt — 正在生成摘要... ✓ (1234ms)
+  [2/10] 北京大学_科研突破.txt — 正在生成摘要... ✓ (987ms)
+  ...
+
+日报已生成于: output\daily_summary_2026-06-02.md
+</code></pre>
+<h3>定时自动运行 (<code>scheduler</code>)</h3>
+<p>让电脑像闹钟一样，每天在固定时间自动完成「抓取 → 分析 → 生成日报」全流程。</p>
+<pre><code class="language-bash"># 安装定时依赖
+pip install schedule
+
+# 每天 07:00 自动运行（默认时间）
+python scheduler.py
+
+# 修改时间：在 .env 中添加
+#   SCHEDULE_TIME = &quot;08:30&quot;
+# 然后启动
+python scheduler.py
+
+# 不等定时，立刻运行一次看看效果
+python scheduler.py --once
+</code></pre>
+<p>启动后终端会显示下一次运行时间，按 <code>Ctrl+C</code> 停止。</p>
+<blockquote>
+<p>进阶玩法：把 <code>python scheduler.py</code> 设为开机自启动，每天早晨日报自动出现在 <code>output/</code> 文件夹里。</p>
+</blockquote>
+<h3>多平台内容适配 (<code>template_engine</code>)</h3>
+<p>同一篇文章，不同平台的写法完全不同。EduDaily 会自动给你生成四种版本：</p>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>风格</th>
+<th>适合场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>微信公众号</td>
+<td>专业深度分析，800-1200 字，Markdown 格式</td>
+<td>教育类公众号推文</td>
+</tr>
+<tr>
+<td>小红书</td>
+<td>活泼笔记，emoji 丰富，话题标签，300-500 字</td>
+<td>碎片化阅读，吸引互动</td>
+</tr>
+<tr>
+<td>抖音脚本</td>
+<td>60 秒口播脚本，黄金 3 秒开头，画面提示</td>
+<td>短视频录制参考</td>
+</tr>
+<tr>
+<td>播客口播稿</td>
+<td>3-5 分钟口播，口语化，带转场过渡</td>
+<td>音频节目录制</td>
+</tr>
+</tbody></table>
+<p>你可以在 <code>templates/</code> 文件夹下找到每个平台的模板文件，用记事本打开即可修改风格。不需要懂编程。</p>
+<p>输出文件名示例：</p>
+<pre><code>output/daily_2026-06-02_wechat.md      ← 公众号版
+output/daily_2026-06-02_xhs.txt        ← 小红书版
+output/daily_2026-06-02_douyin.txt     ← 抖音脚本版
+output/daily_2026-06-02_podcast.md     ← 播客版
+output/daily_summary_2026-06-02.md     ← 默认日报（汇总版）
+</code></pre>
+<h3>一键复制到剪贴板 (<code>clipboard</code>)</h3>
+<p>日报生成好了，不需要打开文件手动全选复制。</p>
+<pre><code class="language-bash"># 安装依赖
+pip install pyperclip
+
+# 复制今天的默认日报
+python clipboard.py
+
+# 复制今天的小红书版本
+python clipboard.py --platform xhs
+
+# 复制指定日期的公众号版本
+python clipboard.py --platform wechat --date 2026-06-02
+
+# 复制任意文件
+python clipboard.py --file &quot;output/某篇文章.md&quot;
+
+# 跟在批量分析后面：分析完自动复制
+python batch_processor.py --platform xhs --copy
+</code></pre>
+<blockquote>
+<p>Mac 用户无需额外配置。Windows 用户开箱即用。Linux 用户如果复制失败，运行 <code>sudo apt install xclip</code> 即可。</p>
+</blockquote>
+<h3>发送草稿到平台 (<code>publisher</code>)</h3>
+<p>对于开放 API 的平台（如微信公众号），可以直接将日报发送到草稿箱。</p>
+<pre><code class="language-bash"># 1. 复制凭据模板
+cp credentials.example.json credentials.json
+
+# 2. 编辑 credentials.json，填入你的平台凭据
+#    （如何获取凭据，见下文&quot;平台接入说明&quot;）
+
+# 3. 发送草稿到微信公众号草稿箱
+python publisher.py --platform wechat --file &quot;output/daily_2026-06-02_wechat.md&quot; --title &quot;教育日报 2026-06-02&quot;
+
+# 4. 或在批量处理后直接发布
+python batch_processor.py --platform wechat --publish-draft wechat
+</code></pre>
+<h4>平台接入说明</h4>
+<p><strong>微信公众号（可运行）：</strong></p>
+<blockquote>
+<p>具体获取方法在每个 publisher 类的文档中有详细说明，运行 <code>python -c &quot;from publisher import WeChatPublisher; help(WeChatPublisher)&quot;</code> 即可查看。</p>
+</blockquote>
+<ol>
+<li>登录 <a href="https://mp.weixin.qq.com/">https://mp.weixin.qq.com/</a> →「开发 → 基本配置」获取 AppID 和 AppSecret</li>
+<li>配置 IP 白名单（添加你电脑的公网 IP）</li>
+<li>调用接口获取 access_token（终端运行以下命令）：<pre><code class="language-bash">curl &quot;https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&amp;appid=你的AppID&amp;secret=你的AppSecret&quot;
+</code></pre>
+</li>
+<li>把返回的 access_token 填入 <code>credentials.json</code> 的 wechat 部分</li>
+</ol>
+<p><strong>知乎 &amp; 微博（预留接口）：</strong>
+由于这两个平台没有公开的草稿 API，当前提供框架接口。如果你有相关 API 权限，可在 <code>publisher.py</code> 中填入对应实现。</p>
+<hr>
+<h2>多平台内容格式说明</h2>
+<p>每个平台版本生成的内容具有不同特点。以下是各平台输出示例片段的对比：</p>
+<p><strong>微信公众号版（Markdown）—— 深度专业</strong></p>
+<pre><code class="language-markdown">&gt; 教育部发布AI赋能教育行动指导意见，计划到2027年建设100个AI教育示范区。
+
+## 一、政策核心：AI如何进入课堂？
+
+教育部此次发布的意见明确了三个重点方向...
+</code></pre>
+<p><strong>小红书版 —— 活泼亲切</strong></p>
+<pre><code>📚 教育部放大招！AI要进入全国课堂啦‼️
+
+✨ 核心消息：教育部要在2027年前建成100个AI教育示范区
+
+━━━━━━━━━━━━━
+
+📌 划重点
+1️⃣ 覆盖从小学到大学所有学段
+2️⃣ 中西部地区是重点支持对象
+3️⃣ AI将用在教学、评价、管理全流程
+
+#教育热点 #AI教育 #教育政策 #家长必看
+</code></pre>
+<p><strong>抖音脚本版 —— 快节奏口播</strong></p>
+<pre><code>[画面：主播出镜，表情惊讶]
+（语速：快）教育部刚刚宣布！到2027年，全国将有100个AI教育示范区！
+
+[画面：切换课堂场景/AI概念图]
+（正常）这次的政策覆盖从小学到大学...
+</code></pre>
+<p><strong>播客口播稿版 —— 娓娓道来</strong></p>
+<pre><code>各位早上好，欢迎收听 EduDaily 教育早报。
+
+今天是 2026 年 6 月 2 日，本期的教育关键词是：AI 赋能教育。
+
+先来看看今天最重要的教育动态——
+
+📌 教育部发布 AI 赋能教育行动指导意见
+就在昨天，教育部正式印发了...
+</code></pre>
+<hr>
+<h2>知识库文档编写指南</h2>
+<h3>基本要求</h3>
+<ul>
+<li>文件格式：<code>.txt</code> 纯文本</li>
+<li>编码：<code>UTF-8</code></li>
+<li><strong>文件第一行会自动成为文档标题</strong></li>
+</ul>
+<h3>段落规则</h3>
+<ul>
+<li>✅ <strong>不同主题之间用空行隔开</strong></li>
+<li>✅ 每个段落保持在 <strong>100-800 字</strong>之间</li>
+<li>✅ 段落内信息尽量独立完整</li>
+<li>❌ 不要几千字不分段，不要超短段落（少于 50 字会被跳过）</li>
+</ul>
+<h3>推荐格式</h3>
+<pre><code>2025年高考综合改革政策解读
+
+一、改革背景
+2025年高考综合改革是在新课程改革和高考评价体系改革的基础上...
+
+二、主要变化
+1. 考试科目调整：实行&quot;3+1+2&quot;模式...
+2. 招生录取方式：综合评价、多元录取...
+
+三、对学校的影响
+高中学校需要在课程设置、师资配置、教学管理等方面做出调整...
+
+四、对教师和学生的建议
+教师应关注新课标的核心素养要求，调整教学策略...
+</code></pre>
+<hr>
+<h2>网址提炼功能</h2>
+<p>不想手动写文档？直接把网址贴进来，AI 帮你搞定。</p>
+<h3>使用方法</h3>
+<ol>
+<li>展开「<strong>🪄 想偷懒？试试输入网址帮你快速构成知识库</strong>」面板</li>
+<li>粘贴网址，每行一个（支持新闻、百科、博客等网页）</li>
+<li>点击「<strong>抓取并提炼</strong>」，系统自动抓取 + AI 提炼</li>
+<li>提炼完成后点击「<strong>导入已提炼的文档</strong>」加载到知识库</li>
+</ol>
+<h3>与每日日报的区别</h3>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>网址提炼</th>
+<th>每日日报</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>触发方式</td>
+<td>手动粘贴网址</td>
+<td>一键自动抓取</td>
+</tr>
+<tr>
+<td>处理范围</td>
+<td>仅处理你粘贴的网址</td>
+<td>处理所有已配置的信息源</td>
+</tr>
+<tr>
+<td>日期筛选</td>
+<td>不筛选，全部提炼</td>
+<td>只抓取当日发布的文章</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>临时补充特定资料</td>
+<td>每日例行资讯收集</td>
+</tr>
+<tr>
+<td>溯源标注</td>
+<td>无特殊标注</td>
+<td>自动标注来源和日期</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>信息源管理 &amp; 每日日报</h2>
+<h3>添加信息源</h3>
+<ol>
+<li>展开「<strong>📡 信息源管理 &amp; 每日日报</strong>」面板</li>
+<li>在输入框中填写信息源名称和网址，例如：<ul>
+<li>名称：<code>教育部官网</code></li>
+<li>网址：<code>https://www.moe.gov.cn/</code></li>
+</ul>
+</li>
+<li>点击「添加」</li>
+</ol>
+<h3>一键获取日报</h3>
+<p>点击「<strong>📰 一键获取今日日报</strong>」按钮，系统会自动：</p>
+<pre><code>对每个信息源：
+  1. 抓取首页 → 提取文本内容
+  2. AI 识别当日发布的所有文章（标题、链接、日期）
+  3. 逐篇抓取全文 → AI 提炼为结构化知识库文档
+  4. 保存至本地 data/sample_docs/ 并自动索引到知识库
+  5. 文件名标注 [来源网站] 日期，确保可溯源
+</code></pre>
+<h3>溯源机制</h3>
+<p>每条入库文档的文件名格式为：</p>
+<pre><code>[教育部官网] 2026-05-29 | 关于深化高中课程改革的指导意见
+</code></pre>
+<p>从知识库中检索到的每段内容，均可追溯到：</p>
+<ul>
+<li><strong>来源网站</strong>名称</li>
+<li><strong>发布日期</strong></li>
+<li><strong>原文链接</strong>（在获取结果中展示）</li>
+</ul>
+<hr>
+<h2>项目结构</h2>
+<pre><code>EduDaily/
+├── server.py                     # Web 服务入口（FastAPI）
+├── main.py                       # 命令行管道（批处理模式）
+├── batch_processor.py            # 批量分析：一键生成所有文章摘要 + 日报
+├── scheduler.py                  # 定时自动运行：每天固定时间跑全流程
+├── template_engine.py            # 多平台模板引擎：公众号/小红书/抖音/播客
+├── clipboard.py                  # 一键复制日报到系统剪贴板
+├── publisher.py                  # 草稿箱发布框架（微信/知乎/微博）
+├── config.py                     # 所有参数集中管理
+├── requirements.txt              # Python 依赖包清单
+├── .env.example                  # API Key 配置模板
+├── credentials.example.json      # 平台发布凭据模板
+│
+├── frontend/
+│   └── index.html                # Vue3 单页应用（4 标签页布局，CDN 引入，零构建，浏览器即用）
+│
+├── templates/
+│   ├── wechat.j2                 # 公众号模板（专业深度分析）
+│   ├── xiaohongshu.j2            # 小红书模板（活泼 emoji 风）
+│   ├── douyin.j2                 # 抖音脚本模板（黄金 3 秒口播）
+│   └── podcast.j2                # 播客口播稿模板（口语化 + 转场）
+│
+├── modules/
+│   ├── data_loader.py            # 读取 .txt 文档
+│   ├── chunker.py                # 段落感知分块（重叠策略）
+│   ├── extractor.py              # LLM 教育资讯结构化抽取
+│   ├── embedder.py               # 本地 Embedding + ChromaDB 存储
+│   ├── retriever.py              # 查询向量化 + 语义检索
+│   ├── generator.py              # RAG 报告生成（含隐私脱敏）
+│   ├── evaluator.py              # 抽取/检索/生成质量评估
+│   ├── privacy.py                # 敏感信息检测与脱敏
+│   ├── domain_classifier.py      # 内容领域自动识别
+│   ├── url_ingester.py           # 网址抓取 + AI 提炼
+│   └── daily_fetcher.py          # 每日日报引擎（信息源抓取+当日筛选+入库）
+│
+├── prompts/
+│   ├── personas.py               # 领域-人格注册表
+│   ├── extraction.py             # 教育资讯抽取 Prompt 模板
+│   └── generation.py             # 报告生成 Prompt 模板（动态角色）
+│
+├── db/
+│   ├── schema.py                 # 数据库建表（含信息源和文章表）
+│   └── repository.py             # 数据库读写操作
+│
+├── data/
+│   ├── sample_docs/              # 知识库文档存放目录
+│   └── processed.json            # 已处理文件跟踪（自动生成）
+│
+├── utils/
+│   └── helpers.py                # 日志、计时等工具函数
+│
+├── tests/                        # 测试文件
+│   ├── test_batch_processor.py
+│   ├── test_scheduler.py
+│   ├── test_template_engine.py
+│   ├── test_clipboard.py
+│   └── test_publisher.py
+│
+├── chroma_store/                 # 向量数据库文件（自动生成）
+└── output/                       # 生成的报告文件（自动生成）
+</code></pre>
+<hr>
+<h2>API 接口</h2>
+<p>所有接口均在 <code>http://localhost:8765</code> 下：</p>
+<h3>查询与知识库管理</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>GET</code></td>
+<td><code>/</code></td>
+<td>Web 交互界面</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/health</code></td>
+<td>系统健康检查</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/query</code></td>
+<td>提交查询，返回检索结果 + AI 报告</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/extract</code></td>
+<td>触发 LLM 信息抽取</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/knowledge</code></td>
+<td>查看知识库文档列表</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/knowledge/upload</code></td>
+<td>上传 .txt 文件到知识库</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/api/knowledge/{doc_id}</code></td>
+<td>删除指定文档</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/knowledge/ingest-url</code></td>
+<td>提交网址列表，AI 提炼为知识库文档</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/knowledge/import-saved</code></td>
+<td>将已提炼的文档导入知识库</td>
+</tr>
+</tbody></table>
+<h3>信息源 &amp; 每日日报</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>GET</code></td>
+<td><code>/api/sources</code></td>
+<td>列出所有信息源</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/sources</code></td>
+<td>添加信息源</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/api/sources/{source_id}</code></td>
+<td>删除信息源及其关联文章</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/daily-fetch</code></td>
+<td>一键获取所有信息源今日发布的文章</td>
+</tr>
+</tbody></table>
+<h3>批量分析 &amp; 多平台</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>POST</code></td>
+<td><code>/api/batch-analyze</code></td>
+<td>批量分析未处理的文章，生成日报</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/batch-analyze?platform=xhs</code></td>
+<td>同时生成指定平台版本</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/batch-analyze?platform=all</code></td>
+<td>生成全部四种平台版本</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/batch-analyze?force_all=true</code></td>
+<td>强制重新分析所有文章</td>
+</tr>
+</tbody></table>
+<h3>查询示例</h3>
+<pre><code class="language-bash">curl -X POST http://localhost:8765/api/query \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{&quot;query&quot;: &quot;最新高考改革对高中教学有什么影响？&quot;, &quot;top_k&quot;: 5}&#39;
+</code></pre>
+<p>返回内容包含：AI 生成的 Markdown 报告、检索到的文档片段（含相关度）、PII 脱敏数量、使用的分析视角。</p>
+<h3>添加信息源示例</h3>
+<pre><code class="language-bash">curl -X POST http://localhost:8765/api/sources \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{&quot;name&quot;: &quot;中国教育报&quot;, &quot;url&quot;: &quot;https://www.jyb.cn/&quot;}&#39;
+</code></pre>
+<h3>批量分析示例</h3>
+<pre><code class="language-bash"># 批量分析 + 生成小红书版本
+curl -X POST &quot;http://localhost:8765/api/batch-analyze?platform=xhs&quot;
+
+# 全平台 + 强制重新处理
+curl -X POST &quot;http://localhost:8765/api/batch-analyze?platform=all&amp;force_all=true&quot;
+</code></pre>
+<h3>每日日报示例</h3>
+<pre><code class="language-bash">curl -X POST http://localhost:8765/api/daily-fetch
+</code></pre>
+<p>返回：批次号、日期、收录文章列表（含标题、来源、原文链接、分块数）、错误信息。</p>
+<h3>命令行模式</h3>
+<pre><code class="language-bash"># 运行完整管道（一次性批处理）
+python main.py
+
+# 跳过 LLM 调用，仅测试本地模块
+python main.py --skip-extraction --skip-generation
+
+# 追加自定义查询
+python main.py -q &quot;分析近期职业教育政策趋势&quot;
+</code></pre>
+<hr>
+<h2>隐私保护机制</h2>
+<p>系统在将检索到的文本发送给 DeepSeek API 之前，<strong>自动检测并替换</strong>以下敏感信息：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>检测方式</th>
+<th>替换为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>手机号</td>
+<td>正则精确匹配</td>
+<td><code>[手机号已隐藏]</code></td>
+</tr>
+<tr>
+<td>身份证号</td>
+<td>18位 + 校验位验证</td>
+<td><code>[身份证号已隐藏]</code></td>
+</tr>
+<tr>
+<td>银行卡号</td>
+<td>16-19位连续数字</td>
+<td><code>[银行卡号已隐藏]</code></td>
+</tr>
+<tr>
+<td>电子邮箱</td>
+<td>标准邮箱正则</td>
+<td><code>[邮箱已隐藏]</code></td>
+</tr>
+<tr>
+<td>人员姓名</td>
+<td>上下文模式匹配</td>
+<td><code>[姓名已隐藏]</code></td>
+</tr>
+<tr>
+<td>表格数据</td>
+<td>Markdown 表格 / TSV 行</td>
+<td><code>[表格行已隐藏]</code></td>
+</tr>
+</tbody></table>
+<p>脱敏后的实际 Prompt 可在 Web 界面的「Prompt 工程」标签页查看验证。</p>
+<hr>
+<h2>技术架构</h2>
+<pre><code>信息源订阅 / 上传 .txt / 输入网址 → 段落分块 → LLM 抽取教育实体 → SQLite 存储
+                                            ↘
+                                      本地 Embedding → ChromaDB 向量索引
+
+Web 界面（4 标签页布局）：
+  🔍 问答分析 → 向量检索 → 组装 Prompt → LLM 生成报告（含 PII 自动脱敏）
+  📚 知识库管理 → 上传/删除文档 + 网址提炼 + 导入
+  📡 信息源与日报 → 添加信息源 → 一键抓取当日文章 → AI 逐篇提炼入库 → 可溯源归档
+  ⚙️ 高级功能 → 批量分析（进度条）+ 多平台内容生成 + 剪贴板工具 + 定时配置
+
+定时调度 → 每天固定时间 → 抓取 → 批量分析 → 生成日报 → 全自动
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>选型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>大语言模型</td>
+<td>DeepSeek Chat</td>
+<td>负责信息抽取、文章提炼、摘要生成和报告撰写</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td>BAAI/bge-small-zh-v1.5</td>
+<td>本地运行，无需 API，中文优化</td>
+</tr>
+<tr>
+<td>向量数据库</td>
+<td>ChromaDB</td>
+<td>持久化存储，重启不丢失数据</td>
+</tr>
+<tr>
+<td>结构化存储</td>
+<td>SQLite</td>
+<td>文件级数据库，无需安装服务</td>
+</tr>
+<tr>
+<td>前端</td>
+<td>Vue 3 + marked.js</td>
+<td>CDN 引入，零构建，4 标签页布局，浏览器即用</td>
+</tr>
+<tr>
+<td>后端</td>
+<td>FastAPI + uvicorn</td>
+<td>Python Web 框架，自动生成 API 文档</td>
+</tr>
+<tr>
+<td>模板引擎</td>
+<td>Jinja2</td>
+<td>轻量级模板，用户可直接编辑模板文件</td>
+</tr>
+<tr>
+<td>定时调度</td>
+<td>schedule</td>
+<td>轻量级定时任务，无需系统 cron 权限</td>
+</tr>
+<tr>
+<td>剪贴板</td>
+<td>pyperclip</td>
+<td>跨平台剪贴板支持</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>不使用 LangChain 等重量级框架，所有代码纯 Python 实现，逻辑清晰可读。</p>
+</blockquote>
+<hr>
+<h2>可配置参数</h2>
+<p>在 <code>config.py</code> 中集中管理，API Key 通过 <code>.env</code> 文件设置。多平台模板在 <code>templates/</code> 文件夹中直接编辑。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>DEEPSEEK_API_KEY</code></td>
+<td>（空）</td>
+<td>在 <code>.env</code> 中设置</td>
+</tr>
+<tr>
+<td><code>SCHEDULE_TIME</code></td>
+<td><code>07:00</code></td>
+<td>每日自动运行时间（在 <code>.env</code> 中设置）</td>
+</tr>
+<tr>
+<td><code>CHUNK_MAX_CHARS</code></td>
+<td>1000</td>
+<td>分块最大字符数</td>
+</tr>
+<tr>
+<td><code>CHUNK_OVERLAP_CHARS</code></td>
+<td>200</td>
+<td>相邻块重叠字符数</td>
+</tr>
+<tr>
+<td><code>CHUNK_MIN_CHARS</code></td>
+<td>50</td>
+<td>低于此长度的内容会被过滤</td>
+</tr>
+<tr>
+<td><code>TOP_K_RETRIEVAL</code></td>
+<td>5</td>
+<td>每次检索返回的片段数</td>
+</tr>
+<tr>
+<td><code>EXTRACTION_TEMPERATURE</code></td>
+<td>0.1</td>
+<td>信息抽取时的 LLM 温度（越低越稳定）</td>
+</tr>
+<tr>
+<td><code>GENERATION_TEMPERATURE</code></td>
+<td>0.3</td>
+<td>报告生成时的 LLM 温度</td>
+</tr>
+<tr>
+<td><code>API_TIMEOUT_SECONDS</code></td>
+<td>60</td>
+<td>API 请求超时时间</td>
+</tr>
+<tr>
+<td><code>CHROMA_COLLECTION_NAME</code></td>
+<td><code>edu_documents</code></td>
+<td>向量数据库集合名称</td>
+</tr>
+<tr>
+<td><code>SAMPLE_DOCS_DIR</code></td>
+<td><code>data/sample_docs</code></td>
+<td>知识库文件存放位置</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>常见问题</h2>
+<h3>Q: 启动时报错 &quot;DEEPSEEK_API_KEY not configured&quot;</h3>
+<p><strong>A:</strong> 检查 <code>.env</code> 文件是否存在，以及里面的 Key 是否正确（不要有多余的引号或空格）。</p>
+<h3>Q: 提示 &quot;No module named &#39;xxx&#39;&quot;</h3>
+<p><strong>A:</strong> 运行 <code>pip install -r requirements.txt</code> 确保所有依赖都安装了。</p>
+<h3>Q: 每日日报获取不到文章？</h3>
+<p><strong>A:</strong> 可能的原因：</p>
+<ul>
+<li>目标网站当日确实没有更新</li>
+<li>网站需要特殊访问方式（如需要登录、反爬虫等）</li>
+<li>网站结构变化导致 AI 无法识别文章列表</li>
+<li>查看终端日志和返回结果中的 <code>errors</code> 字段了解详情</li>
+</ul>
+<h3>Q: 怎么让系统每天自动运行？</h3>
+<p><strong>A:</strong> 使用命令 <code>python scheduler.py</code> 启动定时调度器。想让它在电脑开机后自动启动，可以把它设为开机启动项或添加到系统任务计划中（Windows：任务计划程序，Mac：launchd，Linux：systemd 或 crontab）。</p>
+<h3>Q: 如何修改平台模板的风格？</h3>
+<p><strong>A:</strong> 打开 <code>templates/</code> 文件夹，用记事本编辑对应的 <code>.j2</code> 文件即可。模板文件中用中文标注了每个部分的说明，不需要编程知识就能修改。改完后保存，下次生成就会用新的风格。</p>
+<h3>Q: 复制到剪贴板失败了怎么办？</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li>Windows/Mac：运行 <code>pip install pyperclip</code> 安装依赖</li>
+<li>Linux：运行 <code>sudo apt install xclip</code> 安装系统剪贴板工具</li>
+<li>如果仍然失败，可以手动打开 <code>output/</code> 文件夹复制文件内容</li>
+</ul>
+<h3>Q: 如何把日报直接发到微信公众号？</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>复制 <code>credentials.example.json</code> 为 <code>credentials.json</code></li>
+<li>按照「<a href="#%E5%8F%91%E9%80%81%E8%8D%89%E7%A8%BF%E5%88%B0%E5%B9%B3%E5%8F%B0-publisher">发送草稿到平台</a>」中的步骤获取微信 AppID、Secret 和 access_token</li>
+<li>填入 <code>credentials.json</code>，运行 <code>python publisher.py --platform wechat --file &quot;output/日报文件.md&quot;</code></li>
+<li>登录微信公众号后台 → 草稿箱即可看到已保存的草稿
+<strong>注意：</strong> access_token 有效期只有 2 小时，生产环境需要定期刷新。</li>
+</ol>
+<h3>Q: 数据存在哪里？安全吗？</h3>
+<p><strong>A:</strong> 所有数据都在你电脑的 <code>data/</code> 和 <code>chroma_store/</code> 目录下。只有生成报告时会把脱敏后的文本片段发送给 DeepSeek API，原始文档不会离开你的电脑。<code>credentials.json</code> 已加入 <code>.gitignore</code>，不会被上传到 GitHub。</p>
+<h3>Q: 怎么关掉服务？</h3>
+<p><strong>A:</strong> 在终端里按 <code>Ctrl+C</code> 即可。</p>
+<h3>Q: 支持 PDF / Word 吗？</h3>
+<p><strong>A:</strong> 直接上传只支持 <code>.txt</code>。PDF/Word 请先复制内容到 <code>.txt</code> 文件中。网页内容可通过「网址提炼」功能直接抓取。</p>
+<hr>
+<h2>许可证</h2>
+<p>MIT License</p>
+<hr>
+<h2>Windows 桌面版封装</h2>
+<p>桌面版入口是 <code>desktop_app.py</code>，使用 <code>pywebview</code> 承载现有 HTML/Vue 前端，并通过 Python 桌面桥接直接调用后端逻辑。桌面版不会启动本地 Web 服务，也不会暴露 localhost 端口。</p>
+<p>本版本已经使用 <code>assets/branding/app-icon.png</code> 生成应用图标 <code>assets/branding/app-icon.ico</code>，安装包、桌面快捷方式和 <code>EduDaily.exe</code> 都会使用这个图标。</p>
+<p>生成便携版程序目录：</p>
+<pre><code class="language-powershell">powershell -ExecutionPolicy Bypass -File scripts\build_windows.ps1
+</code></pre>
+<p>输出位置：</p>
+<pre><code class="language-text">dist\EduDaily\EduDaily.exe
+</code></pre>
+<p>安装 Inno Setup 6 后生成安装包：</p>
+<pre><code class="language-powershell">powershell -ExecutionPolicy Bypass -File scripts\build_windows_installer.ps1
+</code></pre>
+<p>输出位置：</p>
+<pre><code class="language-text">dist\installer\EduDailySetup-0.1.2.exe
+</code></pre>
+<p>首次启动桌面版时，用户可以选择数据目录。进入首页后的“设置”页面可以继续管理 API Key、整体数据目录、.txt 知识库目录，并运行 RAG 通道检修。DeepSeek API Key 不会明文显示在页面上，真实内容保存在系统凭据管理器中。</p>
+
+    </div>
+</body>
+</html>
